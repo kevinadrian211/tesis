@@ -1,3 +1,17 @@
 # /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/data_reporting/eye_rub_report/eye_rub_reporting.py
+import atexit
+
+eye_rub_counter = 0
+
+# Función de reporte al detectar el gesto
 def report_eye_rub_data():
-    print("Frotamiento de ojos detectada.")
+    global eye_rub_counter
+    eye_rub_counter += 1
+    print("Frotamiento de ojos detectado.")
+
+# Función que se ejecuta al salir del programa
+def report_total_eye_rubs():
+    print(f"\nTotal de frotamientos de ojos detectados: {eye_rub_counter}")
+
+# Registramos la función para que se ejecute al finalizar
+atexit.register(report_total_eye_rubs)

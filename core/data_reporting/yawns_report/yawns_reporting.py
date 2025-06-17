@@ -1,51 +1,53 @@
 # /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/data_reporting/yawns_report/yawns_reporting.py
+import threading
 import time
+from datetime import datetime, timedelta
+from .total_yawn_report import print_report
 
-# Variables para el registro de bostezos
-yawn_durations = []
-yawn_times = []
-
-# Intervalos de tiempo para clasificar los bostezos
-NORMAL_TIME_FRAME = 10 * 60  # 10 minutos en segundos
-SLEEPY_TIME_FRAME = 5 * 60   # 5 minutos en segundos
-
-# Variables para controlar el tiempo transcurrido
-last_checked_time = time.time()
-last_somnolence_check_time = time.time()  # Nuevo control para los 5 minutos de somnolencia
+yawn_events = []
 
 def report_yawn_data(duration: float):
-    global last_checked_time, last_somnolence_check_time
-    current_time = time.time()  # Obtener el tiempo actual
+    timestamp = datetime.now()
+    yawn_events.append((timestamp, duration))
+    print_report(f"[REPORTE DE BOSTEZO] Duración: {duration:.2f} segundos | Hora: {timestamp.strftime('%H:%M:%S')}")
 
-    # Añadir la duración y el tiempo del bostezo
-    yawn_durations.append(duration)
-    yawn_times.append(current_time)
+def five_minute_report_loop():
+    while True:
+        time.sleep(300)  # Espera 5 minutos
+        now = datetime.now()
+        window_start = now - timedelta(minutes=5)
+        recent_yawns = [y for y in yawn_events if y[0] >= window_start]
+        count = len(recent_yawns)
 
-    # Imprimir los bostezos cada vez que se detectan
-    print(f"[{current_time}] Bostezo detectado. Duración: {duration:.2f} segundos.")
+        if count == 0:
+            print_report("[REPORTE 5 MIN] No se detectó ningún bostezo en los últimos 5 minutos.")
+            print_report("✅ [INFO] Comportamiento dentro de lo normal. Sin señales de cansancio.")
+        elif count == 1:
+            _, duration = recent_yawns[0]
+            print_report(f"[REPORTE 5 MIN] Se detectó 1 bostezo en los últimos 5 minutos. Duración: {duration:.2f} segundos. (Dentro de lo normal)")
+        else:
+            print_report(f"[REPORTE 5 MIN] Se detectaron {count} bostezos en los últimos 5 minutos.")
+            print_report("⚠️ [ALERTA] Posible signo de cansancio detectado en los últimos 5 minutos.")
 
-    # Limpiar bostezos que ocurrieron fuera del rango de tiempo relevante para el caso normal
-    yawn_durations[:] = [d for d, t in zip(yawn_durations, yawn_times) if current_time - t <= NORMAL_TIME_FRAME]
-    yawn_times[:] = [t for t in yawn_times if current_time - t <= NORMAL_TIME_FRAME]
+def ten_minute_report_loop():
+    while True:
+        time.sleep(600)  # Espera 10 minutos
+        now = datetime.now()
+        window_start = now - timedelta(minutes=10)
+        recent_yawns = [y for y in yawn_events if y[0] >= window_start]
+        count = len(recent_yawns)
 
-    # Verificar riesgo de somnolencia (2 o más bostezos en los últimos 5 minutos)
-    if current_time - last_somnolence_check_time >= SLEEPY_TIME_FRAME:
-        recent_yawns_5min = sum(1 for t in yawn_times if current_time - t <= SLEEPY_TIME_FRAME)
-        
-        if recent_yawns_5min >= 2:
-            print(f"[{current_time}] ¡Alerta de riesgo de somnolencia! Se han detectado 2 o más bostezos en los últimos 5 minutos.")
-        
-        # Reiniciar el contador de tiempo para la somnolencia
-        last_somnolence_check_time = current_time
+        if count >= 2:
+            print_report(f"[REPORTE 10 MIN] Se detectaron {count} bostezos en los últimos 10 minutos. Signo de cansancio.")
+        else:
+            print_report(f"[REPORTE 10 MIN] Se detectó {count} bostezo(s) en los últimos 10 minutos. (Dentro de lo normal)")
+            print_report("✅ [INFO] No se detectan señales de cansancio en este periodo.")
 
-    # Reporte cada 10 minutos: cantidad de bostezos y promedio de la duración
-    if current_time - last_checked_time >= NORMAL_TIME_FRAME:
-        recent_yawns_10min = len([1 for t in yawn_times if current_time - t <= NORMAL_TIME_FRAME])
-        if recent_yawns_10min > 0:
-            average_duration = sum(yawn_durations[-recent_yawns_10min:]) / recent_yawns_10min
-            print(f"[{current_time}] Reporte de los últimos 10 minutos:")
-            print(f"- Total de bostezos detectados: {recent_yawns_10min}")
-            print(f"- Duración promedio de los bostezos: {average_duration:.2f} segundos.")
-        
-        # Reiniciar el contador de tiempo para el reporte de 10 minutos
-        last_checked_time = current_time
+def start_reporting():
+    print_report("[INFO] Iniciando reportes automáticos cada 5 y 10 minutos...")
+    t1 = threading.Thread(target=five_minute_report_loop, daemon=True)
+    t2 = threading.Thread(target=ten_minute_report_loop, daemon=True)
+    t1.start()
+    t2.start()
+
+start_reporting()
