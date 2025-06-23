@@ -139,6 +139,8 @@ class FaceMeshProcessor:
         send_face_points_to_router(points)
 
         if draw:
-            sketch = self.drawer.draw_sketch(face_image, face_mesh_info)
+            self.drawer.draw(face_image, face_mesh_info)
+            sketch = face_image  # usar el frame original modificado
+
 
         return points, success, sketch

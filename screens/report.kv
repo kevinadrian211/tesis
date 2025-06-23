@@ -1,0 +1,26 @@
+<ReportResultScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: "10dp"
+        spacing: "10dp"
+
+        Header:
+
+        BoxLayout:
+            orientation: 'vertical'
+            padding: "20dp"
+            spacing: "20dp"
+
+            Label:
+                text: "Reporte generado"
+                font_size: '24sp'
+                halign: 'center'
+
+            Button:
+                text: "Volver"
+                size_hint: 0.5, None
+                height: "50dp"
+                pos_hint: {"center_x": 0.5}
+                on_press: app.root.current = "init_report"
+
+        Footer:

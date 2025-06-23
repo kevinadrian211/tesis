@@ -1,36 +1,86 @@
-# /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/index.py
-from pose_extraction.face_landmarks.face_landmark_detector import FaceMeshProcessor
-from pose_extraction.hand_landmarks.hand_landmark_detector import HandMeshProcessor
+from kivy.app import App
+from kivy.uix.image import Image
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.clock import Clock
+from kivy.graphics.texture import Texture
 import cv2
 
-face_mesh_processor = FaceMeshProcessor()
-hand_mesh_processor = HandMeshProcessor()
+from pose_extraction.face_landmarks.face_landmark_detector import FaceMeshProcessor
+from pose_extraction.hand_landmarks.hand_landmark_detector import HandMeshProcessor
 
-cap = cv2.VideoCapture(1)
 
-if not cap.isOpened():
-    print("No se puede acceder a la cámara.")
-    exit()
+class DriverMonitoringApp(App):
+    def build(self):
+        # Procesadores de malla
+        self.face_mesh_processor = FaceMeshProcessor()
+        self.hand_mesh_processor = HandMeshProcessor()
 
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        print("No se pudo obtener el frame.")
-        break
+        # Rotar siempre activado desde el inicio
+        self.rotate_frame = True
 
-    frame = cv2.flip(frame, 1)
+        # Captura de cámara (usa cámara secundaria)
+        self.cap = cv2.VideoCapture(1)
+        if not self.cap.isOpened():
+            print("❌ No se pudo abrir la cámara.")
+            return Label(text="❌ No se pudo abrir la cámara.")
 
-    face_points, face_success, frame_with_face_mesh = face_mesh_processor.process(frame, draw=True)
-    hand_points, hand_success, frame_with_hand_mesh = hand_mesh_processor.process(frame, draw=True)
+        # Layout principal
+        root_layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
 
-    frame_with_both_meshes = frame.copy()
-    frame_with_both_meshes = cv2.add(frame_with_both_meshes, frame_with_face_mesh)
-    frame_with_both_meshes = cv2.add(frame_with_both_meshes, frame_with_hand_mesh)
+        # Header
+        header = Label(text="🧠 Monitor de Atención del Conductor", size_hint=(1, 0.1), font_size='20sp')
+        root_layout.add_widget(header)
 
-    cv2.imshow("Cámara Test (Modo Espejo) con Mallas de Cara y Manos", frame_with_both_meshes)
+        # Imagen (video)
+        self.img_widget = Image(size_hint=(1, 0.8))
+        root_layout.add_widget(self.img_widget)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        # Footer
+        self.footer = Label(text="Estado: Iniciando...", size_hint=(1, 0.1), font_size='16sp')
+        root_layout.add_widget(self.footer)
 
-cap.release()
-cv2.destroyAllWindows()
+        # Actualización del video
+        Clock.schedule_interval(self.update, 1.0 / 30.0)
+
+        return root_layout
+
+    def update(self, dt):
+        ret, frame = self.cap.read()
+        if not ret:
+            self.footer.text = "❌ Error al leer el frame."
+            return
+
+        # Procesamos sin invertir aún
+        _, face_success, face_frame = self.face_mesh_processor.process(frame.copy(), draw=True)
+        _, hand_success, hand_frame = self.hand_mesh_processor.process(frame.copy(), draw=True)
+
+        # Combinar resultados
+        frame_with_both = frame.copy()
+        frame_with_both = cv2.addWeighted(frame_with_both, 1.0, face_frame, 1.0, 0)
+        frame_with_both = cv2.addWeighted(frame_with_both, 1.0, hand_frame, 1.0, 0)
+
+        # Rotar siempre la imagen 180 grados (flip -1)
+        if self.rotate_frame:
+            frame_with_both = cv2.flip(frame_with_both, -1)
+
+        # Convertir BGR → RGB para Kivy
+        rgb_frame = cv2.cvtColor(frame_with_both, cv2.COLOR_BGR2RGB)
+        buf = rgb_frame.tobytes()
+
+        texture = Texture.create(size=(rgb_frame.shape[1], rgb_frame.shape[0]), colorfmt='rgb')
+        texture.blit_buffer(buf, colorfmt='rgb', bufferfmt='ubyte')
+        self.img_widget.texture = texture
+
+        # Actualizar footer
+        if face_success or hand_success:
+            self.footer.text = "✅ Detección activa"
+        else:
+            self.footer.text = "🔍 Buscando rostro o manos..."
+
+    def on_stop(self):
+        self.cap.release()
+
+
+if __name__ == '__main__':
+    DriverMonitoringApp().run()

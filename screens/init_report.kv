@@ -1,0 +1,27 @@
+<ReportScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: "10dp"
+        spacing: "10dp"
+
+        Header:
+
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: 0.8
+            padding: "20dp"
+            spacing: "20dp"
+
+            Widget:
+
+            Button:
+                text: "Iniciar viaje"
+                size_hint: 0.6, None
+                height: "50dp"
+                pos_hint: {"center_x": 0.5}
+                font_size: '18sp'
+                on_press: root.on_start_trip()
+
+            Widget:
+
+        Footer:

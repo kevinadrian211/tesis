@@ -1,0 +1,30 @@
+<Header>:
+    size_hint_y: None
+    height: "60dp"
+    padding: "10dp"
+    spacing: "10dp"
+    canvas.before:
+        Color:
+            rgba: 0.2, 0.6, 0.9, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    # Logo a la izquierda
+    Image:
+        source: 'assets/logo.png'  # Usa tu logo real aquí
+        size_hint_x: 0.2
+        allow_stretch: True
+        keep_ratio: True
+
+    # Espaciador
+    Widget:
+
+    # Botón a la derecha
+    Button:
+        text: "⚙"
+        size_hint_x: 0.15
+        font_size: '20sp'
+        background_normal: ''
+        background_color: 0.1, 0.1, 0.1, 0.5
+        on_press: print("Configuración presionada")
