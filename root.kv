@@ -1,0 +1,20 @@
+<RootLayout>:
+    orientation: 'vertical'
+
+    Header:
+        size_hint_y: 0.1
+
+    ScreenManager:
+        id: screen_manager
+
+        ReportScreen:
+            name: "init_report"
+
+        DriverMonitoringScreen:
+            name: "monitoring"
+
+        EndReportScreen:
+            name: "end_report"
+
+    Footer:
+        size_hint_y: 0.1

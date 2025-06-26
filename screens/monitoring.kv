@@ -4,6 +4,13 @@
         spacing: 10
         padding: 10
 
+        canvas.before:
+            Color:
+                rgba: 1, 0.99, 0.95, 1  # #FFFCF2 en rgba
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
         Label:
             id: header_label
             text: "🧠 Monitor de Atención del Conductor"

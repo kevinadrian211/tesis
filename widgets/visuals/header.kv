@@ -5,10 +5,15 @@
     spacing: "10dp"
     canvas.before:
         Color:
-            rgba: 0.2, 0.6, 0.9, 1
+            rgba: 0.8, 0.77, 0.72, 1  # Fondo CCC5B9
         Rectangle:
             pos: self.pos
             size: self.size
+        Color:
+            rgba: 0, 0, 0, 1  # Borde negro
+        Line:
+            rectangle: (*self.pos, *self.size)
+            width: 3
 
     # Logo a la izquierda
     Image:
@@ -27,4 +32,5 @@
         font_size: '20sp'
         background_normal: ''
         background_color: 0.1, 0.1, 0.1, 0.5
+        color: 1, 1, 1, 1
         on_press: print("Configuración presionada")

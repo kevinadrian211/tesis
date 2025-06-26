@@ -1,24 +1,30 @@
-# main.py
 from kivy.app import App
 from kivy.lang import Builder
-from kivy.uix.screenmanager import ScreenManager
 
-# Pantallas de lógica
+# Importar pantallas
 from logic_screens.init_report_logic import ReportScreen
-from core.index import DriverMonitoringScreen
 from logic_screens.end_report_logic import EndReportScreen
+from core.index import DriverMonitoringScreen
 
-# Carga de archivos KV
+# Importar widgets
+from widgets.logic.header import Header
+from widgets.logic.footer import Footer
+
+# Importar layout raíz
+from root import RootLayout
+
+# Cargar archivos KV de pantallas
 Builder.load_file("screens/init_report.kv")
 Builder.load_file("screens/monitoring.kv")
+Builder.load_file("screens/end_report.kv")  # si existe
+
+# Cargar archivos KV de widgets
+Builder.load_file("widgets/visuals/header.kv")
+Builder.load_file("widgets/visuals/footer.kv")
 
 class MainApp(App):
     def build(self):
-        sm = ScreenManager()
-        sm.add_widget(ReportScreen(name="init_report"))
-        sm.add_widget(DriverMonitoringScreen(name="monitoring"))
-        sm.add_widget(EndReportScreen(name="end_report"))
-        return sm
+        return RootLayout()
 
 if __name__ == "__main__":
     MainApp().run()
