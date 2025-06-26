@@ -1,7 +1,7 @@
 # core/distance_measurement/hands/hand_to_face_distance.py
 import numpy as np
 from abc import ABC, abstractmethod
-from distance_measurement.gesture_distance import process_hand_distances  # Importar la función
+from ..gesture_distance import process_hand_distances  # Importar la función
 
 # === Base de cálculo de distancia ===
 

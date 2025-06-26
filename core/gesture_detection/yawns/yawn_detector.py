@@ -1,6 +1,6 @@
 # /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/gesture_detection/yawns/yawn_detector.py
 import time
-from gesture_detection.gestures import receive_yawn_gesture  # Importa la función para recibir el gesto
+from ..gestures import receive_yawn_gesture  # Importa la función para recibir el gesto
 
 breathe_start_time = None
 is_breathing_open = False  # Estado de la boca (abierta o cerrada)

@@ -10,5 +10,4 @@ from widgets.logic.footer import Footer
 
 class ReportScreen(Screen):
     def on_start_trip(self):
-        # Cambia a la pantalla "report"
-        self.manager.current = "report"
+        self.manager.current = "monitoring"

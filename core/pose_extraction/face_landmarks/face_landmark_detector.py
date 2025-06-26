@@ -3,7 +3,7 @@ import mediapipe as mp
 import numpy as np
 import cv2
 from typing import Tuple, Any, List, Dict
-from pose_extraction.point_router import send_face_points_to_router
+from ..point_router import send_face_points_to_router
 
 class FaceMeshInference:
     def __init__(self, min_detection_confidence=0.6, min_tracking_confidence=0.6):

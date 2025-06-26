@@ -4,7 +4,7 @@ import mediapipe as mp
 import numpy as np
 import cv2
 from typing import Tuple, Any, List, Dict
-from pose_extraction.point_router import send_hand_points_to_router
+from ..point_router import send_hand_points_to_router
 
 
 class HandMeshInference:
@@ -60,7 +60,7 @@ class HandMeshExtractor:
 class HandMeshDrawer:
     def __init__(self, color: Tuple[int, int, int] = (255, 0, 0)):
         self.mp_draw = mp.solutions.drawing_utils
-        self.config_draw = self.mp_draw.DrawingSpec(color=color, thickness=2, circle_radius=2)
+        self.config_draw = self.mp_draw.DrawingSpec(color=color, thickness=2, circle_radius=4)  # Aumenté el tamaño de los círculos
 
     def draw(self, hand_image: np.ndarray, hand_mesh_info: Any):
         for hand_landmarks in hand_mesh_info.multi_hand_landmarks:
@@ -74,8 +74,8 @@ class HandMeshDrawer:
             for pt in hand_landmarks.landmark:
                 x = int(pt.x * w)
                 y = int(pt.y * h)
-                z = int(pt.z * 50)
-                cv2.circle(black_image, (x, y), 2, (255 - z, 0, 0), -1)
+                z = int(pt.z * 50)  # Cambié este valor para hacerlo más visible
+                cv2.circle(black_image, (x, y), 4, (255, 0, 0), -1)  # Aumenté el radio del círculo
         return black_image
 
 

@@ -1,5 +1,5 @@
 # /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/gesture_detection/eye_rubs/eye_rub_detector.py
-from gesture_detection.gestures import receive_eye_rub_gesture
+from ..gestures import receive_eye_rub_gesture
 import time
 
 THRESHOLD_DISTANCE = 350

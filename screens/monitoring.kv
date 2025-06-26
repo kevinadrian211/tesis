@@ -1,0 +1,27 @@
+<DriverMonitoringScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 10
+        padding: 10
+
+        Label:
+            id: header_label
+            text: "🧠 Monitor de Atención del Conductor"
+            size_hint: 1, 0.1
+            font_size: '20sp'
+
+        Image:
+            id: img_widget
+            size_hint: 1, 0.8
+
+        Label:
+            id: footer_label
+            text: "Estado: Iniciando..."
+            size_hint: 1, 0.1
+            font_size: '16sp'
+
+        Button:
+            text: "Finalizar viaje"
+            size_hint: 1, 0.1
+            font_size: '16sp'
+            on_press: root.end_trip()

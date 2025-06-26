@@ -27,7 +27,7 @@ def print_report(message: str):
 
 # Imprimir resumen al finalizar el programa
 def show_report_summary():
-    print("\n--- RESUMEN FINAL DE REPORTES ---")
+    print("\n--- RESUMEN FINAL DE CABECEOS REPORTADOS ---")
     print(f"🔵 Reportes normales: {normal_reports}")
     print(f"🔴 Reportes en riesgo: {risk_reports}")
     print("----------------------------------")

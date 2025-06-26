@@ -1,7 +1,7 @@
 # /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/distance_measurement/eyes/eye_distance_calculator.py
 import numpy as np
 from abc import ABC, abstractmethod
-from distance_measurement.gesture_distance import process_eye_distances  # Importación correcta
+from ..gesture_distance import process_eye_distances  # Importación correcta
 
 # === Base de cálculo de distancia ===
 

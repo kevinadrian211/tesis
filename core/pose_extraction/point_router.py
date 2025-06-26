@@ -1,9 +1,9 @@
 # core/pose_extraction/point_router.py
+from ..distance_measurement.eyes.eye_distance_calculator import receive_eye_points
+from ..distance_measurement.hands.hand_to_face_distance import receive_hand_and_eye_points
+from ..distance_measurement.head.head_movement_calculator import receive_head_points
+from ..distance_measurement.mouth.mouth_distance_calculator import receive_mouth_points
 
-from distance_measurement.eyes.eye_distance_calculator import receive_eye_points
-from distance_measurement.hands.hand_to_face_distance import receive_hand_and_eye_points
-from distance_measurement.head.head_movement_calculator import receive_head_points
-from distance_measurement.mouth.mouth_distance_calculator import receive_mouth_points
 
 
 def send_face_points_to_router(points: dict):

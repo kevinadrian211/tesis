@@ -1,7 +1,7 @@
 # core/distance_measurement/head/head_movement_calculator.py
 import numpy as np
 from abc import ABC, abstractmethod
-from distance_measurement.gesture_distance import process_head_distances  # Importar la función
+from ..gesture_distance import process_head_distances  # Importar la función
 
 class DistanceCalculator(ABC):
     @abstractmethod

@@ -1,6 +1,6 @@
 # /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/gesture_detection/blinks/blink_detector.py
 import time
-from gesture_detection.gestures import receive_blink_gesture, receive_microsleep_gesture
+from ..gestures import receive_blink_gesture, receive_microsleep_gesture
 
 class BlinkAndMicroSleepDetector:
     def __init__(self):

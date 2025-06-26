@@ -1,6 +1,6 @@
 # /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/gesture_detection/nods/nod_detector.py
 import time
-from gesture_detection.gestures import receive_nod_gesture  # Importa la función para recibir el gesto
+from ..gestures import receive_nod_gesture  # Importa la función para recibir el gesto
 
 # Umbrales ajustados según los rangos observados
 DISTANCE_THRESHOLD_FOREHEAD_NOSE = 10.0
