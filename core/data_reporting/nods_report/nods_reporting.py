@@ -11,4 +11,6 @@ def report_nod_data(duration=None):
 def report_total_nods():
     print(f"\nTotal de cabeceos detectados: {nod_counter}")
 
-atexit.register(report_total_nods)
+# Agregamos esta función para forzar mostrar resumen manualmente
+def force_show_report_summary():
+    report_total_nods()

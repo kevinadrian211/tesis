@@ -1,13 +1,15 @@
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
-from kivy.uix.label import Label
 import cv2
 
 from .pose_extraction.face_landmarks.face_landmark_detector import FaceMeshProcessor
 from .pose_extraction.hand_landmarks.hand_landmark_detector import HandMeshProcessor
 
-
+from core.data_reporting.blink_report.total_blink_report import force_show_report_summary as show_blink_summary
+from core.data_reporting.yawns_report.total_yawn_report import force_show_report_summary as show_yawn_summary
+from core.data_reporting.nods_report.nods_reporting import force_show_report_summary as show_nods_summary
+from core.data_reporting.eye_rub_report.eye_rub_reporting import force_show_report_summary as show_eye_rub_summary
 
 class DriverMonitoringScreen(Screen):
     def on_enter(self):
@@ -28,11 +30,9 @@ class DriverMonitoringScreen(Screen):
             self.ids.footer_label.text = "❌ Error al leer el frame."
             return
 
-        # Procesar rostro y manos
         _, face_success, face_frame = self.face_mesh_processor.process(frame.copy(), draw=True)
         _, hand_success, hand_frame = self.hand_mesh_processor.process(frame.copy(), draw=True)
 
-        # Verificar que las dimensiones coincidan antes de superponer
         if face_frame.shape == frame.shape and hand_frame.shape == frame.shape:
             frame_with_both = frame.copy()
             frame_with_both = cv2.addWeighted(frame_with_both, 1.0, face_frame, 1.0, 0)
@@ -41,11 +41,9 @@ class DriverMonitoringScreen(Screen):
             self.ids.footer_label.text = "❌ Tamaño inconsistente en las mallas."
             return
 
-        # Rotar si está habilitado
         if self.rotate_frame:
             frame_with_both = cv2.flip(frame_with_both, -1)
 
-        # Convertir a formato Kivy
         rgb_frame = cv2.cvtColor(frame_with_both, cv2.COLOR_BGR2RGB)
         buf = rgb_frame.tobytes()
 
@@ -53,7 +51,6 @@ class DriverMonitoringScreen(Screen):
         texture.blit_buffer(buf, colorfmt='rgb', bufferfmt='ubyte')
         self.ids.img_widget.texture = texture
 
-        # Actualizar estado
         self.ids.footer_label.text = (
             "✅ Detección activa" if face_success or hand_success else "🔍 Buscando rostro o manos..."
         )
@@ -69,4 +66,12 @@ class DriverMonitoringScreen(Screen):
 
     def end_trip(self):
         self.stop_monitoring()
+
+        # Mostrar los resúmenes manualmente
+        show_blink_summary()
+        show_yawn_summary()
+        show_nods_summary()
+        show_eye_rub_summary()
+
+        # Cambiar a la pantalla de resumen final
         self.manager.current = "end_report"

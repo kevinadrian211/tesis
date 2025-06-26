@@ -1,4 +1,3 @@
-# /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/data_reporting/yawns_report/total_yawn_report.py
 import atexit
 from datetime import datetime
 
@@ -32,5 +31,6 @@ def show_report_summary():
     print(f"🔴 Reportes en riesgo: {risk_reports}")
     print("----------------------------------")
 
-# Registrar función para ejecutar al final
-atexit.register(show_report_summary)
+# Función para forzar mostrar el resumen en cualquier momento
+def force_show_report_summary():
+    show_report_summary()
