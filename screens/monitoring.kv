@@ -6,7 +6,7 @@
 
         canvas.before:
             Color:
-                rgba: 1, 0.99, 0.95, 1  # #FFFCF2 en rgba
+                rgba: 1, 0.99, 0.95, 1
             Rectangle:
                 pos: self.pos
                 size: self.size
@@ -19,7 +19,14 @@
 
         Image:
             id: img_widget
-            size_hint: 1, 0.8
+            size_hint: 1, 0.6
+
+        TextInput:
+            id: report_box
+            readonly: True
+            font_size: '14sp'
+            size_hint: 1, 0.2
+            text: "Esperando primer reporte..."
 
         Label:
             id: footer_label

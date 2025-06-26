@@ -1,14 +1,23 @@
 # /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/data_reporting/blink_report/blink_reporting.py
+
 import time
 import threading
-from .total_blink_report import print_report
+
+# Lógica para imprimir o enviar reportes a la interfaz
+ui_report_callback = None  # Se debe asignar desde la UI
+
+def print_report(text):
+    global ui_report_callback
+    print(text)
+    if ui_report_callback:
+        ui_report_callback(text)
 
 # Variables globales para almacenar los datos de parpadeos
 blink_count = 0
 total_duration = 0
 
 # Control del hilo de reporte
-reporting_active = True
+reporting_active = False
 report_thread = None
 lock = threading.Lock()
 
@@ -38,12 +47,12 @@ def generate_report():
                     if average_duration > CANSANCIO_DURATION_THRESHOLD:
                         print_report("Estado de cansancio: Parpadeos muy lentos y prolongados (> 400 ms).")
                     elif RIESGO_DURATION_MIN <= average_duration <= RIESGO_DURATION_MAX:
-                        print_report("Riesgo de somnolencia: Duración de parpadeos sugiere posibles microsueños (300–600 ms).")
+                        print_report("⚠️ Riesgo de somnolencia: posibles microsueños (300–600 ms).")
                     else:
                         print_report("Parpadeos poco frecuentes y breves: posible fatiga leve.")
                 elif NORMAL_FREQUENCY_MIN <= blink_count <= NORMAL_FREQUENCY_MAX:
                     if NORMAL_DURATION_MIN <= average_duration <= NORMAL_DURATION_MAX:
-                        print_report("Parpadeo normal: Frecuencia y duración dentro del rango esperado.")
+                        print_report("✅ Parpadeo normal: Frecuencia y duración dentro del rango esperado.")
                     elif average_duration > NORMAL_DURATION_MAX:
                         print_report("Fatiga moderada: parpadeos más lentos de lo normal.")
                     else:
@@ -64,10 +73,16 @@ def report_blink_data(gesture_type: str, eye: str, duration: float):
 
 def start_blink_reporting():
     global report_thread, reporting_active
+    if reporting_active:
+        print("[INFO] El hilo de reporte de parpadeos ya está activo.")
+        return
+
     reporting_active = True
     report_thread = threading.Thread(target=generate_report, daemon=True)
     report_thread.start()
+    print("[INFO] Hilo de reporte de parpadeos iniciado.")
 
 def stop_blink_reporting():
     global reporting_active
     reporting_active = False
+    print("[INFO] Hilo de reporte de parpadeos detenido.")

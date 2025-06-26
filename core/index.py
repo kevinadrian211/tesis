@@ -11,14 +11,8 @@ from .data_reporting.yawns_report.total_yawn_report import force_show_report_sum
 from .data_reporting.nods_report.nods_reporting import force_show_report_summary as show_nods_summary
 from .data_reporting.eye_rub_report.eye_rub_reporting import force_show_report_summary as show_eye_rub_summary
 
-from .data_reporting.blink_report.blink_reporting import (
-    start_blink_reporting,
-    stop_blink_reporting
-)
-from .data_reporting.yawns_report.yawns_reporting import (
-    start_reporting as start_yawn_reporting,
-    stop_reporting as stop_yawn_reporting
-)
+from .data_reporting.blink_report import blink_reporting
+from .data_reporting.yawns_report import yawns_reporting
 
 class DriverMonitoringScreen(Screen):
     def on_enter(self):
@@ -33,10 +27,13 @@ class DriverMonitoringScreen(Screen):
             print("[ERROR] No se pudo abrir la cámara.")
             return
 
-        # Iniciar los hilos de reporte aquí para evitar inicio prematuro
+        # Enlazar función de callback para mostrar reportes en la UI
+        blink_reporting.ui_report_callback = self.update_report_box
+
+        # Iniciar hilos de reporte
         print("[INFO] Iniciando hilos de reporte de parpadeos y bostezos.")
-        start_blink_reporting()
-        start_yawn_reporting()
+        blink_reporting.start_blink_reporting()
+        yawns_reporting.start_reporting()
 
         self.event = Clock.schedule_interval(self.update, 1.0 / 30.0)
 
@@ -72,11 +69,10 @@ class DriverMonitoringScreen(Screen):
         status_msg = "✅ Detección activa" if face_success or hand_success else "🔍 Buscando rostro o manos..."
         self.ids.footer_label.text = status_msg
 
-    def on_leave(self):
-        print("[INFO] Saliendo de DriverMonitoringScreen: deteniendo captura y reportes.")
-        self.stop_monitoring()
-        stop_blink_reporting()
-        stop_yawn_reporting()
+    def update_report_box(self, text):
+        def _update(dt):
+            self.ids.report_box.text = text
+        Clock.schedule_once(_update)
 
     def stop_monitoring(self):
         if hasattr(self, 'event'):
@@ -85,6 +81,13 @@ class DriverMonitoringScreen(Screen):
         if hasattr(self, 'cap') and self.cap.isOpened():
             self.cap.release()
             print("[INFO] Cámara liberada.")
+
+    def on_leave(self):
+        print("[INFO] Saliendo de DriverMonitoringScreen: deteniendo captura y reportes.")
+        self.stop_monitoring()
+        blink_reporting.stop_blink_reporting()
+        yawns_reporting.stop_reporting()
+        blink_reporting.ui_report_callback = None
 
     def end_trip(self):
         print("[INFO] Finalizando viaje: mostrando resúmenes y deteniendo reportes.")
@@ -95,7 +98,8 @@ class DriverMonitoringScreen(Screen):
         show_nods_summary()
         show_eye_rub_summary()
 
-        stop_blink_reporting()
-        stop_yawn_reporting()
+        blink_reporting.stop_blink_reporting()
+        yawns_reporting.stop_reporting()
+        blink_reporting.ui_report_callback = None
 
         self.manager.current = "end_report"
