@@ -1,3 +1,5 @@
+# /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/data_reporting/blink_report/total_blink_report.py
+
 import atexit
 from datetime import datetime
 
@@ -6,12 +8,14 @@ normal_reports = 0
 risk_reports = 0
 microsleep_count = 0
 
-def print_report(message: str):
+def send_report(message: str):
     global normal_reports, risk_reports, microsleep_count
 
+    # Agregar timestamp al mensaje
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print(f"[{timestamp}] {message}")
 
+    # Lógica para actualizar contadores basados en el contenido del mensaje
     if "No se detectaron parpadeos" in message:
         return
 
@@ -41,3 +45,6 @@ def show_report_summary():
 # Función adicional para forzar el resumen manualmente
 def force_show_report_summary():
     show_report_summary()
+
+# Registrar el resumen para que se imprima al finalizar el programa
+atexit.register(show_report_summary)

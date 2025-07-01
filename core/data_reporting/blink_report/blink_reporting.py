@@ -1,7 +1,7 @@
 # /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/data_reporting/blink_report/blink_reporting.py
 import time
 import threading
-from .total_blink_report import print_report
+from .total_blink_report import send_report  # Usamos 'send_report' en lugar de 'print_report'
 
 # Variables globales para almacenar los datos de parpadeos
 blink_count = 0
@@ -27,29 +27,29 @@ def generate_report():
         time.sleep(60)
         with lock:
             if blink_count == 0:
-                print_report("En el último minuto: No se detectaron parpadeos.")
+                send_report("En el último minuto: No se detectaron parpadeos.")
             else:
                 average_duration = total_duration / blink_count
-                print_report("En el último minuto:")
-                print_report(f"- Total de parpadeos: {blink_count}")
-                print_report(f"- Duración promedio del parpadeo: {average_duration:.2f} ms")
+                send_report("En el último minuto:")
+                send_report(f"- Total de parpadeos: {blink_count}")
+                send_report(f"- Duración promedio del parpadeo: {average_duration:.2f} ms")
 
                 if blink_count < NORMAL_FREQUENCY_MIN:
                     if average_duration > CANSANCIO_DURATION_THRESHOLD:
-                        print_report("Estado de cansancio: Parpadeos muy lentos y prolongados (> 400 ms).")
+                        send_report("Estado de cansancio: Parpadeos muy lentos y prolongados (> 400 ms).")
                     elif RIESGO_DURATION_MIN <= average_duration <= RIESGO_DURATION_MAX:
-                        print_report("Riesgo de somnolencia: Duración de parpadeos sugiere posibles microsueños (300–600 ms).")
+                        send_report("Riesgo de somnolencia: Duración de parpadeos sugiere posibles microsueños (300–600 ms).")
                     else:
-                        print_report("Parpadeos poco frecuentes y breves: posible fatiga leve.")
+                        send_report("Parpadeos poco frecuentes y breves: posible fatiga leve.")
                 elif NORMAL_FREQUENCY_MIN <= blink_count <= NORMAL_FREQUENCY_MAX:
                     if NORMAL_DURATION_MIN <= average_duration <= NORMAL_DURATION_MAX:
-                        print_report("Parpadeo normal: Frecuencia y duración dentro del rango esperado.")
+                        send_report("Parpadeo normal: Frecuencia y duración dentro del rango esperado.")
                     elif average_duration > NORMAL_DURATION_MAX:
-                        print_report("Fatiga moderada: parpadeos más lentos de lo normal.")
+                        send_report("Fatiga moderada: parpadeos más lentos de lo normal.")
                     else:
-                        print_report("Parpadeos rápidos pero dentro de frecuencia normal.")
+                        send_report("Parpadeos rápidos pero dentro de frecuencia normal.")
                 else:
-                    print_report("Frecuencia de parpadeo alta: fuera del rango típico.")
+                    send_report("Frecuencia de parpadeo alta: fuera del rango típico.")
 
             # Reiniciar contadores
             blink_count = 0
@@ -60,7 +60,7 @@ def report_blink_data(gesture_type: str, eye: str, duration: float):
     with lock:
         blink_count += 1
         total_duration += duration
-    print(f"Datos reportados: {gesture_type.capitalize()} en {eye.capitalize()} con duración de {duration:.0f} ms")
+    send_report(f"Datos reportados: {gesture_type.capitalize()} en {eye.capitalize()} con duración de {duration:.0f} ms")
 
 def start_blink_reporting():
     global report_thread, reporting_active
