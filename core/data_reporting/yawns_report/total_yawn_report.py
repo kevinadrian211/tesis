@@ -1,17 +1,18 @@
 # /Users/kevin/Desktop/tesis/core/data_reporting/yawns_report/total_yawn_report.py
-import atexit
+
 from datetime import datetime
+from ..report_dispatcher import dispatch_yawn_report  # Importamos el enrutador para los reportes de bostezos
 
 # Contadores globales de reportes
 normal_reports = 0
 risk_reports = 0
 
-def print_report(message: str):
+def send_report(message: str):
     global normal_reports, risk_reports
 
-    # Mostrar siempre el mensaje con timestamp
+    # Agregar timestamp al mensaje
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print(f"[{timestamp}] {message}")
+    dispatch_yawn_report(f"{message}")  # Usamos el enrutador para enviar el mensaje
 
     # Clasificar únicamente reportes válidos (que tengan al menos un gesto)
     if message.startswith("[REPORTE 5 MIN]") or message.startswith("[REPORTE 10 MIN]"):
@@ -27,10 +28,10 @@ def print_report(message: str):
 
 # Imprimir resumen al finalizar el programa
 def show_report_summary():
-    print("\n--- RESUMEN FINAL DE BOSTEZOS REPORTADOS ---")
-    print(f"🔵 Reportes normales: {normal_reports}")
-    print(f"🔴 Reportes en riesgo: {risk_reports}")
-    print("----------------------------------")
+    dispatch_yawn_report("\n--- RESUMEN FINAL DE BOSTEZOS REPORTADOS ---")
+    dispatch_yawn_report(f"🔵 Reportes normales: {normal_reports}")
+    dispatch_yawn_report(f"🔴 Reportes en riesgo: {risk_reports}")
+    dispatch_yawn_report("----------------------------------")
 
 # Función para forzar mostrar el resumen en cualquier momento
 def force_show_report_summary():

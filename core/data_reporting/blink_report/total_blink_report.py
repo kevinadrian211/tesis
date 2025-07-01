@@ -2,6 +2,7 @@
 
 import atexit
 from datetime import datetime
+from ..report_dispatcher import dispatch_blink_report  # Importamos el enrutador específico para BlinkReport
 
 # Contadores globales
 normal_reports = 0
@@ -13,7 +14,7 @@ def send_report(message: str):
 
     # Agregar timestamp al mensaje
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print(f"[{timestamp}] {message}")
+    dispatch_blink_report(f" {message}")  # Usamos el enrutador para enviar el mensaje
 
     # Lógica para actualizar contadores basados en el contenido del mensaje
     if "No se detectaron parpadeos" in message:
@@ -36,15 +37,13 @@ def send_report(message: str):
         normal_reports += 1
 
 def show_report_summary():
-    print("\n--- RESUMEN FINAL DE PARPADEOS ---")
-    print(f"🔵 Reportes normales: {normal_reports}")
-    print(f"🔴 Reportes en riesgo: {risk_reports}")
-    print(f"🛌 Microsueños detectados: {microsleep_count}")
-    print("----------------------------------")
+    # Mostrar el resumen final de los parpadeos, enviando los mensajes al dispatcher
+    dispatch_blink_report("\n--- RESUMEN FINAL DE PARPADEOS ---")
+    dispatch_blink_report(f"🔵 Reportes normales: {normal_reports}")
+    dispatch_blink_report(f"🔴 Reportes en riesgo: {risk_reports}")
+    dispatch_blink_report(f"🛌 Microsueños detectados: {microsleep_count}")
+    dispatch_blink_report("----------------------------------")
 
 # Función adicional para forzar el resumen manualmente
 def force_show_report_summary():
     show_report_summary()
-
-# Registrar el resumen para que se imprima al finalizar el programa
-atexit.register(show_report_summary)
