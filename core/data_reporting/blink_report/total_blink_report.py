@@ -1,8 +1,6 @@
-# /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/data_reporting/blink_report/total_blink_report.py
-
 import atexit
 from datetime import datetime
-from ..report_dispatcher import dispatch_blink_report  # Importamos el enrutador específico para BlinkReport
+from ..report_dispatcher import dispatch_blink_detailed_report, dispatch_blink_summary_report  # Importamos los nuevos enrutadores
 
 # Contadores globales
 normal_reports = 0
@@ -14,7 +12,7 @@ def send_report(message: str):
 
     # Agregar timestamp al mensaje
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    dispatch_blink_report(f" {message}")  # Usamos el enrutador para enviar el mensaje
+    dispatch_blink_detailed_report(f"{timestamp} - {message}")  # Usamos el enrutador para enviar el mensaje detallado
 
     # Lógica para actualizar contadores basados en el contenido del mensaje
     if "No se detectaron parpadeos" in message:
@@ -37,12 +35,16 @@ def send_report(message: str):
         normal_reports += 1
 
 def show_report_summary():
-    # Mostrar el resumen final de los parpadeos, enviando los mensajes al dispatcher
-    dispatch_blink_report("\n--- RESUMEN FINAL DE PARPADEOS ---")
-    dispatch_blink_report(f"🔵 Reportes normales: {normal_reports}")
-    dispatch_blink_report(f"🔴 Reportes en riesgo: {risk_reports}")
-    dispatch_blink_report(f"🛌 Microsueños detectados: {microsleep_count}")
-    dispatch_blink_report("----------------------------------")
+    # Crear el mensaje resumen
+    summary_message = (
+        f"--- RESUMEN FINAL DE PARPADEOS ---\n"
+        f"🔵 Reportes normales: {normal_reports}\n"
+        f"🔴 Reportes en riesgo: {risk_reports}\n"
+        f"🛌 Microsueños detectados: {microsleep_count}\n"
+        f"----------------------------------"
+    )
+    # Enviar el mensaje resumen usando el dispatcher de resumen
+    dispatch_blink_summary_report(summary_message)  # Llamamos a la nueva función de resumen
 
 # Función adicional para forzar el resumen manualmente
 def force_show_report_summary():
