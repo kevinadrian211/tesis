@@ -1,8 +1,7 @@
 # /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/data_reporting/yawns_report/yawns_reporting.py
 import threading
-import time
 from datetime import datetime, timedelta
-from .total_yawn_report import print_report
+from .total_yawn_report import print_report  # Importar print_report desde total_yawn_report
 
 yawn_events = []
 
@@ -12,6 +11,7 @@ stop_event = threading.Event()
 def report_yawn_data(duration: float):
     timestamp = datetime.now()
     yawn_events.append((timestamp, duration))
+    # Reemplazar el print por la función print_report de total_yawn_report
     print_report(f"[REPORTE DE BOSTEZO] Duración: {duration:.2f} segundos | Hora: {timestamp.strftime('%H:%M:%S')}")
 
 def five_minute_report_loop():
@@ -59,6 +59,7 @@ thread_10min = None
 def start_reporting():
     global thread_5min, thread_10min
     stop_event.clear()
+    # Iniciar los reportes utilizando print_report desde total_yawn_report
     print_report("[INFO] Iniciando reportes automáticos cada 5 y 10 minutos...")
     thread_5min = threading.Thread(target=five_minute_report_loop, daemon=True)
     thread_10min = threading.Thread(target=ten_minute_report_loop, daemon=True)

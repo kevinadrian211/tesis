@@ -1,3 +1,4 @@
+# /Users/kevin/Desktop/tesis/core/data_reporting/yawns_report/total_yawn_report.py
 import atexit
 from datetime import datetime
 
@@ -26,7 +27,7 @@ def print_report(message: str):
 
 # Imprimir resumen al finalizar el programa
 def show_report_summary():
-    print("\n--- RESUMEN FINAL DE CABECEOS REPORTADOS ---")
+    print("\n--- RESUMEN FINAL DE BOSTEZOS REPORTADOS ---")
     print(f"🔵 Reportes normales: {normal_reports}")
     print(f"🔴 Reportes en riesgo: {risk_reports}")
     print("----------------------------------")
