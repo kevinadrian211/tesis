@@ -6,27 +6,141 @@
 
         canvas.before:
             Color:
-                rgba: 1, 0.99, 0.95, 1  # #FFFCF2 en rgba
+                rgba: 1, 0.99, 0.95, 1  # Color de fondo (#FFFCF2 en rgba)
             Rectangle:
                 pos: self.pos
                 size: self.size
 
+        # Título
         Label:
             id: header_label
             text: "🧠 Monitor de Atención del Conductor"
             size_hint: 1, 0.1
             font_size: '20sp'
 
+        # Vista de imagen
         Image:
             id: img_widget
             size_hint: 1, 0.8
 
+        # Cuadro para los reportes
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, None
+            height: 200
+
+            # Cuadro para el reporte de ojos
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: 40
+                padding: 5
+                spacing: 5
+                canvas.before:
+                    Color:
+                        rgba: 0.8, 0.8, 0.8, 1  # Gris claro
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                Label:
+                    id: eyes_report_label
+                    text: "Reporte Ojos: "
+                    size_hint: 0.3, 1
+                    font_size: '14sp'
+
+                Label:
+                    id: eyes_message_label
+                    text: "Esperando..."
+                    size_hint: 0.7, 1
+                    font_size: '14sp'
+
+            # Cuadro para el reporte de parpadeo
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: 40
+                padding: 5
+                spacing: 5
+                canvas.before:
+                    Color:
+                        rgba: 0.8, 0.8, 0.8, 1  # Gris claro
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                Label:
+                    id: blink_report_label
+                    text: "Reporte Parpadeo: "
+                    size_hint: 0.3, 1
+                    font_size: '14sp'
+
+                Label:
+                    id: blink_message_label
+                    text: "Esperando..."
+                    size_hint: 0.7, 1
+                    font_size: '14sp'
+
+            # Cuadro para el reporte de cabeceo
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: 40
+                padding: 5
+                spacing: 5
+                canvas.before:
+                    Color:
+                        rgba: 0.8, 0.8, 0.8, 1  # Gris claro
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                Label:
+                    id: nod_report_label
+                    text: "Reporte Cabeceo: "
+                    size_hint: 0.3, 1
+                    font_size: '14sp'
+
+                Label:
+                    id: nod_message_label
+                    text: "Esperando..."
+                    size_hint: 0.7, 1
+                    font_size: '14sp'
+
+            # Cuadro para el reporte de bostezo
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: 40
+                padding: 5
+                spacing: 5
+                canvas.before:
+                    Color:
+                        rgba: 0.8, 0.8, 0.8, 1  # Gris claro
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                Label:
+                    id: yawn_report_label
+                    text: "Reporte Bostezo: "
+                    size_hint: 0.3, 1
+                    font_size: '14sp'
+
+                Label:
+                    id: yawn_message_label
+                    text: "Esperando..."
+                    size_hint: 0.7, 1
+                    font_size: '14sp'
+
+        # Pie de página
         Label:
             id: footer_label
             text: "Estado: Iniciando..."
             size_hint: 1, 0.1
             font_size: '16sp'
 
+        # Botón para finalizar viaje
         Button:
             text: "Finalizar viaje"
             size_hint: 1, 0.1

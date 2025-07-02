@@ -1,3 +1,4 @@
+# /Users/kevin/Desktop/tesis/core/index.py
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
@@ -19,6 +20,28 @@ from .data_reporting.yawns_report.yawns_reporting import (
     start_reporting as start_yawn_reporting,
     stop_reporting as stop_yawn_reporting
 )
+from .data_reporting.blink_report.total_blink_report import register_report_listener
+from .data_reporting.eye_rub_report.eye_rub_reporting import register_eye_rub_listener
+from .data_reporting.nods_report.nods_reporting import register_nod_listener
+from .data_reporting.yawns_report.total_yawn_report import register_yawn_listener  # Importa la función
+
+# Funciones de impresión actualizadas
+def imprimir_frotamiento_en_consola(screen, mensaje):
+    # Actualiza el label de reporte de ojos con el mensaje
+    screen.ids.eyes_message_label.text = mensaje
+
+def imprimir_en_consola(screen, mensaje):
+    # Actualiza el label de reporte de parpadeo con el mensaje
+    screen.ids.blink_message_label.text = mensaje
+
+def imprimir_nods_en_consola(screen, mensaje):
+    # Actualiza el label de reporte de cabeceo con el mensaje
+    screen.ids.nod_message_label.text = mensaje
+
+def imprimir_bostezo_en_consola(screen, mensaje):
+    # Actualiza el label de reporte de bostezo con el mensaje
+    screen.ids.yawn_message_label.text = mensaje
+
 
 class DriverMonitoringScreen(Screen):
     def on_enter(self):
@@ -37,6 +60,12 @@ class DriverMonitoringScreen(Screen):
         print("[INFO] Iniciando hilos de reporte de parpadeos y bostezos.")
         start_blink_reporting()
         start_yawn_reporting()
+
+        # Registrar callback para imprimir reportes en consola, pasando la referencia de la pantalla
+        register_report_listener(lambda mensaje: imprimir_en_consola(self, mensaje))
+        register_eye_rub_listener(lambda mensaje: imprimir_frotamiento_en_consola(self, mensaje))
+        register_nod_listener(lambda mensaje: imprimir_nods_en_consola(self, mensaje))
+        register_yawn_listener(lambda mensaje: imprimir_bostezo_en_consola(self, mensaje))
 
         self.event = Clock.schedule_interval(self.update, 1.0 / 30.0)
 
