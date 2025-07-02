@@ -1,4 +1,3 @@
-# /Users/kevin/Desktop/tesis/core/index.py
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
@@ -20,10 +19,10 @@ from .data_reporting.yawns_report.yawns_reporting import (
     start_reporting as start_yawn_reporting,
     stop_reporting as stop_yawn_reporting
 )
-from .data_reporting.blink_report.total_blink_report import register_report_listener
+from .data_reporting.blink_report.total_blink_report import register_blink_listener  # Importar el listener de blink
 from .data_reporting.eye_rub_report.eye_rub_reporting import register_eye_rub_listener
 from .data_reporting.nods_report.nods_reporting import register_nod_listener
-from .data_reporting.yawns_report.total_yawn_report import register_yawn_listener  # Importa la función
+from .data_reporting.yawns_report.total_yawn_report import register_yawn_listener  # Importar el listener de bostezos
 
 # Funciones de impresión actualizadas
 def imprimir_frotamiento_en_consola(screen, mensaje):
@@ -62,10 +61,10 @@ class DriverMonitoringScreen(Screen):
         start_yawn_reporting()
 
         # Registrar callback para imprimir reportes en consola, pasando la referencia de la pantalla
-        register_report_listener(lambda mensaje: imprimir_en_consola(self, mensaje))
-        register_eye_rub_listener(lambda mensaje: imprimir_frotamiento_en_consola(self, mensaje))
-        register_nod_listener(lambda mensaje: imprimir_nods_en_consola(self, mensaje))
-        register_yawn_listener(lambda mensaje: imprimir_bostezo_en_consola(self, mensaje))
+        register_blink_listener(lambda mensaje: imprimir_en_consola(self, mensaje), report_type="detailed")  # Detallado para parpadeos
+        register_eye_rub_listener(lambda mensaje: imprimir_frotamiento_en_consola(self, mensaje), report_type="detailed")  # Reporte detallado para Eye Rub
+        register_nod_listener(lambda mensaje: imprimir_nods_en_consola(self, mensaje), report_type="detailed")  # SOLO resumen para nodos
+        register_yawn_listener(lambda mensaje: imprimir_bostezo_en_consola(self, mensaje), report_type="detailed")  # Detallado para yawns
 
         self.event = Clock.schedule_interval(self.update, 1.0 / 30.0)
 
@@ -119,10 +118,10 @@ class DriverMonitoringScreen(Screen):
         print("[INFO] Finalizando viaje: mostrando resúmenes y deteniendo reportes.")
         self.stop_monitoring()
 
-        show_blink_summary()
-        show_yawn_summary()
-        show_nods_summary()
-        show_eye_rub_summary()
+        show_blink_summary()  # Mostrar el resumen de parpadeos
+        show_yawn_summary()   # Mostrar el resumen de bostezos
+        show_nods_summary()   # Mostrar el resumen de nodos
+        show_eye_rub_summary() # Mostrar el resumen de frotamientos de ojos
 
         stop_blink_reporting()
         stop_yawn_reporting()
