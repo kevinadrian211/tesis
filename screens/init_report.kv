@@ -1,27 +1,79 @@
 <ReportScreen>:
     BoxLayout:
         orientation: 'vertical'
-        padding: "10dp"
-        spacing: "10dp"
+        padding: "20dp"
+        spacing: "20dp"
 
         canvas.before:
             Color:
-                rgba: 1, 0.99, 0.95, 1  # Color de fondo claro
+                rgba: 1, 0.99, 0.95, 1  # Color de fondo claro (#FFFCF2 en rgba)
             Rectangle:
                 pos: self.pos
                 size: self.size
 
-            # Borde negro alrededor del rectángulo
-            Color:
-                rgba: 0, 0, 0, 1  # Color negro para el borde
-            Line:
-                width: 2  # Ancho del borde
-                rectangle: (self.x, self.y, self.width, self.height)
+        # Header (Título de la pantalla)
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, None
+            height: "60dp"
+            padding: "10dp"
+            spacing: "5dp"
 
-        Button:
-            text: "Iniciar viaje"
-            size_hint: 0.6, None
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1  # Negro para borde
+                Line:
+                    width: 3
+                    rectangle: (*self.pos, *self.size)
+
+            Label:
+                text: "🧳 Reporte de Viaje"
+                size_hint: 1, 1
+                font_size: '24sp'
+                color: 0, 0, 0, 1  # Color negro
+                halign: 'center'
+                valign: 'middle'
+
+        # Body (contenido principal con solo el botón)
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, 1
+            spacing: "20dp"
+            padding: "10dp"
+
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    width: 3
+                    rectangle: (*self.pos, *self.size)
+
+            Button:
+                text: "Iniciar viaje"
+                size_hint: 0.6, None
+                height: "50dp"
+                pos_hint: {"center_x": 0.5}
+                font_size: '18sp'
+                on_press: root.on_start_trip()
+
+        # Footer (Estado o texto adicional)
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, None
             height: "50dp"
-            pos_hint: {"center_x": 0.5}
-            font_size: '18sp'
-            on_press: root.on_start_trip()
+            padding: "10dp"
+            spacing: "10dp"
+
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    width: 3
+                    rectangle: (*self.pos, *self.size)
+
+            Label:
+                text: "Estado: Preparando..."
+                size_hint: 1, 1
+                font_size: '16sp'
+                halign: 'center'
+                valign: 'middle'

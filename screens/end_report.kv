@@ -6,21 +6,63 @@
 
         canvas.before:
             Color:
-                rgba: 1, 0.99, 0.95, 1  # #FFFCF2 en rgba
+                rgba: 1, 0.99, 0.95, 1  # Fondo claro
             Rectangle:
                 pos: self.pos
                 size: self.size
 
-        Label:
-            text: "✅ Esta es la pantalla final del viaje."
-            font_size: '18sp'
-            halign: 'center'
-            valign: 'middle'
-            text_size: self.size
+        # Header
+        BoxLayout:
+            size_hint_y: None
+            height: "60dp"
+            padding: "10dp"
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    width: 3
+                    rectangle: (*self.pos, *self.size)
 
-        Button:
-            text: "Volver al inicio"
-            size_hint: 0.5, None
-            height: "50dp"
-            pos_hint: {"center_x": 0.5}
-            on_press: root.go_to_home()
+            Label:
+                text: "🛑 Fin del Viaje"
+                font_size: '20sp'
+                halign: 'center'
+                valign: 'middle'
+
+        # Body (mensaje final + botón)
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: "20dp"
+            padding: "10dp"
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    width: 3
+                    rectangle: (*self.pos, *self.size)
+
+            Label:
+                text: "✅ Esta es la pantalla final del viaje."
+                font_size: '18sp'
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+
+            Button:
+                text: "Volver al inicio"
+                size_hint: 0.5, None
+                height: "50dp"
+                pos_hint: {"center_x": 0.5}
+                on_press: root.go_to_home()
+
+        # Footer (margen / espacio visual)
+        BoxLayout:
+            size_hint_y: None
+            height: "40dp"
+            padding: "10dp"
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    width: 3
+                    rectangle: (*self.pos, *self.size)
