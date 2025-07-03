@@ -7,7 +7,7 @@ from core.data_reporting.nods_report.nods_reporting import register_nod_listener
 from core.data_reporting.yawns_report.total_yawn_report import register_yawn_listener  # Importar el listener de bostezos
 
 # Cargar la interfaz de usuario (archivo .kv)
-Builder.load_file("screens/end_report.kv")
+Builder.load_file("screens/driver_screens/end_report.kv")
 
 class EndReportScreen(Screen):
     def go_to_home(self):
