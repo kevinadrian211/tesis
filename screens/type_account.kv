@@ -1,0 +1,23 @@
+<TypeAccountScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: 50
+        spacing: 10
+
+        Label:
+            text: "¿Qué tipo de cuenta deseas crear?"
+            font_size: 24
+            size_hint_y: None
+            height: "40dp"
+
+        Button:
+            text: "Company"
+            size_hint_y: None
+            height: "50dp"
+            on_press: root.select_account_type("company")  # Redirige a la pantalla de registro de Company
+
+        Button:
+            text: "Driver"
+            size_hint_y: None
+            height: "50dp"
+            on_press: root.select_account_type("driver")  # Redirige a la pantalla de registro de Driver

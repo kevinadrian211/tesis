@@ -1,0 +1,17 @@
+<DashboardCompanyScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 10
+        Label:
+            text: 'Pantalla de la Compañía'
+            font_size: 32
+            color: (1, 1, 1, 1)  # Color blanco
+            size_hint_y: None
+            height: self.texture_size[1]  # Ajuste de altura según el texto
+        Button:
+            text: 'Volver al Inicio'
+            size_hint: 0.2, 0.1
+            pos_hint: {'center_x': 0.5, 'center_y': 0.1}
+            on_press:
+                root.manager.current = 'type_account'  # Cambia a la pantalla inicial (o login)
