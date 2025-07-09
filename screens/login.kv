@@ -1,0 +1,40 @@
+<LoginScreen>:
+    name: "login"
+    BoxLayout:
+        orientation: "vertical"
+        padding: 50
+        spacing: 20
+
+        TextInput:
+            id: email_input
+            hint_text: "Email"
+            multiline: False
+            size_hint_y: None
+            height: "40dp"
+
+        TextInput:
+            id: password_input
+            hint_text: "Contraseña"
+            password: True
+            multiline: False
+            size_hint_y: None
+            height: "40dp"
+
+        Label:
+            id: error_label
+            text: ""
+            color: 1, 0, 0, 1  # Rojo para errores
+            size_hint_y: None
+            height: "30dp"
+
+        Button:
+            text: "Iniciar sesión"
+            size_hint_y: None
+            height: "50dp"
+            on_press: root.login()
+
+        Button:
+            text: "Registrar"
+            size_hint_y: None
+            height: "50dp"
+            on_press: app.root.current = "type_account"

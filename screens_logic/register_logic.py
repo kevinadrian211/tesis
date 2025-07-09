@@ -43,10 +43,10 @@ class RegisterScreen(Screen):
 
     def go_back(self):
         """
-        Esta función maneja la navegación hacia la pantalla anterior (TypeAccountScreen).
-        Cambia la pantalla activa de ScreenManager a 'type_account'.
+        Esta función maneja la navegación hacia la pantalla anterior (Login).
+        Cambia la pantalla activa de ScreenManager a 'login'.
         """
-        self.manager.current = 'type_account'
+        self.manager.current = 'login'  # Ahora redirige directamente al login
 
     def register_action(self):
         """

@@ -119,3 +119,52 @@ def get_all_companies():
     except Exception as e:
         print(f"Error al acceder a la base de datos: {e}")
         return []
+
+def verify_company_login(email: str, password: str):
+    try:
+        # Usamos maybe_single para evitar error si no hay resultado
+        response = supabase.table('companies').select('*').eq('email', email).maybe_single().execute()
+
+        if not response.data:
+            print(f"No se encontró la compañía con email {email}")
+            return False
+
+        company = response.data
+
+        stored_hashed_password = company.get('password')
+        print(f"Hash guardado para {email}: {stored_hashed_password}")
+
+        if bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password.encode('utf-8')):
+            print("Contraseña correcta.")
+            return company
+        else:
+            print("Contraseña incorrecta.")
+            return False
+    except ValueError as ve:
+        print(f"Error de bcrypt (posible salt inválido): {ve}")
+        return False
+    except Exception as e:
+        print(f"Error inesperado durante login de compañía: {e}")
+        return False
+
+def verify_driver_login(email: str, password: str):
+    """
+    Verifica las credenciales de un conductor (driver).
+    """
+    try:
+        # Buscar usuario con rol 'driver' por email
+        response = supabase.table('users').select('*').eq('email', email).eq('role', 'driver').single().execute()
+
+        if not response.data:
+            return False
+
+        driver = response.data
+        stored_hashed_password = driver.get('encrypted_password')  # o como tengas el campo
+
+        if bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password.encode('utf-8')):
+            return driver  # Login exitoso
+        else:
+            return False  # Contraseña incorrecta
+    except Exception as e:
+        print(f"Error durante login de conductor: {e}")
+        return False
