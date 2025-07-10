@@ -2,169 +2,192 @@ from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
 import uuid
-import bcrypt  # Importamos bcrypt para cifrar las contraseñas
+import bcrypt
 
 # Cargar las variables de entorno
 load_dotenv()
 
-# Obtener las credenciales de Supabase desde las variables de entorno
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
-# Verificar que las credenciales no sean None
 if SUPABASE_URL is None or SUPABASE_KEY is None:
     raise ValueError("Las credenciales de Supabase no se han cargado correctamente. Verifica el archivo .env.")
 
-# Crear el cliente de Supabase
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Función para cifrar contraseñas
+# ----------------------------------------
+# Funciones de utilidad
+# ----------------------------------------
+
 def hash_password(password: str) -> str:
-    """Cifra la contraseña usando bcrypt."""
     salt = bcrypt.gensalt()
     hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed.decode('utf-8')  # Devolver como string para almacenarlo en la DB
+    return hashed.decode('utf-8')
 
-# Función para registrar una nueva compañía
-def register_company(name, email, password):
-    """
-    Registra una nueva compañía en la base de datos.
-    """
+def email_exists_in_table(table_name: str, email: str) -> bool:
     try:
-        # Generar un UUID para la nueva compañía
+        response = supabase.table(table_name).select('id').eq('email', email).maybe_single().execute()
+        return response.data is not None
+    except Exception as e:
+        print(f"Error al verificar existencia de email en '{table_name}': {e}")
+        return False
+
+# ----------------------------------------
+# Registro de compañía
+# ----------------------------------------
+
+def register_company(name, email, password):
+    try:
+        if email_exists_in_table("companies", email):
+            print(f"Ya existe una compañía registrada con el email: {email}")
+            return False
+
         company_id = str(uuid.uuid4())
-        
-        # Cifrar la contraseña de la compañía
         hashed_password = hash_password(password)
-        
-        # Insertar los datos de la compañía
+
         response = supabase.table('companies').insert({
             'id': company_id,
             'name': name,
             'email': email,
-            'password': hashed_password  # Guardamos la contraseña cifrada
+            'encrypted_password': hashed_password  # Renombrado aquí
         }).execute()
-        
-        # Imprimir la respuesta completa para inspeccionarla
-        print("Respuesta completa de Supabase:")
-        print(response)
 
-        # Verificamos si se han devuelto datos en la respuesta
         if response.data:
             print(f"Compañía '{name}' registrada exitosamente.")
-            return company_id  # Devuelve el ID de la compañía creada
+            return company_id
         else:
-            print(f"Error al registrar la compañía: No se encontraron datos en la respuesta.")
-            print(f"Detalles del error: {response.error}")  # Imprime el detalle del error si está presente
+            print(f"Error al registrar la compañía: {response.error}")
             return False
 
     except Exception as e:
-        print(f"Ocurrió un error al intentar registrar la compañía: {e}")
+        print(f"Error al registrar compañía: {e}")
         return False
 
+# ----------------------------------------
+# Registro de conductor
+# ----------------------------------------
+
 def register_driver(name, email, password, company_id):
-    """
-    Registra un nuevo conductor en la base de datos y lo asocia con una compañía.
-    """
     try:
-        # Generar un UUID para el nuevo conductor
+        if email_exists_in_table("users", email):
+            print(f"Ya existe un usuario registrado con el email: {email}")
+            return False
+
         driver_id = str(uuid.uuid4())
-        
-        # Cifrar la contraseña del conductor
         hashed_password = hash_password(password)
-        
-        # Insertar los datos del conductor
+
         response = supabase.table('users').insert({
             'id': driver_id,
             'name': name,
             'email': email,
-            'encrypted_password': hashed_password,  # Asegúrate de que la contraseña esté cifrada antes de almacenarla
-            'role': 'driver',  # Aseguramos que el rol es 'driver'
-            'company_id': company_id  # Asignamos el ID de la compañía
+            'encrypted_password': hashed_password,
+            'role': 'driver',
+            'company_id': company_id
         }).execute()
-        
-        # Imprimir la respuesta completa para inspeccionarla
-        print("Respuesta completa de Supabase:")
-        print(response)
 
-        # Verificamos si la respuesta contiene datos
         if response.data:
             print(f"Conductor '{name}' registrado exitosamente.")
-            return True  # El conductor fue registrado exitosamente
+            return True
         else:
-            print(f"Error al registrar el conductor: No se encontraron datos en la respuesta.")
-            print(f"Detalles del error: {response.error}")  # Imprime el detalle del error si está presente
+            print(f"Error al registrar conductor: {response.error}")
             return False
 
     except Exception as e:
-        print(f"Ocurrió un error al intentar registrar el conductor: {e}")
+        print(f"Error al registrar conductor: {e}")
         return False
 
-# Función para obtener todas las compañías
+# ----------------------------------------
+# Obtener compañías
+# ----------------------------------------
+
 def get_all_companies():
-    """
-    Obtiene todas las compañías registradas en la base de datos.
-    """
     try:
-        # Realizamos la consulta a la base de datos
         response = supabase.table('companies').select('id', 'name').execute()
-
-        # Si la consulta fue exitosa, la propiedad 'data' contendrá los resultados
-        companies = response.data if response.data else []
-
-        # Imprimir las compañías obtenidas para depuración
-        print(f"Compañías obtenidas de la base de datos: {companies}")
-
-        return companies  # Retornamos la lista de compañías
+        return response.data if response.data else []
     except Exception as e:
-        print(f"Error al acceder a la base de datos: {e}")
+        print(f"Error al obtener compañías: {e}")
         return []
+
+# ----------------------------------------
+# Login de compañía
+# ----------------------------------------
 
 def verify_company_login(email: str, password: str):
     try:
-        # Usamos maybe_single para evitar error si no hay resultado
         response = supabase.table('companies').select('*').eq('email', email).maybe_single().execute()
 
         if not response.data:
-            print(f"No se encontró la compañía con email {email}")
+            print(f"Email de compañía no encontrado: {email}")
             return False
 
         company = response.data
+        stored_hash = company.get('encrypted_password')
 
-        stored_hashed_password = company.get('password')
-        print(f"Hash guardado para {email}: {stored_hashed_password}")
-
-        if bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password.encode('utf-8')):
-            print("Contraseña correcta.")
+        if stored_hash and bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
             return company
         else:
-            print("Contraseña incorrecta.")
+            print("Contraseña incorrecta para compañía.")
             return False
-    except ValueError as ve:
-        print(f"Error de bcrypt (posible salt inválido): {ve}")
-        return False
     except Exception as e:
-        print(f"Error inesperado durante login de compañía: {e}")
+        print(f"Error en login de compañía: {e}")
         return False
+
+# ----------------------------------------
+# Login de conductor
+# ----------------------------------------
 
 def verify_driver_login(email: str, password: str):
-    """
-    Verifica las credenciales de un conductor (driver).
-    """
     try:
-        # Buscar usuario con rol 'driver' por email
-        response = supabase.table('users').select('*').eq('email', email).eq('role', 'driver').single().execute()
+        response = supabase.table('users').select('*').eq('email', email).eq('role', 'driver').maybe_single().execute()
 
         if not response.data:
+            print(f"Email de conductor no encontrado: {email}")
             return False
 
         driver = response.data
-        stored_hashed_password = driver.get('encrypted_password')  # o como tengas el campo
+        stored_hash = driver.get('encrypted_password')
 
-        if bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password.encode('utf-8')):
-            return driver  # Login exitoso
+        if stored_hash and bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
+            return driver
         else:
-            return False  # Contraseña incorrecta
+            print("Contraseña incorrecta para conductor.")
+            return False
     except Exception as e:
-        print(f"Error durante login de conductor: {e}")
+        print(f"Error en login de conductor: {e}")
+        return False
+
+# ----------------------------------------
+# Registro de administrador
+# ----------------------------------------
+
+def register_admin(name, email, password, company_id):
+    """
+    Registra un nuevo administrador asociado a la compañía que lo está creando.
+    """
+    try:
+        if email_exists_in_table("users", email):
+            print(f"Ya existe un usuario registrado con el email: {email}")
+            return False
+
+        admin_id = str(uuid.uuid4())
+        hashed_password = hash_password(password)
+
+        response = supabase.table('users').insert({
+            'id': admin_id,
+            'name': name,
+            'email': email,
+            'encrypted_password': hashed_password,
+            'role': 'admin',
+            'company_id': company_id
+        }).execute()
+
+        if response.data:
+            print(f"Administrador '{name}' registrado exitosamente.")
+            return True
+        else:
+            print(f"Error al registrar administrador: {response.error}")
+            return False
+
+    except Exception as e:
+        print(f"Error al registrar administrador: {e}")
         return False

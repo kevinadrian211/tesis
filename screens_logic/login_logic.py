@@ -1,6 +1,7 @@
 # login_logic.py
 from kivy.uix.screenmanager import Screen
-from database import verify_company_login, verify_driver_login  # Importar ambas funciones
+from kivy.app import App  # <-- Agrega esta importación si no está
+from database import verify_company_login, verify_driver_login
 
 class LoginScreen(Screen):
     def login(self):
@@ -17,6 +18,14 @@ class LoginScreen(Screen):
         company = verify_company_login(email, password)
         if company:
             print(f"Inicio de sesión exitoso para la empresa: {company['name']}")
+
+            # 🔐 Guardar en la instancia global de la app
+            App.get_running_app().current_company = {
+                "id": company["id"],
+                "name": company["name"],
+                "email": company["email"]
+            }
+
             self.ids.error_label.text = ""  # Limpiar mensajes de error previos
             self.manager.current = "dashboard_company"
             return

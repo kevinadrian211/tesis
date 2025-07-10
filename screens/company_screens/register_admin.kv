@@ -1,0 +1,49 @@
+<RegisterAdminScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 20
+
+        Label:
+            text: "Agregar nuevo administrador"
+            font_size: 30
+            size_hint: (1, 0.2)
+            color: 1, 1, 1, 1
+
+        TextInput:
+            id: admin_name
+            hint_text: "Nombre completo"
+            multiline: False
+            size_hint_y: None
+            height: 50
+
+        TextInput:
+            id: admin_email
+            hint_text: "Correo electrónico"
+            multiline: False
+            size_hint_y: None
+            height: 50
+            input_type: 'text'
+
+        TextInput:
+            id: admin_password
+            hint_text: "Contraseña"
+            multiline: False
+            password: True
+            size_hint_y: None
+            height: 50
+
+        TextInput:
+            id: admin_confirm_password
+            hint_text: "Confirmar contraseña"
+            multiline: False
+            password: True
+            size_hint_y: None
+            height: 50
+
+        Button:
+            text: "Registrar Administrador"
+            font_size: 24
+            size_hint_y: None
+            height: 60
+            on_press: root.register_admin()
