@@ -10,7 +10,10 @@ from screens_logic.driver_screens_logic.end_report_logic import EndReportScreen
 from core.index import DriverMonitoringScreen
 from screens_logic.login_logic import LoginScreen
 from screens_logic.company_screens_logic.dashboard_company_logic import DashboardCompanyScreen
-from screens_logic.company_screens_logic.register_admin_logic import RegisterAdminScreen  # Asegúrate de importar la nueva pantalla
+from screens_logic.company_screens_logic.register_admin_logic import RegisterAdminScreen
+
+# Importar la nueva pantalla de admin
+from screens_logic.admin_screens_logic.dashboard_admin_logic import DashboardAdminScreen
 
 # Cargar los archivos KV
 Builder.load_file("screens/type_account.kv")
@@ -20,13 +23,17 @@ Builder.load_file("screens/driver_screens/init_report.kv")
 Builder.load_file("screens/driver_screens/monitoring.kv")
 Builder.load_file("screens/driver_screens/end_report.kv")
 Builder.load_file("screens/login.kv")
-Builder.load_file("screens/company_screens/register_admin.kv")  # Cargar el archivo de la pantalla RegisterAdmin
+Builder.load_file("screens/company_screens/register_admin.kv")
 
-# NOTA: Ya tienes la clase DashboardCompanyScreen importada,
-# así que NO la vuelvas a definir aquí para evitar conflicto.
+# Cargar el KV del dashboard admin
+Builder.load_file("screens/admin_screens/dashboard_admin.kv")
 
 class MainApp(App):
-    current_company = None  # 👈 Esta línea habilita el almacenamiento de sesión de empresa
+    # Variables para guardar sesión activa
+    current_company = None
+    current_admin = None
+    current_driver = None
+
     def build(self):
         sm = ScreenManager()
 
@@ -38,12 +45,32 @@ class MainApp(App):
         sm.add_widget(DriverMonitoringScreen(name="monitoring"))
         sm.add_widget(EndReportScreen(name="end_report"))
         sm.add_widget(DashboardCompanyScreen(name="dashboard_company"))
-        sm.add_widget(RegisterAdminScreen(name="register_admin"))  # Pantalla de registro de administrador
+        sm.add_widget(RegisterAdminScreen(name="register_admin"))
+        sm.add_widget(DashboardAdminScreen(name="dashboard_admin"))  # Nueva pantalla agregada
 
         return sm
 
     def on_start(self):
         pass
+
+    # Función para limpiar todas las sesiones
+    def clear_sessions(self):
+        self.current_company = None
+        self.current_admin = None
+        self.current_driver = None
+
+    # Función para limpiar sesión de compañía
+    def clear_company_session(self):
+        self.current_company = None
+
+    # Función para limpiar sesión de administrador
+    def clear_admin_session(self):
+        self.current_admin = None
+
+    # Función para limpiar sesión de conductor
+    def clear_driver_session(self):
+        self.current_driver = None
+
 
 if __name__ == "__main__":
     MainApp().run()

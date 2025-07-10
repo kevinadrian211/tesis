@@ -26,8 +26,8 @@ def hash_password(password: str) -> str:
 
 def email_exists_in_table(table_name: str, email: str) -> bool:
     try:
-        response = supabase.table(table_name).select('id').eq('email', email).maybe_single().execute()
-        return response.data is not None
+        response = supabase.table(table_name).select('id').eq('email', email).limit(1).execute()
+        return response.data is not None and len(response.data) > 0
     except Exception as e:
         print(f"Error al verificar existencia de email en '{table_name}': {e}")
         return False
@@ -49,7 +49,7 @@ def register_company(name, email, password):
             'id': company_id,
             'name': name,
             'email': email,
-            'encrypted_password': hashed_password  # Renombrado aquí
+            'encrypted_password': hashed_password
         }).execute()
 
         if response.data:
@@ -114,13 +114,12 @@ def get_all_companies():
 
 def verify_company_login(email: str, password: str):
     try:
-        response = supabase.table('companies').select('*').eq('email', email).maybe_single().execute()
-
+        response = supabase.table('companies').select('*').eq('email', email).limit(1).execute()
         if not response.data:
             print(f"Email de compañía no encontrado: {email}")
             return False
 
-        company = response.data
+        company = response.data[0]
         stored_hash = company.get('encrypted_password')
 
         if stored_hash and bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
@@ -138,13 +137,12 @@ def verify_company_login(email: str, password: str):
 
 def verify_driver_login(email: str, password: str):
     try:
-        response = supabase.table('users').select('*').eq('email', email).eq('role', 'driver').maybe_single().execute()
-
+        response = supabase.table('users').select('*').eq('email', email).eq('role', 'driver').limit(1).execute()
         if not response.data:
             print(f"Email de conductor no encontrado: {email}")
             return False
 
-        driver = response.data
+        driver = response.data[0]
         stored_hash = driver.get('encrypted_password')
 
         if stored_hash and bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
@@ -161,9 +159,6 @@ def verify_driver_login(email: str, password: str):
 # ----------------------------------------
 
 def register_admin(name, email, password, company_id):
-    """
-    Registra un nuevo administrador asociado a la compañía que lo está creando.
-    """
     try:
         if email_exists_in_table("users", email):
             print(f"Ya existe un usuario registrado con el email: {email}")
@@ -190,4 +185,27 @@ def register_admin(name, email, password, company_id):
 
     except Exception as e:
         print(f"Error al registrar administrador: {e}")
+        return False
+
+# ----------------------------------------
+# Login de administrador
+# ----------------------------------------
+
+def verify_admin_login(email: str, password: str):
+    try:
+        response = supabase.table('users').select('*').eq('email', email).eq('role', 'admin').limit(1).execute()
+        if not response.data:
+            print(f"Email de administrador no encontrado: {email}")
+            return False
+
+        admin = response.data[0]
+        stored_hash = admin.get('encrypted_password')
+
+        if stored_hash and bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
+            return admin
+        else:
+            print("Contraseña incorrecta para administrador.")
+            return False
+    except Exception as e:
+        print(f"Error en login de administrador: {e}")
         return False
