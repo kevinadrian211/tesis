@@ -1,6 +1,7 @@
 from kivy.uix.screenmanager import Screen
 from kivy.properties import StringProperty
-from database import register_company, register_driver, get_all_companies
+from kivy.app import App
+from database import register_company, register_driver, register_admin, get_all_companies
 
 class RegisterScreen(Screen):
     account_type = StringProperty("")  # Usamos StringProperty para hacer la propiedad reactiva
@@ -69,11 +70,20 @@ class RegisterScreen(Screen):
                 password = self.ids.company_password_input.text.strip()
 
                 # Llamamos a la función de registro de la base de datos
-                company_id = register_company(name, email, password)
-                if company_id:
+                company_data = register_company(name, email, password)
+                if company_data:
                     print(f"Compañía '{name}' registrada correctamente.")
+                    
+                    # Guardamos la sesión en current_user
+                    App.get_running_app().current_user = {
+                        "role": "company",
+                        "id": company_data["id"],
+                        "name": company_data["name"],
+                        "email": company_data["email"]
+                    }
+                    
                     # Redirigimos a la pantalla de dashboard_company
-                    self.manager.current = 'dashboard_company'  # Aquí redirigimos a la pantalla de la compañía
+                    self.manager.current = 'dashboard_company'
                 else:
                     print("Hubo un problema al registrar la compañía.")
             
@@ -94,12 +104,58 @@ class RegisterScreen(Screen):
                 password = self.ids.driver_password_input.text.strip()
 
                 # Llamamos a la función de registro de la base de datos para el conductor
-                if register_driver(name, email, password, self.company_id):
+                driver_data = register_driver(name, email, password, self.company_id)
+                if driver_data:
                     print("Conductor registrado correctamente.")
-                    # Redirigimos a la pantalla de init_report (solo conductores pueden acceder)
-                    self.manager.current = 'init_report'  # Redirige a la pantalla de reporte inicial
+                    
+                    # Guardamos la sesión en current_user
+                    App.get_running_app().current_user = {
+                        "role": "driver",
+                        "id": driver_data["id"],
+                        "name": driver_data["name"],
+                        "email": driver_data["email"],
+                        "company_id": driver_data["company_id"]
+                    }
+                    
+                    # Redirigimos a la pantalla de init_report
+                    self.manager.current = 'init_report'
                 else:
                     print("Hubo un problema al registrar el conductor.")
+            
+            elif self.account_type == "admin":
+                # Validamos que todos los campos de admin estén completos
+                if not self.ids.admin_name_input.text or not self.ids.admin_email_input.text or not self.ids.admin_password_input.text:
+                    print("Error: Todos los campos son obligatorios.")
+                    return
+                
+                # Verificamos que el ID de la compañía no sea vacío
+                if not self.company_id:
+                    print("Error: No se encontró el ID de la compañía.")
+                    return
+                
+                # Capturamos los datos del administrador
+                name = self.ids.admin_name_input.text.strip()
+                email = self.ids.admin_email_input.text.strip()
+                password = self.ids.admin_password_input.text.strip()
+
+                # Llamamos a la función de registro de la base de datos para el administrador
+                admin_data = register_admin(name, email, password, self.company_id)
+                if admin_data:
+                    print("Administrador registrado correctamente.")
+                    
+                    # Guardamos la sesión en current_user
+                    App.get_running_app().current_user = {
+                        "role": "admin",
+                        "id": admin_data["id"],
+                        "name": admin_data["name"],
+                        "email": admin_data["email"],
+                        "company_id": admin_data["company_id"]
+                    }
+                    
+                    # Redirigimos a la pantalla de dashboard_admin
+                    self.manager.current = 'dashboard_admin'
+                else:
+                    print("Hubo un problema al registrar el administrador.")
         
         except Exception as e:
             print(f"Ocurrió un error inesperado durante el registro: {e}")
@@ -116,7 +172,6 @@ class RegisterScreen(Screen):
         except Exception as e:
             print(f"Error al obtener la lista de compañías: {e}")
             return []
-
 
     def on_company_selected(self, company_name):
         """

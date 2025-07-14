@@ -54,7 +54,11 @@ def register_company(name, email, password):
 
         if response.data:
             print(f"Compañía '{name}' registrada exitosamente.")
-            return company_id
+            return {
+                'id': company_id,
+                'name': name,
+                'email': email
+            }
         else:
             print(f"Error al registrar la compañía: {response.error}")
             return False
@@ -87,7 +91,12 @@ def register_driver(name, email, password, company_id):
 
         if response.data:
             print(f"Conductor '{name}' registrado exitosamente.")
-            return True
+            return {
+                'id': driver_id,
+                'name': name,
+                'email': email,
+                'company_id': company_id
+            }
         else:
             print(f"Error al registrar conductor: {response.error}")
             return False
@@ -178,7 +187,12 @@ def register_admin(name, email, password, company_id):
 
         if response.data:
             print(f"Administrador '{name}' registrado exitosamente.")
-            return True
+            return {
+                'id': admin_id,
+                'name': name,
+                'email': email,
+                'company_id': company_id
+            }
         else:
             print(f"Error al registrar administrador: {response.error}")
             return False
@@ -209,3 +223,76 @@ def verify_admin_login(email: str, password: str):
     except Exception as e:
         print(f"Error en login de administrador: {e}")
         return False
+
+# ----------------------------------------
+# Funciones para gestión de viajes
+# ----------------------------------------
+
+def create_trip(driver_id: str, company_id: str, start_location: str, end_location: str):
+    """
+    Crea un nuevo viaje en la base de datos
+    """
+    try:
+        trip_id = str(uuid.uuid4())
+        
+        response = supabase.table('trips').insert({
+            'id': trip_id,
+            'driver_id': driver_id,
+            'company_id': company_id,
+            'start_location': start_location,
+            'end_location': end_location
+        }).execute()
+
+        if response.data:
+            print(f"Viaje creado exitosamente con ID: {trip_id}")
+            return {
+                'id': trip_id,
+                'driver_id': driver_id,
+                'company_id': company_id,
+                'start_location': start_location,
+                'end_location': end_location
+            }
+        else:
+            print(f"Error al crear el viaje: {response.error}")
+            return False
+
+    except Exception as e:
+        print(f"Error al crear viaje: {e}")
+        return False
+
+def get_trip_by_id(trip_id: str):
+    """
+    Obtiene un viaje específico por su ID
+    """
+    try:
+        response = supabase.table('trips').select('*').eq('id', trip_id).limit(1).execute()
+        if response.data:
+            return response.data[0]
+        else:
+            print(f"Viaje con ID {trip_id} no encontrado")
+            return None
+    except Exception as e:
+        print(f"Error al obtener viaje: {e}")
+        return None
+
+def get_trips_by_driver(driver_id: str):
+    """
+    Obtiene todos los viajes de un conductor específico
+    """
+    try:
+        response = supabase.table('trips').select('*').eq('driver_id', driver_id).execute()
+        return response.data if response.data else []
+    except Exception as e:
+        print(f"Error al obtener viajes del conductor: {e}")
+        return []
+
+def get_trips_by_company(company_id: str):
+    """
+    Obtiene todos los viajes de una compañía específica
+    """
+    try:
+        response = supabase.table('trips').select('*').eq('company_id', company_id).execute()
+        return response.data if response.data else []
+    except Exception as e:
+        print(f"Error al obtener viajes de la compañía: {e}")
+        return []

@@ -3,14 +3,13 @@
         orientation: 'vertical'
         padding: "20dp"
         spacing: "20dp"
-
         canvas.before:
             Color:
                 rgba: 1, 0.99, 0.95, 1  # Color de fondo claro (#FFFCF2 en rgba)
             Rectangle:
                 pos: self.pos
                 size: self.size
-
+        
         # Header (Título de la pantalla)
         BoxLayout:
             orientation: 'horizontal'
@@ -18,14 +17,13 @@
             height: "60dp"
             padding: "10dp"
             spacing: "5dp"
-
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 1  # Negro para borde
                 Line:
                     width: 3
                     rectangle: (*self.pos, *self.size)
-
+            
             Label:
                 text: "🧳 Reporte de Viaje"
                 size_hint: 1, 1
@@ -33,47 +31,141 @@
                 color: 0, 0, 0, 1  # Color negro
                 halign: 'center'
                 valign: 'middle'
-
-        # Body (contenido principal con solo el botón)
+        
+        # Información del conductor
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, None
+            height: "40dp"
+            padding: "10dp"
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    width: 2
+                    rectangle: (*self.pos, *self.size)
+            
+            Label:
+                id: driver_name_label
+                text: "Conductor: Cargando..."
+                size_hint: 1, 1
+                font_size: '16sp'
+                color: 0, 0, 0, 1
+                halign: 'left'
+                valign: 'middle'
+        
+        # Body (Formulario para crear viaje)
         BoxLayout:
             orientation: 'vertical'
             size_hint: 1, 1
-            spacing: "20dp"
+            spacing: "15dp"
             padding: "10dp"
-
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 1
                 Line:
                     width: 3
                     rectangle: (*self.pos, *self.size)
-
+            
+            # Campo para ubicación de inicio
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: 1, None
+                height: "80dp"
+                spacing: "5dp"
+                
+                Label:
+                    text: "Ubicación de Inicio:"
+                    size_hint: 1, None
+                    height: "30dp"
+                    font_size: '16sp'
+                    color: 0, 0, 0, 1
+                    halign: 'left'
+                    valign: 'middle'
+                
+                TextInput:
+                    id: start_location_input
+                    hint_text: "Ingrese la ubicación de inicio"
+                    size_hint: 1, None
+                    height: "40dp"
+                    font_size: '14sp'
+                    multiline: False
+            
+            # Campo para ubicación de destino
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: 1, None
+                height: "80dp"
+                spacing: "5dp"
+                
+                Label:
+                    text: "Ubicación de Destino:"
+                    size_hint: 1, None
+                    height: "30dp"
+                    font_size: '16sp'
+                    color: 0, 0, 0, 1
+                    halign: 'left'
+                    valign: 'middle'
+                
+                TextInput:
+                    id: end_location_input
+                    hint_text: "Ingrese la ubicación de destino"
+                    size_hint: 1, None
+                    height: "40dp"
+                    font_size: '14sp'
+                    multiline: False
+            
+            # Espaciador
+            Widget:
+                size_hint: 1, 0.2
+            
+            # Botón para iniciar viaje
             Button:
-                text: "Iniciar viaje"
+                text: "Iniciar Viaje"
                 size_hint: 0.6, None
                 height: "50dp"
                 pos_hint: {"center_x": 0.5}
                 font_size: '18sp'
+                background_color: 0.2, 0.7, 0.2, 1  # Color verde
                 on_press: root.on_start_trip()
-
-        # Footer (Estado o texto adicional)
+            
+            # Espaciador
+            Widget:
+                size_hint: 1, 0.1
+        
+        # Footer (Estado del viaje)
         BoxLayout:
             orientation: 'horizontal'
             size_hint: 1, None
             height: "50dp"
             padding: "10dp"
             spacing: "10dp"
-
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 1
                 Line:
                     width: 3
                     rectangle: (*self.pos, *self.size)
-
+            
             Label:
+                id: status_label
                 text: "Estado: Preparando..."
                 size_hint: 1, 1
                 font_size: '16sp'
+                color: 0, 0, 0, 1
                 halign: 'center'
                 valign: 'middle'
+        
+        # Botón de regreso (opcional)
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, None
+            height: "50dp"
+            padding: "10dp"
+            
+            Button:
+                text: "← Volver"
+                size_hint: 0.3, 1
+                font_size: '16sp'
+                background_color: 0.7, 0.7, 0.7, 1  # Color gris
+                on_press: root.go_back()
