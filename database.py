@@ -1,8 +1,11 @@
+# /tesis/database.py
 from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
 import uuid
 import bcrypt
+from typing import Dict, Any  # ← AÑADIR ESTA LÍNEA
+from datetime import datetime  # ← AÑADIR ESTA LÍNEA
 
 # Cargar las variables de entorno
 load_dotenv()
@@ -296,3 +299,357 @@ def get_trips_by_company(company_id: str):
     except Exception as e:
         print(f"Error al obtener viajes de la compañía: {e}")
         return []
+
+
+def save_blink_minute_report_db(data: dict):
+    """
+    Guarda un reporte de parpadeos por minuto en la base de datos
+    """
+    try:
+        # Preparar datos para inserción
+        record = {
+            'id': str(uuid.uuid4()),
+            'driver_id': data.get('driver_id'),
+            'trip_id': data.get('trip_id'),
+            'gesture_type': data.get('gesture_type', 'blink'),
+            'timestamp': data.get('timestamp', datetime.now().isoformat()),
+            'blink_count': data.get('blink_count', 0),
+            'blink_avg_duration': float(data.get('blink_avg_duration', 0)),
+            'blink_comment': data.get('blink_comment', ''),
+            'report_interval_minutes': data.get('report_interval_minutes', 1),
+            'created_at': datetime.now().isoformat()
+        }
+        
+        response = supabase.table('blink_minute_reports').insert(record).execute()
+        
+        if response.data:
+            print(f"[BlinkDBStore] Reporte minuto guardado exitosamente: ID {record['id']}")
+            return True
+        else:
+            print(f"[BlinkDBStore] Error al guardar reporte minuto: {response.error}")
+            return False
+            
+    except Exception as e:
+        print(f"[BlinkDBStore] Error al guardar reporte minuto: {e}")
+        return False
+
+def save_blink_final_report_db(data: dict):
+    """
+    Guarda el reporte final de parpadeos en la base de datos
+    """
+    try:
+        # Preparar datos para inserción
+        record = {
+            'id': str(uuid.uuid4()),
+            'driver_id': data.get('driver_id'),
+            'trip_id': data.get('trip_id'),
+            'gesture_type': data.get('gesture_type', 'blink'),
+            'normal_reports': data.get('normal_reports', 0),
+            'risk_reports': data.get('risk_reports', 0),
+            'microsleeps': data.get('microsleeps', 0),
+            'total_count': data.get('total_count', 0),
+            'comment': data.get('comment', ''),
+            'risk_level': data.get('risk_level', 'low'),
+            'created_at': datetime.now().isoformat()
+        }
+        
+        response = supabase.table('blink_final_reports').insert(record).execute()
+        
+        if response.data:
+            print(f"[BlinkFinalDBStore] Reporte final guardado exitosamente: ID {record['id']}")
+            return True
+        else:
+            print(f"[BlinkFinalDBStore] Error al guardar reporte final: {response.error}")
+            return False
+            
+    except Exception as e:
+        print(f"[BlinkFinalDBStore] Error al guardar reporte final: {e}")
+        return False
+
+# ----------------------------------------
+# Funciones para reportes de bostezos
+# ----------------------------------------
+
+def save_yawn_5min_report_db(data: dict):
+    """
+    Guarda un reporte de bostezos de 5 minutos en la base de datos
+    """
+    try:
+        record = {
+            'id': str(uuid.uuid4()),
+            'driver_id': data.get('driver_id'),
+            'trip_id': data.get('trip_id'),
+            'yawn_count': data.get('yawn_count', 0),
+            'avg_duration': data.get('avg_duration'),
+            'comment': data.get('comment', ''),
+            'report_interval_minutes': 5,
+            'created_at': datetime.now().isoformat()
+        }
+        
+        response = supabase.table('yawn_5min_reports').insert(record).execute()
+        
+        if response.data:
+            print(f"[YawnDBStore] Reporte 5min guardado exitosamente: ID {record['id']}")
+            return True
+        else:
+            print(f"[YawnDBStore] Error al guardar reporte 5min: {response.error}")
+            return False
+            
+    except Exception as e:
+        print(f"[YawnDBStore] Error al guardar reporte 5min: {e}")
+        return False
+
+def save_yawn_10min_report_db(data: dict):
+    """
+    Guarda un reporte de bostezos de 10 minutos en la base de datos
+    """
+    try:
+        record = {
+            'id': str(uuid.uuid4()),
+            'driver_id': data.get('driver_id'),
+            'trip_id': data.get('trip_id'),
+            'yawn_count': data.get('yawn_count', 0),
+            'comment': data.get('comment', ''),
+            'report_interval_minutes': 10,
+            'created_at': datetime.now().isoformat()
+        }
+        
+        response = supabase.table('yawn_10min_reports').insert(record).execute()
+        
+        if response.data:
+            print(f"[YawnDBStore] Reporte 10min guardado exitosamente: ID {record['id']}")
+            return True
+        else:
+            print(f"[YawnDBStore] Error al guardar reporte 10min: {response.error}")
+            return False
+            
+    except Exception as e:
+        print(f"[YawnDBStore] Error al guardar reporte 10min: {e}")
+        return False
+
+def save_yawn_final_report_db(data: dict):
+    """
+    Guarda el reporte final de bostezos en la base de datos
+    """
+    try:
+        record = {
+            'id': str(uuid.uuid4()),
+            'driver_id': data.get('driver_id'),
+            'trip_id': data.get('trip_id'),
+            'normal_reports': data.get('normal_reports', 0),
+            'risk_reports': data.get('risk_reports', 0),
+            'created_at': datetime.now().isoformat()
+        }
+        
+        response = supabase.table('yawn_final_reports').insert(record).execute()
+        
+        if response.data:
+            print(f"[YawnFinalDBStore] Reporte final guardado exitosamente: ID {record['id']}")
+            return True
+        else:
+            print(f"[YawnFinalDBStore] Error al guardar reporte final: {response.error}")
+            return False
+            
+    except Exception as e:
+        print(f"[YawnFinalDBStore] Error al guardar reporte final: {e}")
+        return False
+
+# ----------------------------------------
+# Funciones para reportes de frotamiento de ojos
+# ----------------------------------------
+
+def save_eye_rub_final_report_db(data: str):
+    """
+    Guarda el reporte final de frotamiento de ojos en la base de datos
+    """
+    try:
+        # Convertir string a dict si es necesario
+        if isinstance(data, str):
+            import ast
+            try:
+                data_dict = ast.literal_eval(data)
+            except:
+                print(f"[EyeRubDBStore] Error al parsear datos: {data}")
+                return False
+        else:
+            data_dict = data
+        
+        record = {
+            'id': str(uuid.uuid4()),
+            'driver_id': data_dict.get('driver_id'),
+            'trip_id': data_dict.get('trip_id'),
+            'gesture_type': data_dict.get('gesture_type', 'rubbing_eyes'),
+            'gesture_count': data_dict.get('gesture_count', 0),
+            'created_at': datetime.now().isoformat()
+        }
+        
+        response = supabase.table('eye_rub_final_reports').insert(record).execute()
+        
+        if response.data:
+            print(f"[EyeRubDBStore] Reporte final guardado exitosamente: ID {record['id']}")
+            return True
+        else:
+            print(f"[EyeRubDBStore] Error al guardar reporte final: {response.error}")
+            return False
+            
+    except Exception as e:
+        print(f"[EyeRubDBStore] Error al guardar reporte final: {e}")
+        return False
+
+# ----------------------------------------
+# Funciones para reportes de cabeceo
+# ----------------------------------------
+
+def save_nod_final_report_db(data: str):
+    """
+    Guarda el reporte final de cabeceo en la base de datos
+    """
+    try:
+        # Convertir string a dict si es necesario
+        if isinstance(data, str):
+            import ast
+            try:
+                data_dict = ast.literal_eval(data)
+            except:
+                print(f"[NodDBStore] Error al parsear datos: {data}")
+                return False
+        else:
+            data_dict = data
+        
+        record = {
+            'id': str(uuid.uuid4()),
+            'driver_id': data_dict.get('driver_id'),
+            'trip_id': data_dict.get('trip_id'),
+            'gesture_type': data_dict.get('gesture_type', 'nod'),
+            'gesture_count': data_dict.get('gesture_count', 0),
+            'created_at': datetime.now().isoformat()
+        }
+        
+        response = supabase.table('nod_final_reports').insert(record).execute()
+        
+        if response.data:
+            print(f"[NodDBStore] Reporte final guardado exitosamente: ID {record['id']}")
+            return True
+        else:
+            print(f"[NodDBStore] Error al guardar reporte final: {response.error}")
+            return False
+            
+    except Exception as e:
+        print(f"[NodDBStore] Error al guardar reporte final: {e}")
+        return False
+
+# ----------------------------------------
+# Funciones de consulta para reportes
+# ----------------------------------------
+
+def get_trip_reports(trip_id: str) -> Dict[str, Any]:
+    """
+    Obtiene todos los reportes asociados a un viaje específico
+    """
+    try:
+        reports = {
+            'blink_minute_reports': [],
+            'blink_final_reports': [],
+            'yawn_5min_reports': [],
+            'yawn_10min_reports': [],
+            'yawn_final_reports': [],
+            'eye_rub_final_reports': [],
+            'nod_final_reports': []
+        }
+        
+        # Obtener reportes de parpadeos por minuto
+        response = supabase.table('blink_minute_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['blink_minute_reports'] = response.data
+        
+        # Obtener reportes finales de parpadeos
+        response = supabase.table('blink_final_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['blink_final_reports'] = response.data
+        
+        # Obtener reportes de bostezos 5min
+        response = supabase.table('yawn_5min_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['yawn_5min_reports'] = response.data
+        
+        # Obtener reportes de bostezos 10min
+        response = supabase.table('yawn_10min_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['yawn_10min_reports'] = response.data
+        
+        # Obtener reportes finales de bostezos
+        response = supabase.table('yawn_final_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['yawn_final_reports'] = response.data
+        
+        # Obtener reportes de frotamiento de ojos
+        response = supabase.table('eye_rub_final_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['eye_rub_final_reports'] = response.data
+        
+        # Obtener reportes de cabeceo
+        response = supabase.table('nod_final_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['nod_final_reports'] = response.data
+        
+        return reports
+        
+    except Exception as e:
+        print(f"Error al obtener reportes del viaje {trip_id}: {e}")
+        return {}
+
+def get_driver_reports(driver_id: str) -> Dict[str, Any]:
+    """
+    Obtiene todos los reportes asociados a un conductor específico
+    """
+    try:
+        reports = {
+            'blink_minute_reports': [],
+            'blink_final_reports': [],
+            'yawn_5min_reports': [],
+            'yawn_10min_reports': [],
+            'yawn_final_reports': [],
+            'eye_rub_final_reports': [],
+            'nod_final_reports': []
+        }
+        
+        # Obtener reportes de parpadeos por minuto
+        response = supabase.table('blink_minute_reports').select('*').eq('driver_id', driver_id).execute()
+        if response.data:
+            reports['blink_minute_reports'] = response.data
+        
+        # Obtener reportes finales de parpadeos
+        response = supabase.table('blink_final_reports').select('*').eq('driver_id', driver_id).execute()
+        if response.data:
+            reports['blink_final_reports'] = response.data
+        
+        # Obtener reportes de bostezos 5min
+        response = supabase.table('yawn_5min_reports').select('*').eq('driver_id', driver_id).execute()
+        if response.data:
+            reports['yawn_5min_reports'] = response.data
+        
+        # Obtener reportes de bostezos 10min
+        response = supabase.table('yawn_10min_reports').select('*').eq('driver_id', driver_id).execute()
+        if response.data:
+            reports['yawn_10min_reports'] = response.data
+        
+        # Obtener reportes finales de bostezos
+        response = supabase.table('yawn_final_reports').select('*').eq('driver_id', driver_id).execute()
+        if response.data:
+            reports['yawn_final_reports'] = response.data
+        
+        # Obtener reportes de frotamiento de ojos
+        response = supabase.table('eye_rub_final_reports').select('*').eq('driver_id', driver_id).execute()
+        if response.data:
+            reports['eye_rub_final_reports'] = response.data
+        
+        # Obtener reportes de cabeceo
+        response = supabase.table('nod_final_reports').select('*').eq('driver_id', driver_id).execute()
+        if response.data:
+            reports['nod_final_reports'] = response.data
+        
+        return reports
+        
+    except Exception as e:
+        print(f"Error al obtener reportes del conductor {driver_id}: {e}")
+        return {}
