@@ -3,7 +3,7 @@
         orientation: 'vertical'
         padding: "20dp"
         spacing: "20dp"
-
+        
         canvas.before:
             Color:
                 rgba: 1, 0.99, 0.95, 1  # Fondo claro
@@ -16,24 +16,27 @@
             size_hint_y: None
             height: "60dp"
             padding: "10dp"
+            
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 1
                 Line:
                     width: 3
                     rectangle: (*self.pos, *self.size)
-
+            
             Label:
                 text: "🛑 Fin del Viaje"
                 font_size: '20sp'
                 halign: 'center'
                 valign: 'middle'
+                color: 0, 0, 0, 1
 
-        # Body (mensaje final + botón)
+        # Body (mensajes finales + botón)
         BoxLayout:
             orientation: 'vertical'
-            spacing: "20dp"
+            spacing: "15dp"
             padding: "10dp"
+            
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 1
@@ -42,12 +45,131 @@
                     rectangle: (*self.pos, *self.size)
 
             Label:
-                text: "✅ Esta es la pantalla final del viaje."
+                text: "✅ Resumen Final del Viaje"
                 font_size: '18sp'
                 halign: 'center'
                 valign: 'middle'
                 text_size: self.size
+                color: 0, 0, 0, 1
+                size_hint_y: None
+                height: "50dp"
 
+            # Scroll view para los reportes
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: "10dp"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    
+                    # Reporte de parpadeos
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "5dp"
+                        
+                        canvas.before:
+                            Color:
+                                rgba: 0.9, 0.9, 1, 1  # Fondo azul claro
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                        
+                        Label:
+                            id: final_blink_label
+                            text: "📊 Reporte de parpadeos: Cargando..."
+                            font_size: '14sp'
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            color: 0, 0, 0, 1
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            markup: True
+                    
+                    # Reporte de bostezos
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "5dp"
+                        
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 0.9, 1  # Fondo amarillo claro
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                        
+                        Label:
+                            id: final_yawn_label
+                            text: "🟡 Reporte de bostezos: Cargando..."
+                            font_size: '14sp'
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            color: 0, 0, 0, 1
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            markup: True
+                    
+                    # Reporte de frotamiento de ojos
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "5dp"
+                        
+                        canvas.before:
+                            Color:
+                                rgba: 1, 0.9, 0.9, 1  # Fondo rosa claro
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                        
+                        Label:
+                            id: final_eye_rub_label
+                            text: "👐 Frotamiento de ojos: Cargando..."
+                            font_size: '14sp'
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            color: 0, 0, 0, 1
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            markup: True
+                    
+                    # Reporte de cabeceo
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "5dp"
+                        
+                        canvas.before:
+                            Color:
+                                rgba: 0.9, 1, 0.9, 1  # Fondo verde claro
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                        
+                        Label:
+                            id: final_nod_label
+                            text: "🤕 Cabeceo: Cargando..."
+                            font_size: '14sp'
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            color: 0, 0, 0, 1
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            markup: True
+
+            # Botón para volver al inicio
             Button:
                 text: "Volver al inicio"
                 size_hint: 0.5, None
@@ -60,6 +182,7 @@
             size_hint_y: None
             height: "40dp"
             padding: "10dp"
+            
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 1

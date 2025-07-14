@@ -1,50 +1,37 @@
-# /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/data_reporting/nods_report/nods_reporting.py
-from ..report_dispatcher import dispatch_nods_detailed_report, dispatch_nods_summary_report  # Importamos los nuevos enrutadores
+# core/data_reporting/nods_report/nods_reporting.py
 
-# Aseguramos que el contador global esté definido
+# Contador global de cabeceos detectados
 nod_counter = 0
 
-# Lista de listeners registrados para los reportes detallados de cabeceos
-nod_detailed_report_listeners = []
+# IDs temporales (reemplazar con valores reales en producción)
+DRIVER_ID = 1
+TRIP_ID = 1
 
-# Lista de listeners registrados para los reportes de resumen de cabeceos
-nod_summary_report_listeners = []
-
-def register_nod_listener(callback, report_type="detailed"):
-    """
-    Permite que otros módulos (como EndReportScreen) reciban los reportes de cabeceos.
-    """
-    if report_type == "detailed":
-        nod_detailed_report_listeners.append(callback)
-        print("[INFO] Listener de cabeceo (detallado) registrado.")
-    elif report_type == "summary":
-        nod_summary_report_listeners.append(callback)
-        print("[INFO] Listener de cabeceo (resumen) registrado.")
-    else:
-        print("[ERROR] Tipo de reporte no válido. Usa 'detailed' o 'summary'.")
+# Importar funciones del dispatcher
+from ..report_dispatcher import print_nod_event, print_nod_final_report
 
 def report_nod_data(duration=None):
-    global nod_counter  # Declaramos la variable como global para modificarla
+    """
+    Se llama cada vez que se detecta un cabeceo.
+    Incrementa contador y notifica a través del dispatcher.
+    """
+    global nod_counter
     nod_counter += 1
-    message = "¡Cabeceo detectado!"  # Mensaje detallado de cabeceo
 
-    # Enviar al dispatcher original
-    dispatch_nods_detailed_report(message)
-
-    # Notificar a los listeners registrados para los reportes detallados
-    for listener in nod_detailed_report_listeners:
-        listener(message)
+    message = "¡Cabeceo detectado!"
+    print_nod_event(message)
 
 def report_total_nods():
     """
-    Envía un resumen final con la cantidad total de cabeceos detectados.
+    Imprime resumen final de cabeceos detectados formateado para base de datos.
     """
-    summary_message = f"\nTotal de cabeceos detectados: {nod_counter}"
-    dispatch_nods_summary_report(summary_message)
-
-    # Notificar a los listeners registrados para los reportes de resumen
-    for listener in nod_summary_report_listeners:
-        listener(summary_message)
+    data_to_db = {
+        "driver_id": DRIVER_ID,
+        "trip_id": TRIP_ID,
+        "gesture_type": "nod",
+        "gesture_count": nod_counter
+    }
+    print_nod_final_report(f"{data_to_db}")
 
 def force_show_report_summary():
     """

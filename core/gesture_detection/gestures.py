@@ -8,11 +8,11 @@ from ..data_reporting.yawns_report.yawns_reporting import report_yawn_data
 def receive_eye_rub_gesture():
     report_eye_rub_data()
 
-def receive_blink_gesture(eye: str, duration: float):
-    report_blink_data('parpadeo', eye, duration)
+def receive_blink_gesture(duration: float):
+    report_blink_data('parpadeo', '', duration)
 
-def receive_microsleep_gesture(eye: str, duration: float):
-    report_blink_data('microsueño', eye, duration)
+def receive_microsleep_gesture(duration: float):
+    report_blink_data('microsueño', '', duration)
 
 
 def receive_nod_gesture(duration):

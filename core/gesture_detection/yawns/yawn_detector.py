@@ -1,37 +1,52 @@
-# /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/gesture_detection/yawns/yawn_detector.py
 import time
-from ..gestures import receive_yawn_gesture  # Importa la función para recibir el gesto
+from ..gestures import receive_yawn_gesture
 
-breathe_start_time = None
-is_breathing_open = False  # Estado de la boca (abierta o cerrada)
-flag = False  # Controla si estamos midiendo un gesto abierto
+# Umbral de duración para considerar un bostezo (en segundos)
+MIN_YAWN_DURATION = 1.0
+MAX_YAWN_DURATION = 7.0
+
+class YawnDetector:
+    def __init__(self):
+        self.start_time = None
+        self.mouth_open = False
+
+    def is_valid_number(self, value):
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
+
+    def check_mouth_open(self, lips_distance, chin_distance) -> bool:
+        # Boca se considera abierta si la distancia entre labios es mayor que con el mentón
+        return lips_distance > chin_distance
+
+    def update(self, mouth_distances: dict):
+        lips_distance = self.is_valid_number(mouth_distances.get('lips_distance'))
+        chin_distance = self.is_valid_number(mouth_distances.get('chin_distance'))
+
+        if lips_distance is None or chin_distance is None:
+            return  # Datos no válidos
+
+        mouth_open = self.check_mouth_open(lips_distance, chin_distance)
+
+        current_time = time.time()
+
+        if mouth_open and not self.mouth_open:
+            # Boca se abre
+            self.start_time = current_time
+            self.mouth_open = True
+
+        elif not mouth_open and self.mouth_open:
+            # Boca se cierra
+            duration = current_time - self.start_time
+            self.mouth_open = False
+            self.start_time = None
+
+            if MIN_YAWN_DURATION <= duration <= MAX_YAWN_DURATION:
+                receive_yawn_gesture(duration=duration)
+
+# Instancia global
+yawn_detector = YawnDetector()
 
 def receive_mouth_distances(mouth_distances: dict):
-    global breathe_start_time, is_breathing_open, flag
-
-    lips_distance = mouth_distances.get('lips_distance')
-    chin_distance = mouth_distances.get('chin_distance')
-
-    if lips_distance is None or chin_distance is None:
-        return  # Sin datos suficientes
-
-    open_mouth = lips_distance > chin_distance
-
-    if open_mouth and not flag:
-        # Boca se abre, iniciamos temporizador
-        breathe_start_time = time.time()
-        flag = True
-        is_breathing_open = True
-
-    elif not open_mouth and flag:
-        # Boca se cierra, calculamos duración
-        duration = time.time() - breathe_start_time
-        flag = False
-        is_breathing_open = False
-
-        if 1 <= duration <= 7:
-            # Enviar detección a gestures.py
-            receive_yawn_gesture(duration)
-
-        # Reiniciamos para detectar nuevos bostezos
-        breathe_start_time = None
+    yawn_detector.update(mouth_distances)
