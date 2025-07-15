@@ -93,9 +93,3 @@ class ReportScreen(Screen):
         
         # Navegar a la pantalla de monitoreo
         self.manager.current = "monitoring"
-    
-    def go_back(self):
-        """
-        Navega de vuelta al dashboard del conductor
-        """
-        self.manager.current = "dashboard_driver"

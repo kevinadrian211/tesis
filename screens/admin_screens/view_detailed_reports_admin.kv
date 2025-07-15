@@ -1,9 +1,55 @@
 <ViewDetailedReportsAdminScreen>:
     BoxLayout:
-        orientation: "vertical"
-        Label:
-            text: "Detalle del Reporte"
-        Button:
-            text: "Volver"
-            on_press:
-                app.root.current = "view_reports_admin"
+        orientation: 'vertical'
+        padding: 20
+        spacing: 20
+        
+        # Header
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 60
+            
+            Label:
+                id: title_label
+                text: "Reportes Detallados - admin"
+                font_size: 24
+                bold: True
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                size_hint_x: 0.7
+            
+            Button:
+                text: "Actualizar"
+                size_hint_x: 0.15
+                on_press: root.load_detailed_reports()
+            
+            Button:
+                text: "Volver"
+                size_hint_x: 0.15
+                on_press: root.go_back()
+        
+        # Información de resumen
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 40
+            
+            Label:
+                text: "Reportes detallados por minuto y por intervalos de tiempo admin"
+                font_size: 16
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.6, 0.6, 0.6, 1
+        
+        # Lista de reportes detallados con scroll
+        ScrollView:
+            BoxLayout:
+                id: details_list
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 15
+                padding: 10

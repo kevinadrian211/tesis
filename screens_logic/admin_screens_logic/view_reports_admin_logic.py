@@ -384,4 +384,4 @@ class ViewReportsAdminScreen(Screen):
         """
         Regresa a la pantalla de conductores
         """
-        self.manager.current = 'view_drivers_admin'
+        self.manager.current = 'dashboard_admin'
