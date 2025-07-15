@@ -3,11 +3,76 @@
         orientation: 'vertical'
         padding: 20
         spacing: 20
-
-        Label:
-            text: "Pantalla de Administrador"
-            font_size: 32
-            bold: True
-            halign: 'center'
-            valign: 'middle'
-            color: 1, 1, 1, 1
+        
+        # Header
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(100)
+            spacing: 10
+            
+            Label:
+                text: "Panel de Administrador"
+                font_size: 28
+                bold: True
+                halign: 'center'
+                valign: 'middle'
+                color: 1, 1, 1, 1
+                size_hint_y: None
+                height: dp(40)
+            
+            Label:
+                id: welcome_label
+                text: "Bienvenido, Admin"
+                font_size: 18
+                halign: 'center'
+                valign: 'middle'
+                color: 0.8, 0.8, 0.8, 1
+                size_hint_y: None
+                height: dp(30)
+        
+        # Título de la sección de conductores
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(50)
+            spacing: 10
+            
+            Label:
+                text: "Conductores de la Empresa"
+                font_size: 20
+                bold: True
+                halign: 'left'
+                valign: 'middle'
+                color: 1, 1, 1, 1
+                size_hint_x: 0.8
+            
+            Button:
+                text: "Actualizar"
+                size_hint_x: 0.2
+                size_hint_y: None
+                height: dp(35)
+                background_color: 0.3, 0.7, 0.3, 1
+                on_press: root.refresh_drivers()
+        
+        # Lista de conductores con scroll
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            
+            BoxLayout:
+                id: drivers_list
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(10)
+                padding: [0, 0, 0, dp(10)]
+        
+        # Botón de cerrar sesión
+        Button:
+            text: "Cerrar Sesión"
+            font_size: 16
+            size_hint_y: None
+            height: dp(40)
+            background_color: 0.8, 0.2, 0.2, 1
+            on_press: root.logout()

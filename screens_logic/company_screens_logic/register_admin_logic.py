@@ -22,15 +22,16 @@ class RegisterAdminScreen(Screen):
             self.show_popup("Error", "Las contraseñas no coinciden.")
             return
 
-        # Obtener el ID de la compañía desde el App (debe haber sido guardado luego del login)
+        # Obtener el ID de la compañía desde el current_user guardado tras el login
         app = App.get_running_app()
-        company = getattr(app, 'current_company', None)
+        current_user = getattr(app, 'current_user', None)
 
-        if not company:
+        if not current_user or current_user.get("role") != "company":
             self.show_popup("Error", "No se ha identificado a la compañía.")
             return
 
-        company_id = company.get("id")
+        company_id = current_user.get("id")
+
 
         # Registrar el administrador en Supabase
         success = register_admin(name, email, password, company_id)
