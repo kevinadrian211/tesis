@@ -271,7 +271,7 @@ class DashboardAdminScreen(Screen):
             print(f"Navegando a reportes del conductor: {driver_name} (ID: {driver_id})")
             
             # Cambiar a la pantalla de reportes
-            self.manager.current = 'view_reports_company'
+            self.manager.current = 'view_reports_admin'
             
         except Exception as e:
             print(f"Error al navegar a reportes: {e}")

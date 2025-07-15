@@ -17,6 +17,8 @@ from screens_logic.company_screens_logic.view_drivers_company_logic import ViewD
 # Importar las pantallas de reportes
 from screens_logic.company_screens_logic.view_reports_company_logic import ViewReportsCompanyScreen
 from screens_logic.company_screens_logic.view_detailed_reports_company_logic import ViewDetailedReportsCompanyScreen
+from screens_logic.admin_screens_logic.view_reports_admin_logic import ViewReportsAdminScreen
+from screens_logic.admin_screens_logic.view_detailed_reports_admin_logic import ViewDetailedReportsAdminScreen
 
 # Cargar archivos KV
 Builder.load_file("screens/type_account.kv")
@@ -33,6 +35,8 @@ Builder.load_file("screens/company_screens/view_drivers_company.kv")
 # Cargar los KV de reportes
 Builder.load_file("screens/company_screens/view_reports_company.kv")
 Builder.load_file("screens/company_screens/view_detailed_reports_company.kv")
+Builder.load_file("screens/admin_screens/view_reports_admin.kv")
+Builder.load_file("screens/admin_screens/view_detailed_reports_admin.kv")
 
 class MainApp(App):
     # Variables para guardar sesión activa
@@ -65,7 +69,9 @@ class MainApp(App):
         # Agregar las pantallas de reportes
         sm.add_widget(ViewReportsCompanyScreen(name="view_reports_company"))
         sm.add_widget(ViewDetailedReportsCompanyScreen(name="view_detailed_reports_company"))
-        
+        sm.add_widget(ViewReportsAdminScreen(name="view_reports_admin"))
+        sm.add_widget(ViewDetailedReportsAdminScreen(name="view_detailed_reports_admin"))
+
         return sm
     
     def on_start(self):
