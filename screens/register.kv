@@ -3,21 +3,21 @@
         orientation: "vertical"
         padding: 50
         spacing: 10
-
+        
         Label:
             text: "Estás en la pantalla de registro"
             font_size: 24
             size_hint_y: None
             height: "40dp"
             color: 1, 1, 1, 1  # Blanco
-
+            
         Label:
             text: "Llegaste como: " + root.account_type
             font_size: 24
             size_hint_y: None
             height: "40dp"
             color: 1, 1, 1, 1  # Blanco
-
+            
         # Campos de entrada solo visibles si el tipo es "company"
         TextInput:
             id: company_name_input
@@ -27,7 +27,7 @@
             height: "40dp"
             opacity: 1 if root.account_type == "company" else 0
             height: "40dp" if root.account_type == "company" else "0dp"
-
+            
         TextInput:
             id: company_email_input
             text: root.company_email
@@ -36,16 +36,26 @@
             height: "40dp"
             opacity: 1 if root.account_type == "company" else 0
             height: "40dp" if root.account_type == "company" else "0dp"
-
+            
         TextInput:
             id: company_password_input
             text: root.company_password
             hint_text: "Contraseña de la Compañía"
+            password: True
             size_hint_y: None
             height: "40dp"
             opacity: 1 if root.account_type == "company" else 0
             height: "40dp" if root.account_type == "company" else "0dp"
-
+            
+        TextInput:
+            id: company_password_confirm_input
+            hint_text: "Confirmar Contraseña de la Compañía"
+            password: True
+            size_hint_y: None
+            height: "40dp"
+            opacity: 1 if root.account_type == "company" else 0
+            height: "40dp" if root.account_type == "company" else "0dp"
+            
         # Campos de entrada solo visibles si el tipo es "driver"
         TextInput:
             id: driver_name_input
@@ -55,7 +65,7 @@
             height: "40dp"
             opacity: 1 if root.account_type == "driver" else 0
             height: "40dp" if root.account_type == "driver" else "0dp"
-
+            
         TextInput:
             id: driver_email_input
             text: root.driver_email
@@ -64,33 +74,78 @@
             height: "40dp"
             opacity: 1 if root.account_type == "driver" else 0
             height: "40dp" if root.account_type == "driver" else "0dp"
-
+            
         TextInput:
             id: driver_password_input
             text: root.driver_password
             hint_text: "Contraseña del Conductor"
+            password: True
             size_hint_y: None
             height: "40dp"
             opacity: 1 if root.account_type == "driver" else 0
             height: "40dp" if root.account_type == "driver" else "0dp"
-
-        # Spinner para elegir la compañía si es un driver
+            
+        TextInput:
+            id: driver_password_confirm_input
+            hint_text: "Confirmar Contraseña del Conductor"
+            password: True
+            size_hint_y: None
+            height: "40dp"
+            opacity: 1 if root.account_type == "driver" else 0
+            height: "40dp" if root.account_type == "driver" else "0dp"
+            
+        # Campos de entrada solo visibles si el tipo es "admin"
+        TextInput:
+            id: admin_name_input
+            hint_text: "Nombre del Administrador"
+            size_hint_y: None
+            height: "40dp"
+            opacity: 1 if root.account_type == "admin" else 0
+            height: "40dp" if root.account_type == "admin" else "0dp"
+            
+        TextInput:
+            id: admin_email_input
+            hint_text: "Correo Electrónico del Administrador"
+            size_hint_y: None
+            height: "40dp"
+            opacity: 1 if root.account_type == "admin" else 0
+            height: "40dp" if root.account_type == "admin" else "0dp"
+            
+        TextInput:
+            id: admin_password_input
+            hint_text: "Contraseña del Administrador"
+            password: True
+            size_hint_y: None
+            height: "40dp"
+            opacity: 1 if root.account_type == "admin" else 0
+            height: "40dp" if root.account_type == "admin" else "0dp"
+            
+        TextInput:
+            id: admin_password_confirm_input
+            hint_text: "Confirmar Contraseña del Administrador"
+            password: True
+            size_hint_y: None
+            height: "40dp"
+            opacity: 1 if root.account_type == "admin" else 0
+            height: "40dp" if root.account_type == "admin" else "0dp"
+            
+        # Spinner para elegir la compañía si es un driver o admin
         Spinner:
             id: company_spinner
             text: "Selecciona la compañía"
             values: root.get_company_list()  # Llamada a una función que obtiene las compañías disponibles
             size_hint_y: None
             height: "40dp"
-            opacity: 1 if root.account_type == "driver" else 0
-            height: "40dp" if root.account_type == "driver" else "0dp"
+            opacity: 1 if root.account_type in ["driver", "admin"] else 0
+            height: "40dp" if root.account_type in ["driver", "admin"] else "0dp"
             on_text: root.on_company_selected(self.text)  # Llama a on_company_selected con el texto seleccionado
-
+            
         Button:
             text: "Registrar"
             size_hint_y: None
             height: "50dp"
             on_press: root.register_action()
-
+            
         Button:
             text: "Volver"
             size_hint_y: None
