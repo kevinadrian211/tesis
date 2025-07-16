@@ -19,7 +19,7 @@
         # Título principal
         Label:
             text: "Crear Nueva Cuenta"
-            font_size: "28sp"
+            font_size: 32
             color: 0, 0, 0, 1  # Negro
             size_hint_y: None
             height: "60dp"
@@ -31,7 +31,7 @@
         # Subtítulo
         Label:
             text: "¿Qué tipo de cuenta deseas crear?"
-            font_size: "20sp"
+            font_size: 32
             color: 0, 0, 0, 1
             size_hint_y: None
             height: "50dp"
@@ -51,7 +51,7 @@
             height: "70dp"
             background_color: 1, 1, 1, 1
             color: 0, 0, 0, 1
-            font_size: "20sp"
+            font_size: 32
             bold: True
             on_press: root.select_account_type("company")
             canvas.before:
@@ -64,7 +64,7 @@
         # Descripción de empresa
         Label:
             text: "Para empresas que necesitan gestionar conductores y vehículos"
-            font_size: "14sp"
+            font_size: 32
             color: 0.3, 0.3, 0.3, 1
             size_hint_y: None
             height: "40dp"
@@ -84,7 +84,7 @@
             height: "70dp"
             background_color: 1, 1, 1, 1
             color: 0, 0, 0, 1
-            font_size: "20sp"
+            font_size: 32
             bold: True
             on_press: root.select_account_type("driver")
             canvas.before:
@@ -97,7 +97,7 @@
         # Descripción de conductor
         Label:
             text: "Para conductores que trabajarán con empresas registradas"
-            font_size: "14sp"
+            font_size: 32
             color: 0.3, 0.3, 0.3, 1
             size_hint_y: None
             height: "40dp"
@@ -116,7 +116,7 @@
             height: "50dp"
             background_color: 1, 1, 1, 1
             color: 0, 0, 0, 1
-            font_size: "16sp"
+            font_size: 32
             on_press: app.root.current = "login"
             canvas.before:
                 Color:

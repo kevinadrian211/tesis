@@ -8,7 +8,7 @@
         Label:
             id: title_label
             text: "Reportes Detallados"
-            font_size: 20
+            font_size: 32
             bold: True
             halign: 'center'
             valign: 'middle'
@@ -20,7 +20,7 @@
         Label:
             id: trip_info_label
             text: "Cargando información del viaje..."
-            font_size: 16
+            font_size: 32
             halign: 'center'
             valign: 'middle'
             size_hint_y: None
@@ -39,7 +39,7 @@
                 size_hint_x: 0.3
                 background_color: 0.2, 0.6, 0.9, 1
                 color: 1, 1, 1, 1
-                font_size: 16
+                font_size: 32
                 on_press: root.go_back()
             
             Button:
@@ -47,7 +47,7 @@
                 size_hint_x: 0.3
                 background_color: 0.3, 0.8, 0.3, 1
                 color: 1, 1, 1, 1
-                font_size: 16
+                font_size: 32
                 on_press: root.refresh_reports()
             
             Widget:

@@ -20,7 +20,7 @@
         # Título de la pantalla
         Label:
             text: "Iniciar Sesión"
-            font_size: "28sp"
+            font_size: 32
             color: 0, 0, 0, 1  # Negro
             size_hint_y: None
             height: "60dp"
@@ -43,7 +43,7 @@
             
             Label:
                 text: "Correo Electrónico:"
-                font_size: "16sp"
+                font_size: 32
                 color: 0, 0, 0, 1
                 size_hint_y: None
                 height: "25dp"
@@ -60,7 +60,7 @@
                 background_color: 1, 1, 1, 1  # Fondo blanco
                 foreground_color: 0, 0, 0, 1   # Texto negro
                 cursor_color: 0, 0, 0, 1       # Cursor negro
-                font_size: "16sp"
+                font_size: 32
                 padding: [10, 10]
                 canvas.before:
                     Color:
@@ -78,7 +78,7 @@
             
             Label:
                 text: "Contraseña:"
-                font_size: "16sp"
+                font_size: 32
                 color: 0, 0, 0, 1
                 size_hint_y: None
                 height: "25dp"
@@ -96,7 +96,7 @@
                 background_color: 1, 1, 1, 1
                 foreground_color: 0, 0, 0, 1
                 cursor_color: 0, 0, 0, 1
-                font_size: "16sp"
+                font_size: 32
                 padding: [10, 10]
                 canvas.before:
                     Color:
@@ -115,7 +115,7 @@
             text_size: self.size
             halign: "center"
             valign: "middle"
-            font_size: "14sp"
+            font_size: 32
         
         # Espacio separador
         Widget:
@@ -129,7 +129,7 @@
             height: "55dp"
             background_color: 1, 1, 1, 1  # Fondo blanco
             color: 0, 0, 0, 1  # Texto negro
-            font_size: "18sp"
+            font_size: 32
             bold: True
             on_press: root.login()
             canvas.before:
@@ -146,7 +146,7 @@
             height: "55dp"
             background_color: 1, 1, 1, 1
             color: 0, 0, 0, 1
-            font_size: "18sp"
+            font_size: 32
             bold: True
             on_press: app.root.current = "type_account"
             canvas.before:

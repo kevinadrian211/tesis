@@ -134,7 +134,7 @@ class ViewTripsAdminScreen(Screen):
         
         message_label = Label(
             text="No hay viajes registrados para este conductor",
-            font_size=16,
+            font_size=32,
             halign='center',
             valign='middle',
             color=(0.5, 0.5, 0.5, 1)
@@ -180,7 +180,7 @@ class ViewTripsAdminScreen(Screen):
         
         id_label = Label(
             text=f"ID: {short_id}",
-            font_size=14,
+            font_size=32,
             bold=True,
             halign='left',
             valign='middle',
@@ -195,7 +195,7 @@ class ViewTripsAdminScreen(Screen):
         start_location = trip.get('start_location', 'No especificado')
         start_label = Label(
             text=f"Origen: {start_location}",
-            font_size=13,
+            w=32,
             halign='left',
             valign='middle',
             text_size=(None, None),
@@ -209,7 +209,7 @@ class ViewTripsAdminScreen(Screen):
         end_location = trip.get('end_location', 'No especificado')
         end_label = Label(
             text=f"Destino: {end_location}",
-            font_size=13,
+            font_size=32,
             halign='left',
             valign='middle',
             text_size=(None, None),

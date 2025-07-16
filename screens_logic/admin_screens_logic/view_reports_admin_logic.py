@@ -105,7 +105,7 @@ class ViewReportsAdminScreen(Screen):
         
         message_label = Label(
             text="No hay reportes disponibles para este conductor",
-            font_size=16,
+            font_size=32,
             halign='center',
             valign='middle',
             color=(0.5, 0.5, 0.5, 1)
@@ -158,7 +158,7 @@ class ViewReportsAdminScreen(Screen):
         # Título del tipo de reporte
         title_label = Label(
             text=title,
-            font_size=18,
+            font_size=32,
             bold=True,
             halign='left',
             valign='middle',
@@ -185,7 +185,7 @@ class ViewReportsAdminScreen(Screen):
         
         stats_label = Label(
             text=f"Total de viajes: {total_reports}",
-            font_size=14,
+            font_size=32,
             halign='left',
             valign='middle',
             color=(0.4, 0.4, 0.4, 1)
@@ -194,7 +194,7 @@ class ViewReportsAdminScreen(Screen):
         if risk_key:
             risk_stats_label = Label(
                 text=f"Reportes normales: {total_normal} | Reportes de riesgo: {total_risk}",
-                font_size=14,
+                font_size=32,
                 halign='left',
                 valign='middle',
                 color=(0.4, 0.4, 0.4, 1)
@@ -204,7 +204,7 @@ class ViewReportsAdminScreen(Screen):
         else:
             gesture_stats_label = Label(
                 text=f"Gestos detectados: {total_normal}",
-                font_size=14,
+                font_size=32,
                 halign='left',
                 valign='middle',
                 color=(0.4, 0.4, 0.4, 1)
@@ -225,7 +225,7 @@ class ViewReportsAdminScreen(Screen):
         if len(reports) > 3:
             more_label = Label(
                 text=f"... y {len(reports) - 3} reportes más",
-                font_size=12,
+                font_size=32,
                 halign='center',
                 valign='middle',
                 color=(0.6, 0.6, 0.6, 1),
@@ -265,7 +265,7 @@ class ViewReportsAdminScreen(Screen):
         # Número del reporte
         index_label = Label(
             text=f"{index}.",
-            font_size=12,
+            font_size=32,
             size_hint_x=None,
             width=dp(30),
             halign='center',
@@ -282,7 +282,7 @@ class ViewReportsAdminScreen(Screen):
         
         info_label = Label(
             text=info_text,
-            font_size=12,
+            font_size=32,
             halign='left',
             valign='middle',
             color=(0.3, 0.3, 0.3, 1)
@@ -302,7 +302,7 @@ class ViewReportsAdminScreen(Screen):
         
         date_label = Label(
             text=date_text,
-            font_size=10,
+            font_size=32,
             halign='right',
             valign='middle',
             color=(0.5, 0.5, 0.5, 1),
@@ -319,7 +319,7 @@ class ViewReportsAdminScreen(Screen):
                 height=dp(25),
                 background_color=(0.3, 0.7, 0.3, 1),
                 color=(1, 1, 1, 1),
-                font_size=10
+                font_size=32w
             )
             detail_button.bind(on_press=lambda x, trip_id=report.get('id', report.get('trip_id')), dt=detail_type: self.view_trip_details(trip_id, dt))
             

@@ -212,7 +212,7 @@ class ViewDetailedReportsAdminScreen(Screen):
         for header, width in zip(headers, widths):
             label = Label(
                 text=header,
-                font_size=14,
+                font_size=32,
                 bold=True,
                 size_hint_x=width,
                 color=(1, 1, 1, 1),
@@ -272,7 +272,7 @@ class ViewDetailedReportsAdminScreen(Screen):
         for text, width, color in data:
             label = Label(
                 text=text,
-                font_size=12,
+                font_size=32,
                 size_hint_x=width,
                 color=color,
                 halign='center',
@@ -294,7 +294,7 @@ class ViewDetailedReportsAdminScreen(Screen):
             if reports_5min:
                 title_5min = Label(
                     text="Reportes de 5 Minutos",
-                    font_size=16,
+                    font_size=32,
                     bold=True,
                     size_hint_y=None,
                     height=dp(30),
@@ -310,7 +310,7 @@ class ViewDetailedReportsAdminScreen(Screen):
             if reports_10min:
                 title_10min = Label(
                     text="Reportes de 10 Minutos",
-                    font_size=16,
+                    font_size=32,
                     bold=True,
                     size_hint_y=None,
                     height=dp(30),
@@ -367,7 +367,7 @@ class ViewDetailedReportsAdminScreen(Screen):
         for text, width in data:
             label = Label(
                 text=text,
-                font_size=12,
+                font_size=32,
                 size_hint_x=width,
                 color=(0, 0, 0, 1),
                 halign='center',
@@ -392,7 +392,7 @@ class ViewDetailedReportsAdminScreen(Screen):
             # Crear encabezado simple
             header_label = Label(
                 text="Reportes de Frotamiento de Ojos",
-                font_size=16,
+                font_size=32,
                 bold=True,
                 size_hint_y=None,
                 height=dp(30),
@@ -445,7 +445,7 @@ class ViewDetailedReportsAdminScreen(Screen):
         for text, width in data:
             label = Label(
                 text=text,
-                font_size=12,
+                font_size=32,
                 size_hint_x=width,
                 color=(0, 0, 0, 1),
                 halign='center',
@@ -470,7 +470,7 @@ class ViewDetailedReportsAdminScreen(Screen):
             # Crear encabezado simple
             header_label = Label(
                 text="Reportes de Cabeceo",
-                font_size=16,
+                font_size=32,
                 bold=True,
                 size_hint_y=None,
                 height=dp(30),
@@ -523,7 +523,7 @@ class ViewDetailedReportsAdminScreen(Screen):
         for text, width in data:
             label = Label(
                 text=text,
-                font_size=12,
+                font_size=32,
                 size_hint_x=width,
                 color=(0, 0, 0, 1),
                 halign='center',
@@ -542,7 +542,7 @@ class ViewDetailedReportsAdminScreen(Screen):
         
         message = Label(
             text="No hay reportes disponibles para este viaje",
-            font_size=16,
+            font_size=32,
             halign='center',
             valign='middle',
             color=(0.5, 0.5, 0.5, 1)
@@ -558,7 +558,7 @@ class ViewDetailedReportsAdminScreen(Screen):
         
         message = Label(
             text="Error al cargar los reportes",
-            font_size=16,
+            font_size=32,
             halign='center',
             valign='middle',
             color=(1, 0, 0, 1)

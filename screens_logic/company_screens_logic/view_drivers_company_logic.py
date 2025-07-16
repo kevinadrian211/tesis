@@ -120,7 +120,7 @@ class ViewDriversCompanyScreen(Screen):
         
         message_label = Label(
             text="No hay conductores registrados en esta compañía",
-            font_size=16,
+            font_size=32,
             halign='center',
             valign='middle',
             color=(0.5, 0.5, 0.5, 1)
@@ -163,7 +163,7 @@ class ViewDriversCompanyScreen(Screen):
         # Nombre del conductor
         name_label = Label(
             text=f"Nombre: {driver.get('name', 'N/A')}",
-            font_size=16,
+            font_size=32,
             bold=True,
             halign='left',
             valign='middle',
@@ -176,7 +176,7 @@ class ViewDriversCompanyScreen(Screen):
         # Email del conductor
         email_label = Label(
             text=f"Email: {driver.get('email', 'N/A')}",
-            font_size=14,
+            font_size=32,
             halign='left',
             valign='middle',
             text_size=(None, None),
