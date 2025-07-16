@@ -319,7 +319,7 @@ class ViewReportsAdminScreen(Screen):
                 height=dp(25),
                 background_color=(0.3, 0.7, 0.3, 1),
                 color=(1, 1, 1, 1),
-                font_size=32w
+                font_size=32
             )
             detail_button.bind(on_press=lambda x, trip_id=report.get('id', report.get('trip_id')), dt=detail_type: self.view_trip_details(trip_id, dt))
             

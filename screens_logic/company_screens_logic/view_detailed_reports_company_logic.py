@@ -198,12 +198,15 @@ class ViewDetailedReportsCompanyScreen(Screen):
             spacing=dp(10)
         )
         
-        # Crear fondo
+        # Crear fondo blanco con borde negro
         with header_container.canvas.before:
-            Color(0.2, 0.6, 0.9, 1)
-            header_container.rect = Rectangle(size=header_container.size, pos=header_container.pos)
+            Color(0, 0, 0, 1)  # Negro para el borde
+            header_container.border_rect = Rectangle(size=header_container.size, pos=header_container.pos)
+            Color(1, 1, 1, 1)  # Blanco para el fondo
+            header_container.rect = Rectangle(size=(header_container.size[0]-4, header_container.size[1]-4), 
+                                           pos=(header_container.pos[0]+2, header_container.pos[1]+2))
         
-        header_container.bind(size=self.update_rect, pos=self.update_rect)
+        header_container.bind(size=self.update_header_rect, pos=self.update_header_rect)
         
         # Crear labels de encabezado
         headers = ["#", "Timestamp", "Parpadeos", "Duración Promedio", "Estado"]
@@ -215,7 +218,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
                 font_size=32,
                 bold=True,
                 size_hint_x=width,
-                color=(1, 1, 1, 1),
+                color=(0, 0, 0, 1),  # Texto negro
                 halign='center',
                 valign='middle'
             )
@@ -235,30 +238,31 @@ class ViewDetailedReportsCompanyScreen(Screen):
             spacing=dp(10)
         )
         
-        # Alternar color de fondo
-        bg_color = (0.98, 0.98, 0.98, 1) if index % 2 == 0 else (0.95, 0.95, 0.95, 1)
-        
+        # Fondo blanco con borde negro
         with container.canvas.before:
-            Color(*bg_color)
-            container.rect = Rectangle(size=container.size, pos=container.pos)
+            Color(0, 0, 0, 1)  # Negro para el borde
+            container.border_rect = Rectangle(size=container.size, pos=container.pos)
+            Color(1, 1, 1, 1)  # Blanco para el fondo
+            container.rect = Rectangle(size=(container.size[0]-2, container.size[1]-2), 
+                                     pos=(container.pos[0]+1, container.pos[1]+1))
         
-        container.bind(size=self.update_rect, pos=self.update_rect)
+        container.bind(size=self.update_bordered_rect, pos=self.update_bordered_rect)
         
         # Datos del reporte
         timestamp = report.get('timestamp', 'N/A')
         blink_count = report.get('blink_count', 0)
         avg_duration = report.get('blink_avg_duration', 0)
         
-        # Determinar estado basado en los valores
-        if blink_count > 20:  # Ejemplo de umbral
+        # Determinar estado basado en los valores (manteniendo colores solo para estado)
+        if blink_count > 20:
             status = "Normal"
-            status_color = (0, 0.8, 0, 1)
+            status_color = (0, 0.6, 0, 1)  # Verde oscuro
         elif blink_count < 10:
             status = "Atención"
-            status_color = (1, 0.5, 0, 1)
+            status_color = (0.8, 0.4, 0, 1)  # Naranja oscuro
         else:
             status = "Riesgo"
-            status_color = (1, 0, 0, 1)
+            status_color = (0.8, 0, 0, 1)  # Rojo oscuro
         
         # Crear labels
         data = [
@@ -298,7 +302,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
                     bold=True,
                     size_hint_y=None,
                     height=dp(30),
-                    color=(0.2, 0.2, 0.2, 1)
+                    color=(0, 0, 0, 1)  # Texto negro
                 )
                 reports_container.add_widget(title_5min)
                 
@@ -314,7 +318,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
                     bold=True,
                     size_hint_y=None,
                     height=dp(30),
-                    color=(0.2, 0.2, 0.2, 1)
+                    color=(0, 0, 0, 1)  # Texto negro
                 )
                 reports_container.add_widget(title_10min)
                 
@@ -341,14 +345,15 @@ class ViewDetailedReportsCompanyScreen(Screen):
             spacing=dp(10)
         )
         
-        # Alternar color de fondo
-        bg_color = (0.98, 0.98, 0.98, 1) if index % 2 == 0 else (0.95, 0.95, 0.95, 1)
-        
+        # Fondo blanco con borde negro
         with container.canvas.before:
-            Color(*bg_color)
-            container.rect = Rectangle(size=container.size, pos=container.pos)
+            Color(0, 0, 0, 1)  # Negro para el borde
+            container.border_rect = Rectangle(size=container.size, pos=container.pos)
+            Color(1, 1, 1, 1)  # Blanco para el fondo
+            container.rect = Rectangle(size=(container.size[0]-2, container.size[1]-2), 
+                                     pos=(container.pos[0]+1, container.pos[1]+1))
         
-        container.bind(size=self.update_rect, pos=self.update_rect)
+        container.bind(size=self.update_bordered_rect, pos=self.update_bordered_rect)
         
         # Datos del reporte
         timestamp = report.get('timestamp', 'N/A')
@@ -369,7 +374,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
                 text=text,
                 font_size=32,
                 size_hint_x=width,
-                color=(0, 0, 0, 1),
+                color=(0, 0, 0, 1),  # Texto negro
                 halign='center',
                 valign='middle'
             )
@@ -396,7 +401,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
                 bold=True,
                 size_hint_y=None,
                 height=dp(30),
-                color=(0.2, 0.2, 0.2, 1)
+                color=(0, 0, 0, 1)  # Texto negro
             )
             reports_container.add_widget(header_label)
             
@@ -421,14 +426,15 @@ class ViewDetailedReportsCompanyScreen(Screen):
             spacing=dp(10)
         )
         
-        # Alternar color de fondo
-        bg_color = (0.98, 0.98, 0.98, 1) if index % 2 == 0 else (0.95, 0.95, 0.95, 1)
-        
+        # Fondo blanco con borde negro
         with container.canvas.before:
-            Color(*bg_color)
-            container.rect = Rectangle(size=container.size, pos=container.pos)
+            Color(0, 0, 0, 1)  # Negro para el borde
+            container.border_rect = Rectangle(size=container.size, pos=container.pos)
+            Color(1, 1, 1, 1)  # Blanco para el fondo
+            container.rect = Rectangle(size=(container.size[0]-2, container.size[1]-2), 
+                                     pos=(container.pos[0]+1, container.pos[1]+1))
         
-        container.bind(size=self.update_rect, pos=self.update_rect)
+        container.bind(size=self.update_bordered_rect, pos=self.update_bordered_rect)
         
         # Datos del reporte
         timestamp = report.get('timestamp', 'N/A')
@@ -447,7 +453,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
                 text=text,
                 font_size=32,
                 size_hint_x=width,
-                color=(0, 0, 0, 1),
+                color=(0, 0, 0, 1),  # Texto negro
                 halign='center',
                 valign='middle'
             )
@@ -474,7 +480,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
                 bold=True,
                 size_hint_y=None,
                 height=dp(30),
-                color=(0.2, 0.2, 0.2, 1)
+                color=(0, 0, 0, 1)  # Texto negro
             )
             reports_container.add_widget(header_label)
             
@@ -499,14 +505,15 @@ class ViewDetailedReportsCompanyScreen(Screen):
             spacing=dp(10)
         )
         
-        # Alternar color de fondo
-        bg_color = (0.98, 0.98, 0.98, 1) if index % 2 == 0 else (0.95, 0.95, 0.95, 1)
-        
+        # Fondo blanco con borde negro
         with container.canvas.before:
-            Color(*bg_color)
-            container.rect = Rectangle(size=container.size, pos=container.pos)
+            Color(0, 0, 0, 1)  # Negro para el borde
+            container.border_rect = Rectangle(size=container.size, pos=container.pos)
+            Color(1, 1, 1, 1)  # Blanco para el fondo
+            container.rect = Rectangle(size=(container.size[0]-2, container.size[1]-2), 
+                                     pos=(container.pos[0]+1, container.pos[1]+1))
         
-        container.bind(size=self.update_rect, pos=self.update_rect)
+        container.bind(size=self.update_bordered_rect, pos=self.update_bordered_rect)
         
         # Datos del reporte
         timestamp = report.get('timestamp', 'N/A')
@@ -525,7 +532,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
                 text=text,
                 font_size=32,
                 size_hint_x=width,
-                color=(0, 0, 0, 1),
+                color=(0, 0, 0, 1),  # Texto negro
                 halign='center',
                 valign='middle'
             )
@@ -545,7 +552,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
             font_size=32,
             halign='center',
             valign='middle',
-            color=(0.5, 0.5, 0.5, 1)
+            color=(0, 0, 0, 1)  # Texto negro
         )
         reports_container.add_widget(message)
     
@@ -561,17 +568,39 @@ class ViewDetailedReportsCompanyScreen(Screen):
             font_size=32,
             halign='center',
             valign='middle',
-            color=(1, 0, 0, 1)
+            color=(0.8, 0, 0, 1)  # Rojo oscuro para errores
         )
         reports_container.add_widget(message)
     
     def update_rect(self, instance, value):
         """
-        Actualiza el rectángulo de fondo
+        Actualiza el rectángulo de fondo simple
         """
         if hasattr(instance, 'rect'):
             instance.rect.pos = instance.pos
             instance.rect.size = instance.size
+    
+    def update_bordered_rect(self, instance, value):
+        """
+        Actualiza el rectángulo con borde
+        """
+        if hasattr(instance, 'border_rect'):
+            instance.border_rect.pos = instance.pos
+            instance.border_rect.size = instance.size
+        if hasattr(instance, 'rect'):
+            instance.rect.pos = (instance.pos[0] + 1, instance.pos[1] + 1)
+            instance.rect.size = (instance.size[0] - 2, instance.size[1] - 2)
+    
+    def update_header_rect(self, instance, value):
+        """
+        Actualiza el rectángulo del encabezado
+        """
+        if hasattr(instance, 'border_rect'):
+            instance.border_rect.pos = instance.pos
+            instance.border_rect.size = instance.size
+        if hasattr(instance, 'rect'):
+            instance.rect.pos = (instance.pos[0] + 2, instance.pos[1] + 2)
+            instance.rect.size = (instance.size[0] - 4, instance.size[1] - 4)
     
     def refresh_reports(self):
         """

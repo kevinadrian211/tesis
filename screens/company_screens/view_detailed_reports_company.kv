@@ -1,4 +1,11 @@
 <ViewDetailedReportsCompanyScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Fondo blanco para toda la pantalla
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
     BoxLayout:
         orientation: 'vertical'
         padding: 20
@@ -14,7 +21,7 @@
             valign: 'middle'
             size_hint_y: None
             height: self.texture_size[1] + 20
-            color: 0.2, 0.2, 0.2, 1
+            color: 0, 0, 0, 1  # Texto negro
         
         # Información del viaje
         Label:
@@ -25,7 +32,7 @@
             valign: 'middle'
             size_hint_y: None
             height: self.texture_size[1] + 20
-            color: 0.5, 0.5, 0.5, 1
+            color: 0, 0, 0, 1  # Texto negro
         
         # Botones de navegación
         BoxLayout:
@@ -37,16 +44,38 @@
             Button:
                 text: "← Volver"
                 size_hint_x: 0.3
-                background_color: 0.2, 0.6, 0.9, 1
-                color: 1, 1, 1, 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # Borde negro
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                    Color:
+                        rgba: 1, 1, 1, 1  # Fondo blanco
+                    Rectangle:
+                        pos: self.pos[0] + 2, self.pos[1] + 2
+                        size: self.size[0] - 4, self.size[1] - 4
+                background_color: 0, 0, 0, 0  # Transparente para usar canvas
+                color: 0, 0, 0, 1  # Texto negro
                 font_size: 32
                 on_press: root.go_back()
             
             Button:
                 text: "🔄 Actualizar"
                 size_hint_x: 0.3
-                background_color: 0.3, 0.8, 0.3, 1
-                color: 1, 1, 1, 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # Borde negro
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                    Color:
+                        rgba: 1, 1, 1, 1  # Fondo blanco
+                    Rectangle:
+                        pos: self.pos[0] + 2, self.pos[1] + 2
+                        size: self.size[0] - 4, self.size[1] - 4
+                background_color: 0, 0, 0, 0  # Transparente para usar canvas
+                color: 0, 0, 0, 1  # Texto negro
                 font_size: 32
                 on_press: root.refresh_reports()
             
@@ -57,6 +86,17 @@
         ScrollView:
             do_scroll_x: False
             do_scroll_y: True
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1  # Borde negro
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 1, 1, 1, 1  # Fondo blanco
+                Rectangle:
+                    pos: self.pos[0] + 1, self.pos[1] + 1
+                    size: self.size[0] - 2, self.size[1] - 2
             
             BoxLayout:
                 id: reports_container
