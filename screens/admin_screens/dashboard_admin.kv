@@ -1,78 +1,148 @@
 <DashboardAdminScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Fondo blanco
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
     BoxLayout:
         orientation: 'vertical'
-        padding: 20
-        spacing: 20
+        padding: dp(16)
+        spacing: dp(16)
         
         # Header
         BoxLayout:
             orientation: 'vertical'
             size_hint_y: None
-            height: dp(100)
-            spacing: 10
+            height: dp(120)
+            spacing: dp(8)
+            
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.05  # Fondo muy sutil para el header
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(8)]
+                Color:
+                    rgba: 0, 0, 0, 0.1  # Borde sutil
+                Line:
+                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                    width: dp(1)
             
             Label:
                 text: "Panel de Administrador"
-                font_size: 28
+                font_size: sp(24)
                 bold: True
                 halign: 'center'
                 valign: 'middle'
-                color: 1, 1, 1, 1
+                color: 0, 0, 0, 1  # Texto negro
                 size_hint_y: None
-                height: dp(40)
+                height: dp(50)
+                text_size: self.width, None
             
             Label:
                 id: welcome_label
                 text: "Bienvenido, Admin"
-                font_size: 18
+                font_size: sp(16)
                 halign: 'center'
                 valign: 'middle'
-                color: 0.8, 0.8, 0.8, 1
+                color: 0.3, 0.3, 0.3, 1  # Gris oscuro para subtítulo
                 size_hint_y: None
-                height: dp(30)
+                height: dp(40)
+                text_size: self.width, None
         
         # Título de la sección de conductores
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: None
             height: dp(50)
-            spacing: 10
+            spacing: dp(12)
             
             Label:
                 text: "Conductores de la Empresa"
-                font_size: 20
+                font_size: sp(18)
                 bold: True
                 halign: 'left'
                 valign: 'middle'
-                color: 1, 1, 1, 1
-                size_hint_x: 0.8
+                color: 0, 0, 0, 1  # Texto negro
+                size_hint_x: 0.75
+                text_size: self.width, None
             
             Button:
                 text: "Actualizar"
-                size_hint_x: 0.2
+                size_hint_x: 0.25
                 size_hint_y: None
-                height: dp(35)
-                background_color: 0.3, 0.7, 0.3, 1
+                height: dp(40)
+                font_size: sp(14)
+                background_color: 1, 1, 1, 1  # Fondo blanco
+                color: 0, 0, 0, 1  # Texto negro
                 on_press: root.refresh_drivers()
+                
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # Borde negro
+                    Line:
+                        rounded_rectangle: self.x, self.y, self.width, self.height, dp(6)
+                        width: dp(2)
+                
+                canvas.after:
+                    Color:
+                        rgba: 0.95, 0.95, 0.95, 1 if self.state == 'down' else 0, 0, 0, 0
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(6)]
         
         # Lista de conductores con scroll
         ScrollView:
             do_scroll_x: False
             do_scroll_y: True
             
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.05  # Fondo muy sutil para el área de scroll
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(8)]
+                Color:
+                    rgba: 0, 0, 0, 0.2  # Borde para el área de scroll
+                Line:
+                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                    width: dp(1)
+            
             BoxLayout:
                 id: drivers_list
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height
-                spacing: dp(10)
-                padding: [0, 0, 0, dp(10)]
+                spacing: dp(8)
+                padding: [dp(12), dp(12), dp(12), dp(12)]
         
         # Botón de cerrar sesión
         Button:
             text: "Cerrar Sesión"
-            font_size: 16
+            font_size: sp(16)
             size_hint_y: None
-            height: dp(40)
-            background_color: 0.8, 0.2, 0.2, 1
+            height: dp(50)
+            background_color: 1, 1, 1, 1  # Fondo blanco
+            color: 0, 0, 0, 1  # Texto negro
+            bold: True
             on_press: root.logout()
+            
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1  # Borde negro
+                Line:
+                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                    width: dp(2)
+            
+            canvas.after:
+                Color:
+                    rgba: 0.95, 0.95, 0.95, 1 if self.state == 'down' else 0, 0, 0, 0
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(8)]

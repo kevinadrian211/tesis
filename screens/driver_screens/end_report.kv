@@ -3,10 +3,10 @@
         orientation: 'vertical'
         padding: "20dp"
         spacing: "20dp"
-        
+
         canvas.before:
             Color:
-                rgba: 1, 0.99, 0.95, 1  # Fondo claro
+                rgba: 1, 1, 1, 1  # Fondo blanco
             Rectangle:
                 pos: self.pos
                 size: self.size
@@ -16,14 +16,14 @@
             size_hint_y: None
             height: "60dp"
             padding: "10dp"
-            
+
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 1
                 Line:
-                    width: 3
+                    width: 2
                     rectangle: (*self.pos, *self.size)
-            
+
             Label:
                 text: "🛑 Fin del Viaje"
                 font_size: '20sp'
@@ -31,17 +31,17 @@
                 valign: 'middle'
                 color: 0, 0, 0, 1
 
-        # Body (mensajes finales + botón)
+        # Body
         BoxLayout:
             orientation: 'vertical'
             spacing: "15dp"
             padding: "10dp"
-            
+
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 1
                 Line:
-                    width: 3
+                    width: 2
                     rectangle: (*self.pos, *self.size)
 
             Label:
@@ -54,138 +54,169 @@
                 size_hint_y: None
                 height: "50dp"
 
-            # Scroll view para los reportes
             ScrollView:
                 do_scroll_x: False
                 do_scroll_y: True
-                
+
                 BoxLayout:
                     orientation: 'vertical'
                     spacing: "10dp"
                     size_hint_y: None
                     height: self.minimum_height
-                    
-                    # Reporte de parpadeos
+
+                    # Reutilizable estilo para cada reporte
+                    # Puedes personalizar fondo si quieres diferenciar
+
+                    # Reporte 1
                     BoxLayout:
                         orientation: 'vertical'
                         size_hint_y: None
                         height: self.minimum_height
                         padding: "5dp"
-                        
+
                         canvas.before:
                             Color:
-                                rgba: 0.9, 0.9, 1, 1  # Fondo azul claro
+                                rgba: 1, 1, 1, 1
                             Rectangle:
                                 pos: self.pos
                                 size: self.size
-                        
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                width: 1.5
+                                rectangle: (*self.pos, *self.size)
+
                         Label:
                             id: final_blink_label
                             text: "📊 Reporte de parpadeos: Cargando..."
                             font_size: '14sp'
+                            color: 0, 0, 0, 1
                             halign: 'left'
                             valign: 'top'
                             text_size: self.width, None
-                            color: 0, 0, 0, 1
-                            size_hint_y: None
-                            height: self.texture_size[1]
-                            markup: True
-                    
-                    # Reporte de bostezos
-                    BoxLayout:
-                        orientation: 'vertical'
-                        size_hint_y: None
-                        height: self.minimum_height
-                        padding: "5dp"
-                        
-                        canvas.before:
-                            Color:
-                                rgba: 1, 1, 0.9, 1  # Fondo amarillo claro
-                            Rectangle:
-                                pos: self.pos
-                                size: self.size
-                        
-                        Label:
-                            id: final_yawn_label
-                            text: "🟡 Reporte de bostezos: Cargando..."
-                            font_size: '14sp'
-                            halign: 'left'
-                            valign: 'top'
-                            text_size: self.width, None
-                            color: 0, 0, 0, 1
-                            size_hint_y: None
-                            height: self.texture_size[1]
-                            markup: True
-                    
-                    # Reporte de frotamiento de ojos
-                    BoxLayout:
-                        orientation: 'vertical'
-                        size_hint_y: None
-                        height: self.minimum_height
-                        padding: "5dp"
-                        
-                        canvas.before:
-                            Color:
-                                rgba: 1, 0.9, 0.9, 1  # Fondo rosa claro
-                            Rectangle:
-                                pos: self.pos
-                                size: self.size
-                        
-                        Label:
-                            id: final_eye_rub_label
-                            text: "👐 Frotamiento de ojos: Cargando..."
-                            font_size: '14sp'
-                            halign: 'left'
-                            valign: 'top'
-                            text_size: self.width, None
-                            color: 0, 0, 0, 1
-                            size_hint_y: None
-                            height: self.texture_size[1]
-                            markup: True
-                    
-                    # Reporte de cabeceo
-                    BoxLayout:
-                        orientation: 'vertical'
-                        size_hint_y: None
-                        height: self.minimum_height
-                        padding: "5dp"
-                        
-                        canvas.before:
-                            Color:
-                                rgba: 0.9, 1, 0.9, 1  # Fondo verde claro
-                            Rectangle:
-                                pos: self.pos
-                                size: self.size
-                        
-                        Label:
-                            id: final_nod_label
-                            text: "🤕 Cabeceo: Cargando..."
-                            font_size: '14sp'
-                            halign: 'left'
-                            valign: 'top'
-                            text_size: self.width, None
-                            color: 0, 0, 0, 1
                             size_hint_y: None
                             height: self.texture_size[1]
                             markup: True
 
-            # Botón para volver al inicio
+                    # Reporte 2
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "5dp"
+
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 1, 1
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                width: 1.5
+                                rectangle: (*self.pos, *self.size)
+
+                        Label:
+                            id: final_yawn_label
+                            text: "🟡 Reporte de bostezos: Cargando..."
+                            font_size: '14sp'
+                            color: 0, 0, 0, 1
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            markup: True
+
+                    # Reporte 3
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "5dp"
+
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 1, 1
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                width: 1.5
+                                rectangle: (*self.pos, *self.size)
+
+                        Label:
+                            id: final_eye_rub_label
+                            text: "👐 Frotamiento de ojos: Cargando..."
+                            font_size: '14sp'
+                            color: 0, 0, 0, 1
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            markup: True
+
+                    # Reporte 4
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "5dp"
+
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 1, 1
+                            Rectangle:
+                                pos: self.pos
+                                size: self.size
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                width: 1.5
+                                rectangle: (*self.pos, *self.size)
+
+                        Label:
+                            id: final_nod_label
+                            text: "🤕 Cabeceo: Cargando..."
+                            font_size: '14sp'
+                            color: 0, 0, 0, 1
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            markup: True
+
             Button:
                 text: "Volver al inicio"
                 size_hint: 0.5, None
                 height: "50dp"
                 pos_hint: {"center_x": 0.5}
+                background_normal: ''
+                background_color: 1, 1, 1, 1
+                color: 0, 0, 0, 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1
+                    Line:
+                        width: 2
+                        rounded_rectangle: (*self.pos, *self.size, 10)
+
                 on_press: root.go_to_home()
 
-        # Footer (margen / espacio visual)
+        # Footer
         BoxLayout:
             size_hint_y: None
             height: "40dp"
             padding: "10dp"
-            
+
             canvas.before:
                 Color:
                     rgba: 0, 0, 0, 1
                 Line:
-                    width: 3
+                    width: 2
                     rectangle: (*self.pos, *self.size)

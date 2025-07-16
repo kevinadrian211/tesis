@@ -1,40 +1,157 @@
 <LoginScreen>:
     name: "login"
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Fondo blanco
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: 0, 0, 0, 1  # Borde negro
+        Line:
+            rectangle: self.x, self.y, self.width, self.height
+            width: 2
+    
     BoxLayout:
         orientation: "vertical"
-        padding: 50
-        spacing: 20
-
-        TextInput:
-            id: email_input
-            hint_text: "Email"
-            multiline: False
+        padding: [30, 50, 30, 50]
+        spacing: 25
+        
+        # Título de la pantalla
+        Label:
+            text: "Iniciar Sesión"
+            font_size: "28sp"
+            color: 0, 0, 0, 1  # Negro
             size_hint_y: None
-            height: "40dp"
-
-        TextInput:
-            id: password_input
-            hint_text: "Contraseña"
-            password: True
-            multiline: False
+            height: "60dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+            bold: True
+        
+        # Espacio separador
+        Widget:
             size_hint_y: None
-            height: "40dp"
-
+            height: "20dp"
+        
+        # Input de email con estilo
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: "70dp"
+            spacing: 5
+            
+            Label:
+                text: "Correo Electrónico:"
+                font_size: "16sp"
+                color: 0, 0, 0, 1
+                size_hint_y: None
+                height: "25dp"
+                text_size: self.size
+                halign: "left"
+                valign: "middle"
+            
+            TextInput:
+                id: email_input
+                hint_text: "Ingresa tu email"
+                multiline: False
+                size_hint_y: None
+                height: "45dp"
+                background_color: 1, 1, 1, 1  # Fondo blanco
+                foreground_color: 0, 0, 0, 1   # Texto negro
+                cursor_color: 0, 0, 0, 1       # Cursor negro
+                font_size: "16sp"
+                padding: [10, 10]
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1
+                    Line:
+                        rectangle: self.x, self.y, self.width, self.height
+                        width: 1.5
+        
+        # Input de contraseña con estilo
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: "70dp"
+            spacing: 5
+            
+            Label:
+                text: "Contraseña:"
+                font_size: "16sp"
+                color: 0, 0, 0, 1
+                size_hint_y: None
+                height: "25dp"
+                text_size: self.size
+                halign: "left"
+                valign: "middle"
+            
+            TextInput:
+                id: password_input
+                hint_text: "Ingresa tu contraseña"
+                password: True
+                multiline: False
+                size_hint_y: None
+                height: "45dp"
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+                cursor_color: 0, 0, 0, 1
+                font_size: "16sp"
+                padding: [10, 10]
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1
+                    Line:
+                        rectangle: self.x, self.y, self.width, self.height
+                        width: 1.5
+        
+        # Label de error
         Label:
             id: error_label
             text: ""
             color: 1, 0, 0, 1  # Rojo para errores
             size_hint_y: None
             height: "30dp"
-
-        Button:
-            text: "Iniciar sesión"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+            font_size: "14sp"
+        
+        # Espacio separador
+        Widget:
             size_hint_y: None
-            height: "50dp"
+            height: "20dp"
+        
+        # Botón de iniciar sesión
+        Button:
+            text: "Iniciar Sesión"
+            size_hint_y: None
+            height: "55dp"
+            background_color: 1, 1, 1, 1  # Fondo blanco
+            color: 0, 0, 0, 1  # Texto negro
+            font_size: "18sp"
+            bold: True
             on_press: root.login()
-
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 2
+        
+        # Botón de registro
         Button:
-            text: "Registrar"
+            text: "Crear Cuenta"
             size_hint_y: None
-            height: "50dp"
+            height: "55dp"
+            background_color: 1, 1, 1, 1
+            color: 0, 0, 0, 1
+            font_size: "18sp"
+            bold: True
             on_press: app.root.current = "type_account"
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 2

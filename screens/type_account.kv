@@ -1,23 +1,126 @@
 <TypeAccountScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Fondo blanco
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: 0, 0, 0, 1  # Borde negro
+        Line:
+            rectangle: self.x, self.y, self.width, self.height
+            width: 2
+    
     BoxLayout:
         orientation: "vertical"
-        padding: 50
-        spacing: 10
-
+        padding: [30, 50, 30, 50]
+        spacing: 30
+        
+        # Título principal
+        Label:
+            text: "Crear Nueva Cuenta"
+            font_size: "28sp"
+            color: 0, 0, 0, 1  # Negro
+            size_hint_y: None
+            height: "60dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+            bold: True
+        
+        # Subtítulo
         Label:
             text: "¿Qué tipo de cuenta deseas crear?"
-            font_size: 24
+            font_size: "20sp"
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: "50dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+        
+        # Espacio separador
+        Widget:
+            size_hint_y: None
+            height: "30dp"
+        
+        # Botón Company
+        Button:
+            text: "Cuenta de Empresa"
+            size_hint_y: None
+            height: "70dp"
+            background_color: 1, 1, 1, 1
+            color: 0, 0, 0, 1
+            font_size: "20sp"
+            bold: True
+            on_press: root.select_account_type("company")
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 2
+        
+        # Descripción de empresa
+        Label:
+            text: "Para empresas que necesitan gestionar conductores y vehículos"
+            font_size: "14sp"
+            color: 0.3, 0.3, 0.3, 1
             size_hint_y: None
             height: "40dp"
-
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+        
+        # Espacio separador
+        Widget:
+            size_hint_y: None
+            height: "20dp"
+        
+        # Botón Driver
         Button:
-            text: "Company"
+            text: "Cuenta de Conductor"
+            size_hint_y: None
+            height: "70dp"
+            background_color: 1, 1, 1, 1
+            color: 0, 0, 0, 1
+            font_size: "20sp"
+            bold: True
+            on_press: root.select_account_type("driver")
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 2
+        
+        # Descripción de conductor
+        Label:
+            text: "Para conductores que trabajarán con empresas registradas"
+            font_size: "14sp"
+            color: 0.3, 0.3, 0.3, 1
+            size_hint_y: None
+            height: "40dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+        
+        # Espacio flexible
+        Widget:
+            size_hint_y: 1
+        
+        # Botón volver
+        Button:
+            text: "Volver"
             size_hint_y: None
             height: "50dp"
-            on_press: root.select_account_type("company")  # Redirige a la pantalla de registro de Company
-
-        Button:
-            text: "Driver"
-            size_hint_y: None
-            height: "50dp"
-            on_press: root.select_account_type("driver")  # Redirige a la pantalla de registro de Driver
+            background_color: 1, 1, 1, 1
+            color: 0, 0, 0, 1
+            font_size: "16sp"
+            on_press: app.root.current = "login"
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 1.5

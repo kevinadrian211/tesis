@@ -1,49 +1,203 @@
 <RegisterAdminScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Fondo blanco
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
     BoxLayout:
         orientation: 'vertical'
-        padding: 20
-        spacing: 20
-
-        Label:
-            text: "Agregar nuevo administrador"
-            font_size: 30
-            size_hint: (1, 0.2)
-            color: 1, 1, 1, 1
-
-        TextInput:
-            id: admin_name
-            hint_text: "Nombre completo"
-            multiline: False
+        padding: dp(20)
+        spacing: dp(20)
+        
+        # Header
+        BoxLayout:
+            orientation: 'vertical'
             size_hint_y: None
-            height: 50
-
-        TextInput:
-            id: admin_email
-            hint_text: "Correo electrónico"
-            multiline: False
+            height: dp(100)
+            spacing: dp(8)
+            
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.05  # Fondo muy sutil para el header
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(12)]
+                Color:
+                    rgba: 0, 0, 0, 0.1  # Borde sutil
+                Line:
+                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(12)
+                    width: dp(1)
+            
+            Label:
+                text: "Agregar nuevo administrador"
+                font_size: sp(24)
+                bold: True
+                halign: 'center'
+                valign: 'middle'
+                color: 0, 0, 0, 1  # Texto negro
+                size_hint_y: None
+                height: dp(60)
+                text_size: self.width, None
+            
+            Label:
+                text: "Complete los datos del nuevo administrador"
+                font_size: sp(14)
+                halign: 'center'
+                valign: 'middle'
+                color: 0.4, 0.4, 0.4, 1  # Gris oscuro para subtítulo
+                size_hint_y: None
+                height: dp(32)
+                text_size: self.width, None
+        
+        # Spacer
+        Widget:
+            size_hint_y: 0.1
+        
+        # Formulario
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(16)
             size_hint_y: None
-            height: 50
-            input_type: 'text'
-
-        TextInput:
-            id: admin_password
-            hint_text: "Contraseña"
-            multiline: False
-            password: True
-            size_hint_y: None
-            height: 50
-
-        TextInput:
-            id: admin_confirm_password
-            hint_text: "Confirmar contraseña"
-            multiline: False
-            password: True
-            size_hint_y: None
-            height: 50
-
+            height: dp(320)
+            
+            TextInput:
+                id: admin_name
+                hint_text: "Nombre completo"
+                multiline: False
+                size_hint_y: None
+                height: dp(50)
+                font_size: sp(16)
+                background_color: 1, 1, 1, 1  # Fondo blanco
+                foreground_color: 0, 0, 0, 1  # Texto negro
+                hint_text_color: 0.5, 0.5, 0.5, 1  # Gris para hint
+                padding: [dp(12), dp(12)]
+                
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # Borde negro
+                    Line:
+                        rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                        width: dp(2)
+                    Color:
+                        rgba: 0, 0, 0, 0.05  # Fondo muy sutil
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(8)]
+            
+            TextInput:
+                id: admin_email
+                hint_text: "Correo electrónico"
+                multiline: False
+                size_hint_y: None
+                height: dp(50)
+                font_size: sp(16)
+                background_color: 1, 1, 1, 1  # Fondo blanco
+                foreground_color: 0, 0, 0, 1  # Texto negro
+                hint_text_color: 0.5, 0.5, 0.5, 1  # Gris para hint
+                padding: [dp(12), dp(12)]
+                input_type: 'text'
+                
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # Borde negro
+                    Line:
+                        rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                        width: dp(2)
+                    Color:
+                        rgba: 0, 0, 0, 0.05  # Fondo muy sutil
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(8)]
+            
+            TextInput:
+                id: admin_password
+                hint_text: "Contraseña"
+                multiline: False
+                password: True
+                size_hint_y: None
+                height: dp(50)
+                font_size: sp(16)
+                background_color: 1, 1, 1, 1  # Fondo blanco
+                foreground_color: 0, 0, 0, 1  # Texto negro
+                hint_text_color: 0.5, 0.5, 0.5, 1  # Gris para hint
+                padding: [dp(12), dp(12)]
+                
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # Borde negro
+                    Line:
+                        rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                        width: dp(2)
+                    Color:
+                        rgba: 0, 0, 0, 0.05  # Fondo muy sutil
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(8)]
+            
+            TextInput:
+                id: admin_confirm_password
+                hint_text: "Confirmar contraseña"
+                multiline: False
+                password: True
+                size_hint_y: None
+                height: dp(50)
+                font_size: sp(16)
+                background_color: 1, 1, 1, 1  # Fondo blanco
+                foreground_color: 0, 0, 0, 1  # Texto negro
+                hint_text_color: 0.5, 0.5, 0.5, 1  # Gris para hint
+                padding: [dp(12), dp(12)]
+                
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # Borde negro
+                    Line:
+                        rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                        width: dp(2)
+                    Color:
+                        rgba: 0, 0, 0, 0.05  # Fondo muy sutil
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(8)]
+        
+        # Spacer
+        Widget:
+            size_hint_y: 0.1
+        
+        # Botón de registro
         Button:
             text: "Registrar Administrador"
-            font_size: 24
+            font_size: sp(18)
             size_hint_y: None
-            height: 60
+            height: dp(60)
+            size_hint_x: 0.8
+            pos_hint: {'center_x': 0.5}
+            background_color: 1, 1, 1, 1  # Fondo blanco
+            color: 0, 0, 0, 1  # Texto negro
+            bold: True
             on_press: root.register_admin()
+            
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1  # Borde negro
+                Line:
+                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(12)
+                    width: dp(3)
+            
+            canvas.after:
+                Color:
+                    rgba: 0.95, 0.95, 0.95, 1 if self.state == 'down' else 0, 0, 0, 0
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(12)]
+        
+        # Spacer inferior
+        Widget:
+            size_hint_y: 0.2

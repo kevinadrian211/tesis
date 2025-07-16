@@ -1,19 +1,120 @@
 <DashboardCompanyScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Fondo blanco
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
     BoxLayout:
         orientation: 'vertical'
-        padding: 20
-        spacing: 20
-
-        Button:
-            text: 'Ver Conductores'
-            font_size: 24
-            size_hint: (0.5, 0.2)
-            pos_hint: {'center_x': 0.5}
-            on_press: root.ver_reportes()
-
-        Button:
-            text: 'Agregar Administrador'
-            font_size: 24
-            size_hint: (0.5, 0.2)
-            pos_hint: {'center_x': 0.5}
-            on_press: root.agregar_administrador()
+        padding: dp(20)
+        spacing: dp(30)
+        
+        # Header/Title
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_y: None
+            height: dp(120)
+            spacing: dp(16)
+            
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.05  # Fondo muy sutil para el header
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [dp(12)]
+                Color:
+                    rgba: 0, 0, 0, 0.1  # Borde sutil
+                Line:
+                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(12)
+                    width: dp(1)
+            
+            Label:
+                text: "Panel de Empresa"
+                font_size: sp(28)
+                bold: True
+                halign: 'center'
+                valign: 'middle'
+                color: 0, 0, 0, 1  # Texto negro
+                size_hint_y: None
+                height: dp(60)
+                text_size: self.width, None
+            
+            Label:
+                text: "Gestión de Conductores y Administradores"
+                font_size: sp(16)
+                halign: 'center'
+                valign: 'middle'
+                color: 0.4, 0.4, 0.4, 1  # Gris oscuro para subtítulo
+                size_hint_y: None
+                height: dp(40)
+                text_size: self.width, None
+        
+        # Spacer para centrar los botones
+        Widget:
+            size_hint_y: 0.3
+        
+        # Botones principales
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: dp(24)
+            size_hint_y: None
+            height: dp(180)
+            
+            Button:
+                text: 'Ver Conductores'
+                font_size: sp(20)
+                size_hint: (0.7, None)
+                height: dp(60)
+                pos_hint: {'center_x': 0.5}
+                background_color: 1, 1, 1, 1  # Fondo blanco
+                color: 0, 0, 0, 1  # Texto negro
+                bold: True
+                on_press: root.ver_reportes()
+                
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # Borde negro
+                    Line:
+                        rounded_rectangle: self.x, self.y, self.width, self.height, dp(12)
+                        width: dp(3)
+                
+                canvas.after:
+                    Color:
+                        rgba: 0.95, 0.95, 0.95, 1 if self.state == 'down' else 0, 0, 0, 0
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(12)]
+            
+            Button:
+                text: 'Agregar Administrador'
+                font_size: sp(20)
+                size_hint: (0.7, None)
+                height: dp(60)
+                pos_hint: {'center_x': 0.5}
+                background_color: 1, 1, 1, 1  # Fondo blanco
+                color: 0, 0, 0, 1  # Texto negro
+                bold: True
+                on_press: root.agregar_administrador()
+                
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # Borde negro
+                    Line:
+                        rounded_rectangle: self.x, self.y, self.width, self.height, dp(12)
+                        width: dp(3)
+                
+                canvas.after:
+                    Color:
+                        rgba: 0.95, 0.95, 0.95, 1 if self.state == 'down' else 0, 0, 0, 0
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(12)]
+        
+        # Spacer inferior para centrar los botones
+        Widget:
+            size_hint_y: 0.4
