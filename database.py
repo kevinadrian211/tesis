@@ -850,3 +850,240 @@ def get_driver_final_reports(driver_id: str):
             'eye_rub_reports': [],
             'nod_reports': []
         }
+
+def get_final_reports_by_trip(trip_id: str):
+    """
+    Obtiene todos los reportes finales asociados a un viaje específico.
+    """
+    try:
+        reports = {
+            'blink_reports': [],
+            'yawn_reports': [],
+            'eye_rub_reports': [],
+            'nod_reports': []
+        }
+        
+        # Obtener reportes finales de parpadeos
+        response = supabase.table('blink_final_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['blink_reports'] = response.data
+        
+        # Obtener reportes finales de bostezos
+        response = supabase.table('yawn_final_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['yawn_reports'] = response.data
+        
+        # Obtener reportes finales de frotamiento de ojos
+        response = supabase.table('eye_rub_final_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['eye_rub_reports'] = response.data
+        
+        # Obtener reportes finales de cabeceo
+        response = supabase.table('nod_final_reports').select('*').eq('trip_id', trip_id).execute()
+        if response.data:
+            reports['nod_reports'] = response.data
+        
+        return reports
+        
+    except Exception as e:
+        print(f"Error al obtener reportes finales por viaje: {e}")
+        return {}
+
+def get_minute_reports_by_trip(trip_id: str):
+    """
+    Obtiene todos los reportes por minuto de un viaje específico
+    """
+    try:
+        response = supabase.table('blink_minute_reports') \
+                      .select('*') \
+                      .eq('trip_id', trip_id) \
+                      .order('timestamp') \
+                      .execute()
+        
+        return response.data if response.data else []
+        
+    except Exception as e:
+        print(f"Error al obtener reportes por minuto: {e}")
+        return []
+
+def get_5min_reports_by_trip(trip_id: str):
+    """
+    Obtiene todos los reportes de 5 minutos de un viaje específico
+    """
+    try:
+        response = supabase.table('yawn_5min_reports') \
+                      .select('*') \
+                      .eq('trip_id', trip_id) \
+                      .order('timestamp') \
+                      .execute()
+        
+        return response.data if response.data else []
+        
+    except Exception as e:
+        print(f"Error al obtener reportes de 5 minutos: {e}")
+        return []
+
+def get_10min_reports_by_trip(trip_id: str):
+    """
+    Obtiene todos los reportes de 10 minutos de un viaje específico
+    """
+    try:
+        response = supabase.table('yawn_10min_reports') \
+                      .select('*') \
+                      .eq('trip_id', trip_id) \
+                      .order('timestamp') \
+                      .execute()
+        
+        return response.data if response.data else []
+        
+    except Exception as e:
+        print(f"Error al obtener reportes de 10 minutos: {e}")
+        return []
+def get_minute_reports_by_trip(trip_id: str):
+    """
+    Obtiene todos los reportes por minuto de un viaje específico
+    """
+    try:
+        response = supabase.table('blink_minute_reports') \
+                      .select('*') \
+                      .eq('trip_id', trip_id) \
+                      .order('timestamp') \
+                      .execute()
+        
+        return response.data if response.data else []
+        
+    except Exception as e:
+        print(f"Error al obtener reportes por minuto: {e}")
+        return []
+
+def get_5min_reports_by_trip(trip_id: str):
+    """
+    Obtiene todos los reportes de 5 minutos de un viaje específico
+    """
+    try:
+        response = supabase.table('yawn_5min_reports') \
+                      .select('*') \
+                      .eq('trip_id', trip_id) \
+                      .order('timestamp') \
+                      .execute()
+        
+        return response.data if response.data else []
+        
+    except Exception as e:
+        print(f"Error al obtener reportes de 5 minutos: {e}")
+        return []
+
+def get_10min_reports_by_trip(trip_id: str):
+    """
+    Obtiene todos los reportes de 10 minutos de un viaje específico
+    """
+    try:
+        response = supabase.table('yawn_10min_reports') \
+                      .select('*') \
+                      .eq('trip_id', trip_id) \
+                      .order('timestamp') \
+                      .execute()
+        
+        return response.data if response.data else []
+        
+    except Exception as e:
+        print(f"Error al obtener reportes de 10 minutos: {e}")
+        return []
+
+def get_eye_rub_reports_by_trip(trip_id: str):
+    """
+    Obtiene todos los reportes de frotamiento de ojos de un viaje específico
+    """
+    try:
+        response = supabase.table('eye_rub_reports') \
+                      .select('*') \
+                      .eq('trip_id', trip_id) \
+                      .order('timestamp') \
+                      .execute()
+        
+        return response.data if response.data else []
+        
+    except Exception as e:
+        print(f"Error al obtener reportes de frotamiento de ojos: {e}")
+        return []
+
+def get_nod_reports_by_trip(trip_id: str):
+    """
+    Obtiene todos los reportes de cabeceo de un viaje específico
+    """
+    try:
+        response = supabase.table('nod_reports') \
+                      .select('*') \
+                      .eq('trip_id', trip_id) \
+                      .order('timestamp') \
+                      .execute()
+        
+        return response.data if response.data else []
+        
+    except Exception as e:
+        print(f"Error al obtener reportes de cabeceo: {e}")
+        return []
+
+def get_all_minute_reports_by_trip(trip_id: str):
+    """
+    Obtiene todos los tipos de reportes por minuto de un viaje específico
+    """
+    try:
+        reports = {
+            'blink_minute_reports': get_minute_reports_by_trip(trip_id),
+            'yawn_5min_reports': get_5min_reports_by_trip(trip_id),
+            'yawn_10min_reports': get_10min_reports_by_trip(trip_id),
+            'eye_rub_reports': get_eye_rub_reports_by_trip(trip_id),
+            'nod_reports': get_nod_reports_by_trip(trip_id)
+        }
+        
+        return reports
+        
+    except Exception as e:
+        print(f"Error al obtener todos los reportes por minuto: {e}")
+        return {}
+
+# Endpoint adicional para obtener estadísticas resumidas
+def get_trip_statistics(trip_id: str):
+    """
+    Obtiene estadísticas resumidas de un viaje específico
+    """
+    try:
+        # Obtener información básica del viaje
+        trip_response = supabase.table('trips') \
+                          .select('*') \
+                          .eq('id', trip_id) \
+                          .execute()
+        
+        if not trip_response.data:
+            return {}
+        
+        trip_info = trip_response.data[0]
+        
+        # Obtener todos los reportes
+        final_reports = get_final_reports_by_trip(trip_id)
+        minute_reports = get_all_minute_reports_by_trip(trip_id)
+        
+        # Calcular estadísticas
+        statistics = {
+            'trip_info': trip_info,
+            'final_reports_summary': {
+                'total_blink_reports': len(final_reports.get('blink_reports', [])),
+                'total_yawn_reports': len(final_reports.get('yawn_reports', [])),
+                'total_eye_rub_reports': len(final_reports.get('eye_rub_reports', [])),
+                'total_nod_reports': len(final_reports.get('nod_reports', []))
+            },
+            'minute_reports_summary': {
+                'blink_minute_count': len(minute_reports.get('blink_minute_reports', [])),
+                'yawn_5min_count': len(minute_reports.get('yawn_5min_reports', [])),
+                'yawn_10min_count': len(minute_reports.get('yawn_10min_reports', [])),
+                'eye_rub_count': len(minute_reports.get('eye_rub_reports', [])),
+                'nod_count': len(minute_reports.get('nod_reports', []))
+            }
+        }
+        
+        return statistics
+        
+    except Exception as e:
+        print(f"Error al obtener estadísticas del viaje: {e}")
+        return {}

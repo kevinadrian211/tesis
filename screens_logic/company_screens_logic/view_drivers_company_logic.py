@@ -200,7 +200,7 @@ class ViewDriversCompanyScreen(Screen):
         
         # Botón para ver reportes
         view_reports_btn = Button(
-            text="Ver Reportes",
+            text="Ver Viajes",
             size_hint_x=0.3,
             size_hint_y=None,
             height=dp(35),
@@ -278,7 +278,7 @@ class ViewDriversCompanyScreen(Screen):
             print(f"Navegando a reportes del conductor: {driver_name} (ID: {driver_id})")
             
             # Cambiar a la pantalla de reportes
-            self.manager.current = 'view_reports_company'
+            self.manager.current = 'view_trips_company'
             
         except Exception as e:
             print(f"Error al navegar a reportes: {e}")

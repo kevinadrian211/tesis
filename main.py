@@ -19,6 +19,8 @@ from screens_logic.company_screens_logic.view_reports_company_logic import ViewR
 from screens_logic.company_screens_logic.view_detailed_reports_company_logic import ViewDetailedReportsCompanyScreen
 from screens_logic.admin_screens_logic.view_reports_admin_logic import ViewReportsAdminScreen
 from screens_logic.admin_screens_logic.view_detailed_reports_admin_logic import ViewDetailedReportsAdminScreen
+from screens_logic.admin_screens_logic.view_trips_admin_logic import ViewTripsAdminScreen
+from screens_logic.company_screens_logic.view_trips_company_logic import ViewTripsCompanyScreen
 
 # Cargar archivos KV
 Builder.load_file("screens/type_account.kv")
@@ -37,6 +39,8 @@ Builder.load_file("screens/company_screens/view_reports_company.kv")
 Builder.load_file("screens/company_screens/view_detailed_reports_company.kv")
 Builder.load_file("screens/admin_screens/view_reports_admin.kv")
 Builder.load_file("screens/admin_screens/view_detailed_reports_admin.kv")
+Builder.load_file("screens/admin_screens/view_trips_admin.kv")
+Builder.load_file("screens/company_screens/view_trips_company.kv")
 
 class MainApp(App):
     # Variables para guardar sesión activa
@@ -71,6 +75,8 @@ class MainApp(App):
         sm.add_widget(ViewDetailedReportsCompanyScreen(name="view_detailed_reports_company"))
         sm.add_widget(ViewReportsAdminScreen(name="view_reports_admin"))
         sm.add_widget(ViewDetailedReportsAdminScreen(name="view_detailed_reports_admin"))
+        sm.add_widget(ViewTripsAdminScreen(name="view_trips_admin"))
+        sm.add_widget(ViewTripsCompanyScreen(name="view_trips_company"))
 
         return sm
     
