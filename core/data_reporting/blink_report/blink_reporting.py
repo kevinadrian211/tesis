@@ -74,20 +74,20 @@ def generate_report():
 def evaluate_blink_status(count: int, avg_duration: float) -> str:
     if count < NORMAL_FREQUENCY_MIN:
         if avg_duration > CANSANCIO_DURATION_THRESHOLD:
-            return "⚠️ Cansancio: Parpadeos muy lentos y prolongados (> 400 ms)."
+            return "Cansancio: Parpadeos muy lentos y prolongados (> 400 ms)."
         elif RIESGO_DURATION_MIN <= avg_duration <= RIESGO_DURATION_MAX:
-            return "⚠️ Riesgo de somnolencia: Microsueños posibles (300–600 ms)."
+            return "Riesgo de somnolencia: Microsueños posibles (300–600 ms)."
         else:
             return "Parpadeos escasos y breves: posible fatiga leve."
     elif NORMAL_FREQUENCY_MIN <= count <= NORMAL_FREQUENCY_MAX:
         if NORMAL_DURATION_MIN <= avg_duration <= NORMAL_DURATION_MAX:
-            return "✅ Parpadeo normal: frecuencia y duración dentro del rango."
+            return "Parpadeo normal: frecuencia y duración dentro del rango."
         elif avg_duration > NORMAL_DURATION_MAX:
-            return "⚠️ Fatiga moderada: parpadeos más lentos de lo normal."
+            return "Fatiga moderada: parpadeos más lentos de lo normal."
         else:
             return "Parpadeos rápidos pero frecuencia adecuada."
     else:
-        return "⚠️ Frecuencia alta de parpadeo: fuera del rango típico."
+        return "Frecuencia alta de parpadeo: fuera del rango típico."
 
 def report_blink_data(gesture_type: str, eye: str, duration: float):
     global blink_count, total_duration

@@ -1,14 +1,16 @@
-kevin@Kevins-MacBook-Air tesis % pip3 freeze
+tesis % pip3 freeze
 absl-py==2.2.2
 altgraph @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/altgraph-0.17.2-py2.py3-none-any.whl
 annotated-types==0.7.0
 anyio==4.9.0
 attrs==25.3.0
+bcrypt==4.3.0
 certifi==2025.4.26
 cffi==1.17.1
 charset-normalizer==3.4.2
 contourpy==1.3.0
 cycler==0.12.1
+Cython==3.1.2
 deprecation==2.1.0
 docutils==0.21.2
 exceptiongroup==1.3.0
@@ -42,13 +44,16 @@ opencv-python==4.11.0.86
 opt_einsum==3.4.0
 packaging==25.0
 pillow==11.2.1
+plyer==2.1.0
 postgrest==1.1.1
 protobuf==4.25.7
 pycparser==2.22
 pydantic==2.11.7
 pydantic_core==2.33.2
+pygame==2.6.1
 Pygments==2.19.1
 PyJWT==2.10.1
+pyobjus==1.2.3
 pyparsing==3.2.3
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
