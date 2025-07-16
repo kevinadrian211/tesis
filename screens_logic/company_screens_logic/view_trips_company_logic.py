@@ -36,7 +36,7 @@ class ViewTripsCompanyScreen(Screen):
             if self.driver_data:
                 print(f"Conductor seleccionado: {self.driver_data['name']} (ID: {self.driver_data['id']})")
                 # Actualizar el título con el nombre del conductor
-                self.ids.title_label.text = f"Viajes de {self.driver_data['name']}"
+                self.ids.title_label.text = f"Viajes de company {self.driver_data['name']}"
                 self.ids.driver_info_label.text = f"Conductor: {self.driver_data['name']}"
             else:
                 print("No se encontró conductor seleccionado")
