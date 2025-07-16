@@ -330,7 +330,6 @@ class LoginScreen(Screen):
         # Verificar si hay una sesión activa
         app = App.get_running_app()
         if hasattr(app, 'current_user') and app.current_user:
-            print("Sesión activa detectada, redirigiendo...")
             role = app.current_user.get('role')
             if role == 'company':
                 self.manager.current = 'dashboard_company'
