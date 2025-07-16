@@ -412,4 +412,4 @@ class ViewReportsCompanyScreen(Screen):
         """
         Regresa a la pantalla de conductores
         """
-        self.manager.current = 'view_drivers_company'
+        self.manager.current = 'view_trips_company'

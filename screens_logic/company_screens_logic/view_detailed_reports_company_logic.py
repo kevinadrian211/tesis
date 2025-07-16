@@ -39,7 +39,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
             self.current_trip_id = getattr(app, 'selected_trip_id', None)
             self.current_driver = getattr(app, 'selected_driver', None)
             
-            print(f"Cargando reportes detallados - Tipo: {self.current_report_type}, Trip ID: {self.current_trip_id}")
+            print(f"Cargando reportes detallados - Tipo company: {self.current_report_type}, Trip ID: {self.current_trip_id}")
             
             # Actualizar información de la pantalla
             self.update_screen_info()
@@ -72,7 +72,7 @@ class ViewDetailedReportsCompanyScreen(Screen):
             
             # Mostrar información del viaje o conductor
             if self.current_trip_id:
-                self.ids.trip_info_label.text = f"Viaje ID: {self.current_trip_id[:8]}..."
+                self.ids.trip_info_label.text = f"Viaje ID company: {self.current_trip_id[:8]}..."
             elif self.current_driver:
                 driver_name = self.current_driver.get('name', 'N/A')
                 self.ids.trip_info_label.text = f"Conductor: {driver_name} - Vista General"

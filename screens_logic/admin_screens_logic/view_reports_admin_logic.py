@@ -1,4 +1,3 @@
-# screens_logic/admin_screens_logic/view_reports_admin_logic.py
 from kivy.uix.screenmanager import Screen
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -6,7 +5,7 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.metrics import dp
 from kivy.graphics import Color, Rectangle
-from database import get_driver_final_reports
+from database import get_final_reports_by_trip
 
 class ViewReportsAdminScreen(Screen):
     def __init__(self, **kwargs):
@@ -37,8 +36,15 @@ class ViewReportsAdminScreen(Screen):
             
             print(f"Cargando reportes para: {driver_name} (ID: {driver_id})")
             
+            # Obtener el trip_id seleccionado
+            trip_id = App.get_running_app().selected_trip_id
+            
+            if not trip_id:
+                print("Error: No hay viaje seleccionado")
+                return
+            
             # Obtener reportes de la base de datos
-            self.reports_data = get_driver_final_reports(driver_id)
+            self.reports_data = get_final_reports_by_trip(trip_id)
             print(f"Reportes obtenidos: {self.reports_data}")
             
             # Actualizar la interfaz
@@ -335,11 +341,33 @@ class ViewReportsAdminScreen(Screen):
         try:
             app = App.get_running_app()
             app.selected_report_type = detail_type
-            app.selected_trip_id = None  # Para vista general
             
-            print(f"Navegando a reportes detallados de tipo: {detail_type}")
-            self.manager.current = 'view_detailed_reports_admin'
+            # Obtener el trip_id del viaje actual que se está mostrando
+            # Usamos el trip_id del primer reporte disponible
+            trip_id = None
             
+            # Buscar en los reportes del tipo seleccionado
+            report_types = ['blink_reports', 'yawn_reports', 'eye_rub_reports', 'nod_reports']
+            
+            for report_type in report_types:
+                reports = self.reports_data.get(report_type, [])
+                if reports and len(reports) > 0:
+                    trip_id = reports[0].get('trip_id')
+                    break
+            
+            # Si no encontramos trip_id, usar el que ya tenemos en la app
+            if not trip_id:
+                trip_id = getattr(app, 'selected_trip_id', None)
+            
+            app.selected_trip_id = trip_id
+            
+            print(f"Navegando a reportes detallados - Tipo: {detail_type}, Trip ID: {trip_id}")
+            
+            if trip_id:
+                self.manager.current = 'view_detailed_reports_admin'
+            else:
+                print("Error: No se pudo determinar el trip_id para los reportes detallados")
+                
         except Exception as e:
             print(f"Error al navegar a reportes detallados: {e}")
             import traceback
@@ -384,4 +412,4 @@ class ViewReportsAdminScreen(Screen):
         """
         Regresa a la pantalla de conductores
         """
-        self.manager.current = 'dashboard_admin'
+        self.manager.current = 'view_trips_admin'
