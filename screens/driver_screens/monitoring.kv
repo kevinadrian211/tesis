@@ -20,7 +20,7 @@
             bold: True
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, 0.1  # Borde sutil
+                    rgba: 0, 0, 0, 1  # Borde sutil
                 Line:
                     width: 1
                     rectangle: (*self.pos, *self.size)
@@ -33,7 +33,7 @@
             padding: 12
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, 0.1  # Borde sutil
+                    rgba: 0, 0, 0, 1  # Borde sutil
                 Line:
                     width: 1
                     rectangle: (*self.pos, *self.size)
@@ -65,12 +65,12 @@
                     spacing: 8
                     canvas.before:
                         Color:
-                            rgba: 0.95, 0.95, 0.95, 1  # Fondo gris muy claro
+                            rgba: 1, 1, 1, 1  # Fondo gris muy claro
                         Rectangle:
                             pos: self.pos
                             size: self.size
                         Color:
-                            rgba: 0, 0, 0, 0.2  # Borde sutil
+                            rgba: 0, 0, 0, 1  # Borde sutil
                         Line:
                             width: 1
                             rectangle: (*self.pos, *self.size)
@@ -89,7 +89,7 @@
                         markup: True
                         size_hint_x: 0.75
                         font_size: 32
-                        color: 0.3, 0.3, 0.3, 1
+                        color: 0, 0, 0, 1
                         text_size: self.width, None
                         halign: 'left'
                         valign: 'middle'
@@ -103,12 +103,12 @@
                     spacing: 8
                     canvas.before:
                         Color:
-                            rgba: 0.95, 0.95, 0.95, 1
+                            rgba: 1, 1, 1, 1
                         Rectangle:
                             pos: self.pos
                             size: self.size
                         Color:
-                            rgba: 0, 0, 0, 0.2
+                            rgba: 0, 0, 0, 1
                         Line:
                             width: 1
                             rectangle: (*self.pos, *self.size)
@@ -127,7 +127,7 @@
                         markup: True
                         size_hint_x: 0.75
                         font_size: 32
-                        color: 0.3, 0.3, 0.3, 1
+                        color: 0, 0, 0, 1
                         text_size: self.width, None
                         halign: 'left'
                         valign: 'middle'
@@ -141,12 +141,12 @@
                     spacing: 8
                     canvas.before:
                         Color:
-                            rgba: 0.95, 0.95, 0.95, 1
+                            rgba: 1, 1, 1, 1
                         Rectangle:
                             pos: self.pos
                             size: self.size
                         Color:
-                            rgba: 0, 0, 0, 0.2
+                            rgba: 0, 0, 0, 1
                         Line:
                             width: 1
                             rectangle: (*self.pos, *self.size)
@@ -165,7 +165,7 @@
                         markup: True
                         size_hint_x: 0.75
                         font_size: 32
-                        color: 0.3, 0.3, 0.3, 1
+                        color: 0, 0, 0, 1
                         text_size: self.width, None
                         halign: 'left'
                         valign: 'middle'
@@ -179,12 +179,12 @@
                     spacing: 8
                     canvas.before:
                         Color:
-                            rgba: 0.95, 0.95, 0.95, 1
+                            rgba: 1, 1, 1, 1
                         Rectangle:
                             pos: self.pos
                             size: self.size
                         Color:
-                            rgba: 0, 0, 0, 0.2
+                            rgba: 0, 0, 0, 1
                         Line:
                             width: 1
                             rectangle: (*self.pos, *self.size)
@@ -203,7 +203,7 @@
                         markup: True
                         size_hint_x: 0.75
                         font_size: 32
-                        color: 0.3, 0.3, 0.3, 1
+                        color: 0, 0, 0, 1
                         text_size: self.width, None
                         halign: 'left'
                         valign: 'middle'
@@ -217,12 +217,12 @@
                     spacing: 8
                     canvas.before:
                         Color:
-                            rgba: 0.95, 0.95, 0.95, 1
+                            rgba: 1, 1, 1, 1
                         Rectangle:
                             pos: self.pos
                             size: self.size
                         Color:
-                            rgba: 0, 0, 0, 0.2
+                            rgba: 0, 0, 0, 1
                         Line:
                             width: 1
                             rectangle: (*self.pos, *self.size)
@@ -240,7 +240,7 @@
                         markup: True
                         size_hint_x: 0.75
                         font_size: 32
-                        color: 0.3, 0.3, 0.3, 1
+                        color: 0, 0, 0, 1
                         text_size: self.width, None
                         halign: 'left'
                         valign: 'middle'
@@ -252,6 +252,7 @@
                 height: "48dp"
                 font_size: 32
                 background_color: 1, 1, 1, 1  # Fondo blanco
+                background_normal: ''
                 color: 0, 0, 0, 1  # Texto negro
                 bold: True
                 canvas.before:
@@ -268,15 +269,15 @@
             text: "Estado: Iniciando..."
             size_hint: 1, 0.1
             font_size: '14sp'
-            color: 0.3, 0.3, 0.3, 1  # Texto gris oscuro
+            color: 0, 0, 0, 1  # Texto gris oscuro
             canvas.before:
                 Color:
-                    rgba: 0.95, 0.95, 0.95, 1  # Fondo gris muy claro
+                    rgba: 1, 1, 1, 1  # Fondo gris muy claro
                 Rectangle:
                     pos: self.pos
                     size: self.size
                 Color:
-                    rgba: 0, 0, 0, 0.2  # Borde sutil
+                    rgba: 0, 0, 0, 1  # Borde sutil
                 Line:
                     width: 1
                     rectangle: (*self.pos, *self.size)

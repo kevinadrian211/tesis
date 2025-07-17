@@ -10,7 +10,7 @@
         Line:
             rectangle: self.x, self.y, self.width, self.height
             width: 2
-    
+
     ScrollView:
         do_scroll_x: False
         do_scroll_y: True
@@ -498,6 +498,7 @@
                     size_hint_y: None
                     height: "50dp"
                     background_color: 1, 1, 1, 1
+                    background_normal: ''
                     color: 0, 0, 0, 1
                     font_size: 32
                     on_text: root.on_company_selected(self.text)
@@ -519,6 +520,7 @@
                 size_hint_y: None
                 height: "60dp"
                 background_color: 1, 1, 1, 1
+                background_normal: ''
                 color: 0, 0, 0, 1
                 font_size: 32
                 bold: True
@@ -536,6 +538,7 @@
                 size_hint_y: None
                 height: "50dp"
                 background_color: 1, 1, 1, 1
+                background_normal: ''
                 color: 0, 0, 0, 1
                 font_size: 32
                 on_press: root.go_back()

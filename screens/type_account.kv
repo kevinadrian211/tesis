@@ -10,25 +10,23 @@
         Line:
             rectangle: self.x, self.y, self.width, self.height
             width: 2
-    
+
     BoxLayout:
         orientation: "vertical"
         padding: [30, 50, 30, 50]
         spacing: 30
-        
-        # Título principal
+
         Label:
             text: "Crear Nueva Cuenta"
             font_size: 32
-            color: 0, 0, 0, 1  # Negro
+            color: 0, 0, 0, 1
             size_hint_y: None
             height: "60dp"
             text_size: self.size
             halign: "center"
             valign: "middle"
             bold: True
-        
-        # Subtítulo
+
         Label:
             text: "¿Qué tipo de cuenta deseas crear?"
             font_size: 32
@@ -38,18 +36,18 @@
             text_size: self.size
             halign: "center"
             valign: "middle"
-        
-        # Espacio separador
+
         Widget:
             size_hint_y: None
             height: "30dp"
-        
-        # Botón Company
+
         Button:
             text: "Cuenta de Empresa"
             size_hint_y: None
             height: "70dp"
             background_color: 1, 1, 1, 1
+            background_normal: ""
+            background_down: ""
             color: 0, 0, 0, 1
             font_size: 32
             bold: True
@@ -60,29 +58,28 @@
                 Line:
                     rectangle: self.x, self.y, self.width, self.height
                     width: 2
-        
-        # Descripción de empresa
+
         Label:
             text: "Para empresas que necesitan gestionar conductores y vehículos"
             font_size: 32
-            color: 0.3, 0.3, 0.3, 1
+            color: 0, 0, 0, 1  # Negro en vez de gris
             size_hint_y: None
             height: "40dp"
             text_size: self.size
             halign: "center"
             valign: "middle"
-        
-        # Espacio separador
+
         Widget:
             size_hint_y: None
             height: "20dp"
-        
-        # Botón Driver
+
         Button:
             text: "Cuenta de Conductor"
             size_hint_y: None
             height: "70dp"
             background_color: 1, 1, 1, 1
+            background_normal: ""
+            background_down: ""
             color: 0, 0, 0, 1
             font_size: 32
             bold: True
@@ -93,28 +90,27 @@
                 Line:
                     rectangle: self.x, self.y, self.width, self.height
                     width: 2
-        
-        # Descripción de conductor
+
         Label:
             text: "Para conductores que trabajarán con empresas registradas"
             font_size: 32
-            color: 0.3, 0.3, 0.3, 1
+            color: 0, 0, 0, 1
             size_hint_y: None
             height: "40dp"
             text_size: self.size
             halign: "center"
             valign: "middle"
-        
-        # Espacio flexible
+
         Widget:
             size_hint_y: 1
-        
-        # Botón volver
+
         Button:
             text: "Volver"
             size_hint_y: None
             height: "50dp"
             background_color: 1, 1, 1, 1
+            background_normal: ""
+            background_down: ""
             color: 0, 0, 0, 1
             font_size: 32
             on_press: app.root.current = "login"
@@ -123,4 +119,4 @@
                     rgba: 0, 0, 0, 1
                 Line:
                     rectangle: self.x, self.y, self.width, self.height
-                    width: 1.5
+                    width: 2

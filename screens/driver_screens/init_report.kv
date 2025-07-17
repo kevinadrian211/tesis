@@ -41,7 +41,7 @@
             padding: "12dp"
             canvas.before:
                 Color:
-                    rgba: 0.95, 0.95, 0.95, 1  # Fondo gris muy claro
+                    rgba: 1, 1, 1, 1  # Fondo gris muy claro
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -68,7 +68,7 @@
             padding: "12dp"
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, 0.1  # Borde del contenedor principal
+                    rgba: 0, 0, 0, 1  # Borde del contenedor principal
                 Line:
                     width: 1
                     rectangle: (*self.pos, *self.size)
@@ -98,6 +98,7 @@
                     font_size: 32
                     multiline: False
                     background_color: 1, 1, 1, 1  # Fondo blanco
+                    background_normal: ''
                     foreground_color: 0, 0, 0, 1  # Texto negro
                     cursor_color: 0, 0, 0, 1  # Cursor negro
                     canvas.before:
@@ -132,6 +133,7 @@
                     font_size: 32
                     multiline: False
                     background_color: 1, 1, 1, 1  # Fondo blanco
+                    background_normal: ''
                     foreground_color: 0, 0, 0, 1  # Texto negro
                     cursor_color: 0, 0, 0, 1  # Cursor negro
                     canvas.before:
@@ -153,6 +155,7 @@
                 pos_hint: {"center_x": 0.5}
                 font_size: 32
                 background_color: 1, 1, 1, 1  # Fondo blanco
+                background_normal: ''
                 color: 0, 0, 0, 1  # Texto negro
                 bold: True
                 canvas.before:
@@ -176,7 +179,7 @@
             spacing: "8dp"
             canvas.before:
                 Color:
-                    rgba: 0.95, 0.95, 0.95, 1  # Fondo gris muy claro
+                    rgba: 1, 1, 1, 1  # Fondo gris muy claro
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -191,7 +194,7 @@
                 text: "Estado: Preparando..."
                 size_hint: 1, 1
                 font_size: 32
-                color: 0.3, 0.3, 0.3, 1  # Texto gris oscuro
+                color: 0, 0, 0, 1  # Texto gris oscuro
                 halign: 'center'
                 valign: 'middle'
         
