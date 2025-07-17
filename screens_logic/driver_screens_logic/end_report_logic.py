@@ -40,10 +40,10 @@ class EndReportScreen(Screen):
     
     def reset_labels(self):
         """Resetea todos los labels a su estado inicial"""
-        self.ids.final_blink_label.text = "📊 Reporte de parpadeos: Cargando..."
-        self.ids.final_yawn_label.text = "🟡 Reporte de bostezos: Cargando..."
-        self.ids.final_eye_rub_label.text = "👐 Frotamiento de ojos: Cargando..."
-        self.ids.final_nod_label.text = "🤕 Cabeceo: Cargando..."
+        self.ids.final_blink_label.text = "Reporte de parpadeos: Cargando..."
+        self.ids.final_yawn_label.text = "Reporte de bostezos: Cargando..."
+        self.ids.final_eye_rub_label.text = "Frotamiento de ojos: Cargando..."
+        self.ids.final_nod_label.text = "Cabeceo: Cargando..."
         
     def go_to_home(self):
         self.manager.current = "init_report"
@@ -88,11 +88,11 @@ class EndReportScreen(Screen):
         
         # Determinar nivel general
         if high_risk_count >= 2:
-            return "🔴 RIESGO ALTO"
+            return "RIESGO ALTO"
         elif high_risk_count >= 1 or medium_risk_count >= 2:
-            return "🟡 RIESGO MEDIO"
+            return "RIESGO MEDIO"
         else:
-            return "🟢 RIESGO BAJO"
+            return "RIESGO BAJO"
 
     def show_final_blink_report(self, data):
         """Actualiza el reporte final de parpadeos"""
@@ -119,15 +119,15 @@ class EndReportScreen(Screen):
                 
                 status_text = ""
                 if microsleeps > 0:
-                    status_text = f"⚠️ {microsleeps} microsueño(s) detectado(s)"
+                    status_text = f"{microsleeps} microsueño(s) detectado(s)"
                 elif risk > normal:
-                    status_text = "⚠️ Patrón de parpadeo irregular detectado"
+                    status_text = "Patrón de parpadeo irregular detectado"
                 elif risk > 0:
-                    status_text = "⚠️ Algunos episodios de riesgo detectados"
+                    status_text = "Algunos episodios de riesgo detectados"
                 else:
-                    status_text = "✅ Patrón de parpadeo normal"
+                    status_text = "Patrón de parpadeo normal"
                 
-                new_text = f"📊 Parpadeos:\n{main_text}\n{status_text}"
+                new_text = f"Parpadeos:\n{main_text}\n{status_text}"
                 
                 self.ids.final_blink_label.text = new_text
                 print(f"[INFO] Label de parpadeos actualizado exitosamente")
@@ -157,20 +157,20 @@ class EndReportScreen(Screen):
                 
                 if total == 0:
                     main_text = "No se detectaron bostezos"
-                    status_text = "✅ Nivel de somnolencia normal"
+                    status_text = "Nivel de somnolencia normal"
                 else:
                     main_text = f"Total de bostezos: {total}"
                     
                     if risk > 8:
-                        status_text = "🔴 Nivel alto de somnolencia"
+                        status_text = "Nivel alto de somnolencia"
                     elif risk > 4:
-                        status_text = "🟡 Nivel moderado de somnolencia"
+                        status_text = "Nivel moderado de somnolencia"
                     elif risk > 0:
-                        status_text = "⚠️ Algunos episodios de somnolencia"
+                        status_text = "Algunos episodios de somnolencia"
                     else:
-                        status_text = "✅ Nivel normal de somnolencia"
+                        status_text = "Nivel normal de somnolencia"
                 
-                new_text = f"🟡 Bostezos:\n{main_text}\n{status_text}"
+                new_text = f"Bostezos:\n{main_text}\n{status_text}"
                 
                 self.ids.final_yawn_label.text = new_text
                 print(f"[INFO] Label de bostezos actualizado exitosamente")
@@ -195,7 +195,7 @@ class EndReportScreen(Screen):
                     return
                 
                 # El message ya viene formateado desde el dispatcher
-                new_text = f"👐 Frotamiento de ojos:\n{message}"
+                new_text = f"Frotamiento de ojos:\n{message}"
                 self.ids.final_eye_rub_label.text = new_text
                 print(f"[INFO] Label de frotamiento de ojos actualizado exitosamente")
                 
@@ -219,7 +219,7 @@ class EndReportScreen(Screen):
                     return
                 
                 # El message ya viene formateado desde el dispatcher
-                new_text = f"🤕 Cabeceo:\n{message}"
+                new_text = f"Cabeceo:\n{message}"
                 self.ids.final_nod_label.text = new_text
                 print(f"[INFO] Label de cabeceo actualizado exitosamente")
                 

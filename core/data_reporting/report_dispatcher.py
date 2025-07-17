@@ -32,7 +32,7 @@ from core.data_store.yawn_store.yawn_db_store import (
 )
 
 def print_blink_event(message: str):
-    print(f"[Parpadeo-dispatcher] {message}")
+    print(f"{message}")
 
 def print_microsleep_event(message: str):
     receiver_print_microsleep_event(message)

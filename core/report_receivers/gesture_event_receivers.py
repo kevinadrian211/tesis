@@ -20,7 +20,7 @@ def register_callbacks(
     _callbacks["on_nod"] = on_nod
     _callbacks["on_yawn"] = on_yawn
     _callbacks["on_microsleep"] = on_microsleep
-    print("[Receivers] Callbacks registrados desde DriverMonitoringScreen")
+    print(" Callbacks registrados desde DriverMonitoringScreen")
 
 
 def format_blink_report(data: dict) -> str:
@@ -60,21 +60,21 @@ def format_yawn_report_10min(data: dict) -> str:
     return formatted
 
 def print_eye_rub_event(message: str):
-    full_message = f"[Frotamiento de ojos receivers] {message}"
+    full_message = f"{message}"
     if _callbacks["on_eyes"]:
         Clock.schedule_once(lambda dt: _callbacks["on_eyes"](full_message))
     else:
         print(full_message)
 
 def print_nod_event(message: str):
-    full_message = f"[Cabeceo receivers] {message}"
+    full_message = f"{message}"
     if _callbacks["on_nod"]:
         Clock.schedule_once(lambda dt: _callbacks["on_nod"](full_message))
     else:
         print(full_message)
 
 def print_yawn_event(message: str):
-    full_message = f"[Bostezo Detectado receivers] {message}"
+    full_message = f"Bostezo Detectado {message}"
     if _callbacks["on_yawn"]:
         Clock.schedule_once(lambda dt: _callbacks["on_yawn"](full_message))
     else:
@@ -95,7 +95,7 @@ def print_yawn_10min_report_db(data: dict):
         print(formatted_message)
 
 def print_microsleep_event(message: str):
-    full_message = f"🛌 Microsueño:\n{message}"
+    full_message = f"Microsueño:\n{message}"
     if _callbacks["on_microsleep"]:
         Clock.schedule_once(lambda dt: _callbacks["on_microsleep"](full_message))
     else:
