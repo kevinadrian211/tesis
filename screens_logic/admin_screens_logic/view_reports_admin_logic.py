@@ -310,27 +310,10 @@ class ViewReportsAdminScreen(Screen):
             width=dp(120)
         )
         
-        # Botón "Ver Detalles" individual para blink y yawn
-        if detail_type in ['blink', 'yawn']:
-            detail_button = Button(
-                text="Ver",
-                size_hint_x=None,
-                width=dp(50),
-                height=dp(25),
-                background_color=(0.3, 0.7, 0.3, 1),
-                color=(1, 1, 1, 1),
-                font_size=32
-            )
-            detail_button.bind(on_press=lambda x, trip_id=report.get('id', report.get('trip_id')), dt=detail_type: self.view_trip_details(trip_id, dt))
-            
-            container.add_widget(index_label)
-            container.add_widget(info_label)
-            container.add_widget(date_label)
-            container.add_widget(detail_button)
-        else:
-            container.add_widget(index_label)
-            container.add_widget(info_label)
-            container.add_widget(date_label)
+        # Solo agregar los elementos básicos sin el botón "Ver"
+        container.add_widget(index_label)
+        container.add_widget(info_label)
+        container.add_widget(date_label)
         
         return container
     
@@ -370,23 +353,6 @@ class ViewReportsAdminScreen(Screen):
                 
         except Exception as e:
             print(f"Error al navegar a reportes detallados: {e}")
-            import traceback
-            traceback.print_exc()
-    
-    def view_trip_details(self, trip_id, detail_type):
-        """
-        Navega a la pantalla de reportes detallados para un viaje específico
-        """
-        try:
-            app = App.get_running_app()
-            app.selected_report_type = detail_type
-            app.selected_trip_id = trip_id
-            
-            print(f"Navegando a reportes detallados - Tipo: {detail_type}, Trip ID: {trip_id}")
-            self.manager.current = 'view_detailed_reports_admin'
-            
-        except Exception as e:
-            print(f"Error al navegar a reportes detallados del viaje: {e}")
             import traceback
             traceback.print_exc()
     
