@@ -22,8 +22,146 @@ class ViewTripsAdminScreen(Screen):
         Se ejecuta cuando entramos a la pantalla
         """
         self.load_selected_driver()
+        self.setup_ui_elements()
         if self.driver_data:
             self.load_trips()
+
+    def setup_ui_elements(self):
+        """
+        Configura los elementos gráficos que no se muestran correctamente en KV
+        """
+        try:
+            # Configurar el botón de regreso
+            back_button = self.ids.get('back_button')
+            if not back_button:
+                # Buscar el botón en el layout
+                for child in self.walk():
+                    if hasattr(child, 'text') and child.text == "← Regresar":
+                        back_button = child
+                        break
+            
+            if back_button:
+                self.setup_button_graphics(back_button)
+            
+            # Configurar el contenedor de información del conductor
+            self.setup_driver_info_container()
+            
+            # Configurar el ScrollView
+            self.setup_scrollview_container()
+            
+        except Exception as e:
+            print(f"Error en setup_ui_elements: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def setup_button_graphics(self, button):
+        """
+        Configura los gráficos del botón
+        """
+        try:
+            with button.canvas.before:
+                Color(1, 1, 1, 1)  # Fondo blanco
+                button.bg_rect = RoundedRectangle(
+                    pos=button.pos,
+                    size=button.size,
+                    radius=[dp(6)]
+                )
+                Color(0, 0, 0, 1)  # Borde negro
+                button.border_line = Line(
+                    rounded_rectangle=(button.x, button.y, button.width, button.height, dp(6)),
+                    width=2
+                )
+            
+            def update_button_graphics(instance, value):
+                if hasattr(instance, 'bg_rect'):
+                    instance.bg_rect.pos = instance.pos
+                    instance.bg_rect.size = instance.size
+                if hasattr(instance, 'border_line'):
+                    instance.border_line.rounded_rectangle = (
+                        instance.x, instance.y, instance.width, instance.height, dp(6)
+                    )
+            
+            button.bind(pos=update_button_graphics, size=update_button_graphics)
+            
+        except Exception as e:
+            print(f"Error configurando gráficos del botón: {e}")
+
+    def setup_driver_info_container(self):
+        """
+        Configura el contenedor de información del conductor
+        """
+        try:
+            # Buscar el contenedor padre del driver_info_label
+            driver_label = self.ids.driver_info_label
+            if driver_label and driver_label.parent:
+                container = driver_label.parent
+                
+                with container.canvas.before:
+                    Color(1, 1, 1, 1)  # Fondo blanco
+                    container.bg_rect = RoundedRectangle(
+                        pos=container.pos,
+                        size=container.size,
+                        radius=[dp(8)]
+                    )
+                    Color(0, 0, 0, 1)  # Borde negro
+                    container.border_line = Line(
+                        rounded_rectangle=(container.x, container.y, container.width, container.height, dp(8)),
+                        width=2
+                    )
+                
+                def update_container_graphics(instance, value):
+                    if hasattr(instance, 'bg_rect'):
+                        instance.bg_rect.pos = instance.pos
+                        instance.bg_rect.size = instance.size
+                    if hasattr(instance, 'border_line'):
+                        instance.border_line.rounded_rectangle = (
+                            instance.x, instance.y, instance.width, instance.height, dp(8)
+                        )
+                
+                container.bind(pos=update_container_graphics, size=update_container_graphics)
+                
+        except Exception as e:
+            print(f"Error configurando contenedor de driver info: {e}")
+
+    def setup_scrollview_container(self):
+        """
+        Configura el contenedor ScrollView
+        """
+        try:
+            # Buscar el ScrollView
+            scrollview = None
+            for child in self.walk():
+                if isinstance(child, ScrollView):
+                    scrollview = child
+                    break
+            
+            if scrollview:
+                with scrollview.canvas.before:
+                    Color(0.98, 0.98, 0.98, 1)  # Fondo gris claro
+                    scrollview.bg_rect = RoundedRectangle(
+                        pos=scrollview.pos,
+                        size=scrollview.size,
+                        radius=[dp(8)]
+                    )
+                    Color(0, 0, 0, 1)  # Borde negro
+                    scrollview.border_line = Line(
+                        rounded_rectangle=(scrollview.x, scrollview.y, scrollview.width, scrollview.height, dp(8)),
+                        width=2
+                    )
+                
+                def update_scrollview_graphics(instance, value):
+                    if hasattr(instance, 'bg_rect'):
+                        instance.bg_rect.pos = instance.pos
+                        instance.bg_rect.size = instance.size
+                    if hasattr(instance, 'border_line'):
+                        instance.border_line.rounded_rectangle = (
+                            instance.x, instance.y, instance.width, instance.height, dp(8)
+                        )
+                
+                scrollview.bind(pos=update_scrollview_graphics, size=update_scrollview_graphics)
+                
+        except Exception as e:
+            print(f"Error configurando ScrollView: {e}")
 
     def load_selected_driver(self):
         """
@@ -36,7 +174,7 @@ class ViewTripsAdminScreen(Screen):
             if self.driver_data:
                 print(f"Conductor seleccionado: {self.driver_data['name']} (ID: {self.driver_data['id']})")
                 # Actualizar el título con el nombre del conductor
-                self.ids.title_label.text = f"Viajes de company {self.driver_data['name']}"
+                self.ids.title_label.text = f"Viajes de {self.driver_data['name']}"
                 self.ids.driver_info_label.text = f"Conductor: {self.driver_data['name']}"
                 self.ids.title_label.color = (0, 0, 0, 1)  # texto negro
                 self.ids.driver_info_label.color = (0, 0, 0, 1)
@@ -132,12 +270,15 @@ class ViewTripsAdminScreen(Screen):
             padding=dp(20)
         )
 
-        # Fondo blanco
+        # Fondo blanco con borde negro
         with container.canvas.before:
             Color(1, 1, 1, 1)  # blanco
-            container.rect = Rectangle(size=container.size, pos=container.pos)
+            container.rect = RoundedRectangle(radius=[dp(8)], size=container.size, pos=container.pos)
             Color(0, 0, 0, 1)  # borde negro
-            Line(rectangle=(container.x, container.y, container.width, container.height), width=1.2)
+            container.border = Line(
+                rounded_rectangle=(container.x, container.y, container.width, container.height, dp(8)),
+                width=2
+            )
 
         container.bind(size=self.update_rect, pos=self.update_rect)
 
@@ -168,11 +309,11 @@ class ViewTripsAdminScreen(Screen):
         # Fondo blanco con borde negro y bordes redondeados
         with container.canvas.before:
             Color(1, 1, 1, 1)  # blanco
-            container.rect = RoundedRectangle(radius=[dp(16)], size=container.size, pos=container.pos)
+            container.rect = RoundedRectangle(radius=[dp(8)], size=container.size, pos=container.pos)
             Color(0, 0, 0, 1)  # borde negro
             container.border = Line(
-                rounded_rectangle=(container.x, container.y, container.width, container.height, dp(16)),
-                width=1.2
+                rounded_rectangle=(container.x, container.y, container.width, container.height, dp(8)),
+                width=2
             )
 
         container.bind(size=self.update_rect, pos=self.update_rect)
@@ -239,21 +380,16 @@ class ViewTripsAdminScreen(Screen):
             size_hint_x=0.3,
             size_hint_y=None,
             height=dp(35),
+            background_normal='',
+            background_down='',
             background_color=(1, 1, 1, 1),  # fondo blanco
             color=(0, 0, 0, 1),  # texto negro
+            font_size=30,
             on_press=lambda x: self.view_trip_reports(trip)
         )
 
-        # Borde negro para botón
-        def btn_canvas(instance, value):
-            instance.canvas.before.clear()
-            with instance.canvas.before:
-                Color(1, 1, 1, 1)
-                Rectangle(pos=instance.pos, size=instance.size)
-                Color(0, 0, 0, 1)
-                Line(rectangle=(instance.x, instance.y, instance.width, instance.height), width=1.2)
-
-        view_reports_btn.bind(pos=btn_canvas, size=btn_canvas)
+        # Configurar gráficos del botón
+        self.setup_trip_button_graphics(view_reports_btn)
 
         spacer = Label(size_hint_x=0.7)
 
@@ -264,6 +400,38 @@ class ViewTripsAdminScreen(Screen):
         container.add_widget(button_container)
 
         return container
+
+    def setup_trip_button_graphics(self, button):
+        """
+        Configura los gráficos del botón de viaje
+        """
+        try:
+            with button.canvas.before:
+                Color(1, 1, 1, 1)  # Fondo blanco
+                button.bg_rect = RoundedRectangle(
+                    pos=button.pos,
+                    size=button.size,
+                    radius=[dp(6)]
+                )
+                Color(0, 0, 0, 1)  # Borde negro
+                button.border_line = Line(
+                    rounded_rectangle=(button.x, button.y, button.width, button.height, dp(6)),
+                    width=2
+                )
+            
+            def update_button_graphics(instance, value):
+                if hasattr(instance, 'bg_rect'):
+                    instance.bg_rect.pos = instance.pos
+                    instance.bg_rect.size = instance.size
+                if hasattr(instance, 'border_line'):
+                    instance.border_line.rounded_rectangle = (
+                        instance.x, instance.y, instance.width, instance.height, dp(6)
+                    )
+            
+            button.bind(pos=update_button_graphics, size=update_button_graphics)
+            
+        except Exception as e:
+            print(f"Error configurando gráficos del botón de viaje: {e}")
 
     def view_trip_reports(self, trip):
         """
@@ -294,14 +462,10 @@ class ViewTripsAdminScreen(Screen):
         Actualiza el rectángulo y borde cuando cambia el tamaño del widget
         """
         if hasattr(instance, 'rect'):
-            if isinstance(instance.rect, (Rectangle, RoundedRectangle)):
-                instance.rect.pos = instance.pos
-                instance.rect.size = instance.size
+            instance.rect.pos = instance.pos
+            instance.rect.size = instance.size
         if hasattr(instance, 'border'):
-            if isinstance(instance.border, Line):
-                instance.border.rectangle = (instance.x, instance.y, instance.width, instance.height)
-                if hasattr(instance.border, 'rounded_rectangle'):
-                    instance.border.rounded_rectangle = (instance.x, instance.y, instance.width, instance.height, dp(16))
+            instance.border.rounded_rectangle = (instance.x, instance.y, instance.width, instance.height, dp(8))
 
     def clear_trips(self):
         """
@@ -312,20 +476,13 @@ class ViewTripsAdminScreen(Screen):
         except:
             pass
 
-    def refresh_trips(self):
-        """
-        Actualiza la lista de viajes
-        """
-        print("Actualizando lista de viajes...")
-        self.load_trips()
-
     def go_back(self):
         """
         Regresa a la pantalla de conductores
         """
         try:
             print("Regresando a la pantalla de conductores...")
-            self.manager.current = 'view_drivers_admin'
+            self.manager.current = 'dashboard_admin'
         except Exception as e:
             print(f"Error al regresar: {e}")
             import traceback

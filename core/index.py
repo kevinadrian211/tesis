@@ -37,7 +37,7 @@ class DriverMonitoringScreen(Screen):
         self.hand_mesh_processor = HandMeshProcessor()
         self.rotate_frame = True
         
-        self.cap = cv2.VideoCapture(1)
+        self.cap = cv2.VideoCapture(0)
         if not self.cap.isOpened():
             self.ids.footer_label.text = "❌ No se pudo abrir la cámara."
             print("[ERROR] No se pudo abrir la cámara.")

@@ -48,6 +48,52 @@ class EndReportScreen(Screen):
     def go_to_home(self):
         self.manager.current = "init_report"
 
+    def get_overall_risk_level(self):
+        """Calcula el nivel de riesgo general basado en todos los reportes"""
+        high_risk_count = 0
+        medium_risk_count = 0
+        
+        # Analizar cada reporte para determinar riesgo
+        for report_type, data in self.report_data.items():
+            if data is None:
+                continue
+                
+            if report_type == 'blink':
+                risk_reports = data.get('risk_reports', 0)
+                microsleeps = data.get('microsleeps', 0)
+                if risk_reports > 5 or microsleeps > 2:
+                    high_risk_count += 1
+                elif risk_reports > 2 or microsleeps > 0:
+                    medium_risk_count += 1
+                    
+            elif report_type == 'yawn':
+                risk_reports = data.get('risk_reports', 0)
+                if risk_reports > 8:
+                    high_risk_count += 1
+                elif risk_reports > 4:
+                    medium_risk_count += 1
+                    
+            elif report_type == 'eye_rub':
+                # Para eye_rub y nod, el data ya viene formateado
+                if "ALTO" in str(data):
+                    high_risk_count += 1
+                elif "MEDIO" in str(data):
+                    medium_risk_count += 1
+                    
+            elif report_type == 'nod':
+                if "ALTO" in str(data):
+                    high_risk_count += 1
+                elif "MEDIO" in str(data):
+                    medium_risk_count += 1
+        
+        # Determinar nivel general
+        if high_risk_count >= 2:
+            return "🔴 RIESGO ALTO"
+        elif high_risk_count >= 1 or medium_risk_count >= 2:
+            return "🟡 RIESGO MEDIO"
+        else:
+            return "🟢 RIESGO BAJO"
+
     def show_final_blink_report(self, data):
         """Actualiza el reporte final de parpadeos"""
         self.report_data['blink'] = data
@@ -60,20 +106,28 @@ class EndReportScreen(Screen):
                     print("[WARNING] Intentando actualizar label pero no estamos en end_report")
                     return
                 
-                count = data.get("total_count", "N/A")
-                normal = data.get("normal_reports", "N/A")
-                risk = data.get("risk_reports", "N/A")
-                microsleeps = data.get("microsleeps", "N/A")
-                level = data.get("risk_level", "")
-                comment = data.get("comment", "")
+                count = data.get("total_count", 0)
+                normal = data.get("normal_reports", 0)
+                risk = data.get("risk_reports", 0)
+                microsleeps = data.get("microsleeps", 0)
                 
-                new_text = (
-                    f"📊 Reporte final de parpadeos:\n"
-                    f"🔵 Normales: {normal} | 🔴 Riesgo: {risk}\n"
-                    f"🛌 Microsueños: {microsleeps}\n"
-                    f"📈 Total: {count} | Riesgo: {level}\n"
-                    f"{comment}"
-                )
+                # Crear mensaje más legible
+                if count == 0:
+                    main_text = "No se registraron datos de parpadeo"
+                else:
+                    main_text = f"Total de reportes: {count}"
+                
+                status_text = ""
+                if microsleeps > 0:
+                    status_text = f"⚠️ {microsleeps} microsueño(s) detectado(s)"
+                elif risk > normal:
+                    status_text = "⚠️ Patrón de parpadeo irregular detectado"
+                elif risk > 0:
+                    status_text = "⚠️ Algunos episodios de riesgo detectados"
+                else:
+                    status_text = "✅ Patrón de parpadeo normal"
+                
+                new_text = f"📊 Parpadeos:\n{main_text}\n{status_text}"
                 
                 self.ids.final_blink_label.text = new_text
                 print(f"[INFO] Label de parpadeos actualizado exitosamente")
@@ -83,7 +137,6 @@ class EndReportScreen(Screen):
                 if hasattr(self, 'ids') and hasattr(self.ids, 'final_blink_label'):
                     self.ids.final_blink_label.text = "❌ Error cargando reporte de parpadeos"
         
-        # Usar un delay muy pequeño para asegurar que la pantalla esté lista
         Clock.schedule_once(update_label, 0.05)
 
     def show_final_yawn_report(self, data):
@@ -98,13 +151,26 @@ class EndReportScreen(Screen):
                     print("[WARNING] Intentando actualizar label pero no estamos en end_report")
                     return
                 
-                normal = data.get("normal_reports", "N/A")
-                risk = data.get("risk_reports", "N/A")
+                normal = data.get("normal_reports", 0)
+                risk = data.get("risk_reports", 0)
+                total = normal + risk
                 
-                new_text = (
-                    f"🟡 Reporte final de bostezos:\n"
-                    f"🔵 Normales: {normal} | 🔴 Riesgo: {risk}"
-                )
+                if total == 0:
+                    main_text = "No se detectaron bostezos"
+                    status_text = "✅ Nivel de somnolencia normal"
+                else:
+                    main_text = f"Total de bostezos: {total}"
+                    
+                    if risk > 8:
+                        status_text = "🔴 Nivel alto de somnolencia"
+                    elif risk > 4:
+                        status_text = "🟡 Nivel moderado de somnolencia"
+                    elif risk > 0:
+                        status_text = "⚠️ Algunos episodios de somnolencia"
+                    else:
+                        status_text = "✅ Nivel normal de somnolencia"
+                
+                new_text = f"🟡 Bostezos:\n{main_text}\n{status_text}"
                 
                 self.ids.final_yawn_label.text = new_text
                 print(f"[INFO] Label de bostezos actualizado exitosamente")
@@ -128,7 +194,8 @@ class EndReportScreen(Screen):
                     print("[WARNING] Intentando actualizar label pero no estamos en end_report")
                     return
                 
-                new_text = f"👐 Frotamiento de ojos final:\n{message}"
+                # El message ya viene formateado desde el dispatcher
+                new_text = f"👐 Frotamiento de ojos:\n{message}"
                 self.ids.final_eye_rub_label.text = new_text
                 print(f"[INFO] Label de frotamiento de ojos actualizado exitosamente")
                 
@@ -151,7 +218,8 @@ class EndReportScreen(Screen):
                     print("[WARNING] Intentando actualizar label pero no estamos en end_report")
                     return
                 
-                new_text = f"🤕 Cabeceo final:\n{message}"
+                # El message ya viene formateado desde el dispatcher
+                new_text = f"🤕 Cabeceo:\n{message}"
                 self.ids.final_nod_label.text = new_text
                 print(f"[INFO] Label de cabeceo actualizado exitosamente")
                 

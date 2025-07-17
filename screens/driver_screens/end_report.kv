@@ -6,7 +6,7 @@
 
         canvas.before:
             Color:
-                rgba: 1, 1, 1, 1  # Fondo blanco
+                rgba: 0.95, 0.95, 0.95, 1  # Fondo gris claro
             Rectangle:
                 pos: self.pos
                 size: self.size
@@ -14,22 +14,24 @@
         # Header
         BoxLayout:
             size_hint_y: None
-            height: "60dp"
-            padding: "10dp"
+            height: "80dp"
+            padding: "15dp"
 
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, 1
-                Line:
-                    width: 2
-                    rectangle: (*self.pos, *self.size)
+                    rgba: 0.2, 0.4, 0.8, 1  # Azul
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [15, 15, 15, 15]
 
             Label:
-                text: "🛑 Fin del Viaje"
-                font_size: 32
+                text: "🛑 Resumen Final del Viaje"
+                font_size: 36
+                bold: True
                 halign: 'center'
                 valign: 'middle'
-                color: 0, 0, 0, 1
+                color: 1, 1, 1, 1
 
         # Body
         BoxLayout:
@@ -39,20 +41,27 @@
 
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, 1
+                    rgba: 1, 1, 1, 1  # Fondo blanco
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [10, 10, 10, 10]
+                Color:
+                    rgba: 0.8, 0.8, 0.8, 1
                 Line:
                     width: 2
-                    rectangle: (*self.pos, *self.size)
+                    rounded_rectangle: (*self.pos, *self.size, 10)
 
             Label:
-                text: "✅ Resumen Final del Viaje"
-                font_size: 32
+                text: "📊 Análisis de Comportamiento del Conductor"
+                font_size: 28
+                bold: True
                 halign: 'center'
                 valign: 'middle'
                 text_size: self.size
-                color: 0, 0, 0, 1
+                color: 0.2, 0.2, 0.2, 1
                 size_hint_y: None
-                height: "50dp"
+                height: "60dp"
 
             ScrollView:
                 do_scroll_x: False
@@ -60,163 +69,161 @@
 
                 BoxLayout:
                     orientation: 'vertical'
-                    spacing: "10dp"
+                    spacing: "15dp"
                     size_hint_y: None
                     height: self.minimum_height
+                    padding: "10dp"
 
-                    # Reutilizable estilo para cada reporte
-                    # Puedes personalizar fondo si quieres diferenciar
-
-                    # Reporte 1
+                    # Reporte de Parpadeos
                     BoxLayout:
                         orientation: 'vertical'
                         size_hint_y: None
                         height: self.minimum_height
-                        padding: "5dp"
+                        padding: "15dp"
 
                         canvas.before:
                             Color:
-                                rgba: 1, 1, 1, 1
-                            Rectangle:
+                                rgba: 0.9, 0.95, 1, 1  # Azul muy claro
+                            RoundedRectangle:
                                 pos: self.pos
                                 size: self.size
+                                radius: [8, 8, 8, 8]
                             Color:
-                                rgba: 0, 0, 0, 1
+                                rgba: 0.3, 0.6, 0.9, 1
                             Line:
-                                width: 1.5
-                                rectangle: (*self.pos, *self.size)
+                                width: 2
+                                rounded_rectangle: (*self.pos, *self.size, 8)
 
                         Label:
                             id: final_blink_label
                             text: "📊 Reporte de parpadeos: Cargando..."
-                            font_size: 32
-                            color: 0, 0, 0, 1
+                            font_size: 24
+                            color: 0.1, 0.1, 0.1, 1
                             halign: 'left'
                             valign: 'top'
-                            text_size: self.width, None
+                            text_size: self.width - 20, None
                             size_hint_y: None
-                            height: self.texture_size[1]
+                            height: self.texture_size[1] + 20
                             markup: True
 
-                    # Reporte 2
+                    # Reporte de Bostezos
                     BoxLayout:
                         orientation: 'vertical'
                         size_hint_y: None
                         height: self.minimum_height
-                        padding: "5dp"
+                        padding: "15dp"
 
                         canvas.before:
                             Color:
-                                rgba: 1, 1, 1, 1
-                            Rectangle:
+                                rgba: 1, 0.98, 0.9, 1  # Amarillo muy claro
+                            RoundedRectangle:
                                 pos: self.pos
                                 size: self.size
+                                radius: [8, 8, 8, 8]
                             Color:
-                                rgba: 0, 0, 0, 1
+                                rgba: 0.9, 0.7, 0.3, 1
                             Line:
-                                width: 1.5
-                                rectangle: (*self.pos, *self.size)
+                                width: 2
+                                rounded_rectangle: (*self.pos, *self.size, 8)
 
                         Label:
                             id: final_yawn_label
                             text: "🟡 Reporte de bostezos: Cargando..."
-                            font_size: 32
-                            color: 0, 0, 0, 1
+                            font_size: 24
+                            color: 0.1, 0.1, 0.1, 1
                             halign: 'left'
                             valign: 'top'
-                            text_size: self.width, None
+                            text_size: self.width - 20, None
                             size_hint_y: None
-                            height: self.texture_size[1]
+                            height: self.texture_size[1] + 20
                             markup: True
 
-                    # Reporte 3
+                    # Reporte de Frotamiento de Ojos
                     BoxLayout:
                         orientation: 'vertical'
                         size_hint_y: None
                         height: self.minimum_height
-                        padding: "5dp"
+                        padding: "15dp"
 
                         canvas.before:
                             Color:
-                                rgba: 1, 1, 1, 1
-                            Rectangle:
+                                rgba: 0.95, 0.9, 1, 1  # Púrpura muy claro
+                            RoundedRectangle:
                                 pos: self.pos
                                 size: self.size
+                                radius: [8, 8, 8, 8]
                             Color:
-                                rgba: 0, 0, 0, 1
+                                rgba: 0.7, 0.4, 0.9, 1
                             Line:
-                                width: 1.5
-                                rectangle: (*self.pos, *self.size)
+                                width: 2
+                                rounded_rectangle: (*self.pos, *self.size, 8)
 
                         Label:
                             id: final_eye_rub_label
                             text: "👐 Frotamiento de ojos: Cargando..."
-                            font_size: 32
-                            color: 0, 0, 0, 1
+                            font_size: 24
+                            color: 0.1, 0.1, 0.1, 1
                             halign: 'left'
                             valign: 'top'
-                            text_size: self.width, None
+                            text_size: self.width - 20, None
                             size_hint_y: None
-                            height: self.texture_size[1]
+                            height: self.texture_size[1] + 20
                             markup: True
 
-                    # Reporte 4
+                    # Reporte de Cabeceo
                     BoxLayout:
                         orientation: 'vertical'
                         size_hint_y: None
                         height: self.minimum_height
-                        padding: "5dp"
+                        padding: "15dp"
 
                         canvas.before:
                             Color:
-                                rgba: 1, 1, 1, 1
-                            Rectangle:
+                                rgba: 1, 0.9, 0.9, 1  # Rojo muy claro
+                            RoundedRectangle:
                                 pos: self.pos
                                 size: self.size
+                                radius: [8, 8, 8, 8]
                             Color:
-                                rgba: 0, 0, 0, 1
+                                rgba: 0.9, 0.4, 0.4, 1
                             Line:
-                                width: 1.5
-                                rectangle: (*self.pos, *self.size)
+                                width: 2
+                                rounded_rectangle: (*self.pos, *self.size, 8)
 
                         Label:
                             id: final_nod_label
                             text: "🤕 Cabeceo: Cargando..."
-                            font_size: 32
-                            color: 0, 0, 0, 1
+                            font_size: 24
+                            color: 0.1, 0.1, 0.1, 1
                             halign: 'left'
                             valign: 'top'
-                            text_size: self.width, None
+                            text_size: self.width - 20, None
                             size_hint_y: None
-                            height: self.texture_size[1]
+                            height: self.texture_size[1] + 20
                             markup: True
 
-            Button:
-                text: "Volver al inicio"
-                size_hint: 0.5, None
-                height: "50dp"
-                pos_hint: {"center_x": 0.5}
-                background_normal: ''
-                background_color: 1, 1, 1, 1
-                color: 0, 0, 0, 1
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 1
-                    Line:
-                        width: 2
-                        rounded_rectangle: (*self.pos, *self.size, 10)
-
-                on_press: root.go_to_home()
-
-        # Footer
+        # Footer con botón
         BoxLayout:
             size_hint_y: None
-            height: "40dp"
-            padding: "10dp"
+            height: "80dp"
+            padding: "20dp"
 
-            canvas.before:
-                Color:
-                    rgba: 0, 0, 0, 1
-                Line:
-                    width: 2
-                    rectangle: (*self.pos, *self.size)
+            Button:
+                text: "🏠 Volver al Inicio"
+                size_hint: 0.6, 1
+                pos_hint: {"center_x": 0.5}
+                font_size: 24
+                bold: True
+                background_normal: ''
+                background_color: 0.2, 0.7, 0.3, 1  # Verde
+                color: 1, 1, 1, 1
+                
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.7, 0.3, 1
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [10, 10, 10, 10]
+                
+                on_press: root.go_to_home()

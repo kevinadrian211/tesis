@@ -66,6 +66,34 @@ def print_yawn_10min_report_db(data: dict):
     handle_yawn_10min_report(data)
     save_yawn_10min_report_db(data)
 
+# === Funciones auxiliares para formatear datos para UI ===
+def format_eye_rub_for_ui(gesture_count: int) -> str:
+    """Formatea los datos de frotamiento de ojos para mostrar en UI"""
+    if gesture_count == 0:
+        return "No se detectaron frotamientos de ojos"
+    elif gesture_count == 1:
+        return "1 frotamiento de ojos detectado"
+    else:
+        return f"{gesture_count} frotamientos de ojos detectados"
+
+def format_nod_for_ui(gesture_count: int) -> str:
+    """Formatea los datos de cabeceo para mostrar en UI"""
+    if gesture_count == 0:
+        return "No se detectaron cabeceos"
+    elif gesture_count == 1:
+        return "1 cabeceo detectado"
+    else:
+        return f"{gesture_count} cabeceos detectados"
+
+def get_risk_level_text(count: int, thresholds: dict) -> str:
+    """Determina el nivel de riesgo basado en el conteo"""
+    if count >= thresholds.get('high', 10):
+        return "🔴 ALTO"
+    elif count >= thresholds.get('medium', 5):
+        return "🟡 MEDIO"
+    else:
+        return "🟢 BAJO"
+
 # === Reportes finales enviados a EndReportScreen ===
 def print_final_report_db(data: dict):
     """Envía reporte final de parpadeos a la pantalla de reporte final"""
@@ -82,35 +110,67 @@ def print_final_report_db(data: dict):
     # Guardar en base de datos
     save_blink_final_report_db(data)
 
-def print_eye_rub_final_report(message: str):
+def print_eye_rub_final_report(raw_data: str):
     """Envía reporte final de frotamiento de ojos a la pantalla de reporte final"""
-    print(f"[INFO] Enviando reporte final de frotamiento de ojos: {message}")
+    print(f"[INFO] Enviando reporte final de frotamiento de ojos: {raw_data}")
+    
+    # Parsear los datos del string (formato: "{'driver_id': ..., 'gesture_count': ...}")
+    try:
+        import ast
+        data_dict = ast.literal_eval(raw_data)
+        gesture_count = data_dict.get('gesture_count', 0)
+        
+        # Formatear para UI
+        ui_message = format_eye_rub_for_ui(gesture_count)
+        risk_level = get_risk_level_text(gesture_count, {'medium': 3, 'high': 8})
+        
+        formatted_message = f"{ui_message}\nNivel de riesgo: {risk_level}"
+        
+    except (ValueError, SyntaxError) as e:
+        print(f"[ERROR] Error parseando datos de frotamiento: {e}")
+        formatted_message = "Error procesando datos de frotamiento"
     
     # Obtener la instancia actual de la pantalla
     screen = get_end_report_screen()
     if screen:
-        screen.show_final_eye_rub_report(message)
+        screen.show_final_eye_rub_report(formatted_message)
         print("[INFO] Reporte de frotamiento de ojos enviado a EndReportScreen")
     else:
         print("[WARNING] No se pudo encontrar EndReportScreen para actualizar reporte de frotamiento")
     
-    # Guardar en base de datos
-    save_eye_rub_final_report_db(message)
+    # Guardar en base de datos (datos originales)
+    save_eye_rub_final_report_db(raw_data)
 
-def print_nod_final_report(message: str):
+def print_nod_final_report(raw_data: str):
     """Envía reporte final de cabeceo a la pantalla de reporte final"""
-    print(f"[INFO] Enviando reporte final de cabeceo: {message}")
+    print(f"[INFO] Enviando reporte final de cabeceo: {raw_data}")
+    
+    # Parsear los datos del string
+    try:
+        import ast
+        data_dict = ast.literal_eval(raw_data)
+        gesture_count = data_dict.get('gesture_count', 0)
+        
+        # Formatear para UI
+        ui_message = format_nod_for_ui(gesture_count)
+        risk_level = get_risk_level_text(gesture_count, {'medium': 5, 'high': 12})
+        
+        formatted_message = f"{ui_message}\nNivel de riesgo: {risk_level}"
+        
+    except (ValueError, SyntaxError) as e:
+        print(f"[ERROR] Error parseando datos de cabeceo: {e}")
+        formatted_message = "Error procesando datos de cabeceo"
     
     # Obtener la instancia actual de la pantalla
     screen = get_end_report_screen()
     if screen:
-        screen.show_final_nod_report(message)
+        screen.show_final_nod_report(formatted_message)
         print("[INFO] Reporte de cabeceo enviado a EndReportScreen")
     else:
         print("[WARNING] No se pudo encontrar EndReportScreen para actualizar reporte de cabeceo")
     
-    # Guardar en base de datos
-    save_nod_final_report_db(message)
+    # Guardar en base de datos (datos originales)
+    save_nod_final_report_db(raw_data)
 
 def print_yawn_final_report_db(data: dict):
     """Envía reporte final de bostezos a la pantalla de reporte final"""

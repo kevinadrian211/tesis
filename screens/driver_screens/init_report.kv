@@ -10,7 +10,7 @@
                 pos: self.pos
                 size: self.size
         
-        # Header (Título de la pantalla)
+        # Header (Título de la pantalla con botón de logout)
         BoxLayout:
             orientation: 'horizontal'
             size_hint: 1, None
@@ -26,12 +26,29 @@
             
             Label:
                 text: "🧳 Reporte de Viaje"
-                size_hint: 1, 1
+                size_hint: 0.8, 1
                 font_size: 32
                 color: 0, 0, 0, 1  # Color negro
                 halign: 'center'
                 valign: 'middle'
                 bold: True
+            
+            # Botón de cerrar sesión
+            Button:
+                text: "🚪 Cerrar Sesión"
+                size_hint: 0.2, 1
+                font_size: 24
+                background_color: 0.9, 0.2, 0.2, 1  # Fondo rojo claro
+                background_normal: ''
+                color: 1, 1, 1, 1  # Texto blanco
+                bold: True
+                canvas.before:
+                    Color:
+                        rgba: 0.7, 0.1, 0.1, 1  # Borde rojo oscuro
+                    Line:
+                        width: 2
+                        rectangle: (*self.pos, *self.size)
+                on_press: root.on_logout()
         
         # Información del conductor
         BoxLayout:
@@ -197,10 +214,3 @@
                 color: 0, 0, 0, 1  # Texto gris oscuro
                 halign: 'center'
                 valign: 'middle'
-        
-        # Botón de regreso (opcional)
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1, None
-            height: "48dp"
-            padding: "12dp"

@@ -70,7 +70,6 @@ class ReportScreen(Screen):
             self.current_trip = trip_data
             # Guardar el viaje actual en la aplicación para uso posterior
             app.current_trip = trip_data
-            
             self.ids.status_label.text = f"Viaje creado exitosamente (ID: {trip_data['id'][:8]}...)"
             print(f"Viaje creado: {trip_data}")
             return True
@@ -93,3 +92,33 @@ class ReportScreen(Screen):
         
         # Navegar a la pantalla de monitoreo
         self.manager.current = "monitoring"
+    
+    def on_logout(self):
+        """
+        Maneja el cierre de sesión
+        """
+        app = App.get_running_app()
+        
+        # Limpiar datos del usuario actual
+        if hasattr(app, 'current_user'):
+            app.current_user = None
+        
+        # Limpiar viaje actual si existe
+        if hasattr(app, 'current_trip'):
+            app.current_trip = None
+        
+        # Limpiar datos locales de la pantalla
+        self.current_trip = None
+        
+        # Limpiar campos del formulario
+        self.ids.start_location_input.text = ""
+        self.ids.end_location_input.text = ""
+        
+        # Actualizar estado
+        self.ids.status_label.text = "Estado: Sesión cerrada"
+        self.ids.driver_name_label.text = "Conductor: Sin sesión"
+        
+        print("Sesión cerrada exitosamente")
+        
+        # Navegar a la pantalla de login
+        self.manager.current = "login"  # Cambia "login" por el nombre de tu pantalla de login

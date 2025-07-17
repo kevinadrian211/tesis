@@ -4,7 +4,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.metrics import dp
-from kivy.graphics import Color, Rectangle
+from kivy.graphics import Color, Rectangle, Line
 from database import get_drivers_by_company
 
 class DashboardAdminScreen(Screen):
@@ -127,7 +127,7 @@ class DashboardAdminScreen(Screen):
         
         # Crear fondo con color
         with container.canvas.before:
-            Color(0.9, 0.9, 0.9, 1)  # Gris claro
+            Color(1, 1, 1, 1)  # Gris claro
             container.rect = Rectangle(size=container.size, pos=container.pos)
         
         # Actualizar el rectángulo cuando cambie el tamaño
@@ -138,7 +138,7 @@ class DashboardAdminScreen(Screen):
             font_size=32,
             halign='center',
             valign='middle',
-            color=(0.5, 0.5, 0.5, 1)
+            color=(0, 0, 0, 1)
         )
         
         container.add_widget(message_label)
@@ -159,10 +159,10 @@ class DashboardAdminScreen(Screen):
         
         # Crear fondo con borde
         with container.canvas.before:
-            Color(0.95, 0.95, 0.95, 1)  # Fondo gris muy claro
+            Color(1, 1, 1, 1)  # Fondo gris muy claro
             container.rect = Rectangle(size=container.size, pos=container.pos)
-            Color(0.8, 0.8, 0.8, 1)  # Borde gris
-            container.border = Rectangle(size=container.size, pos=container.pos)
+            Color(0, 0, 0, 1)  # Borde gris
+            container.border = Line(rectangle=(container.x, container.y, container.width, container.height), width=1.5)
         
         # Actualizar el rectángulo cuando cambie el tamaño
         container.bind(size=self.update_rect, pos=self.update_rect)
@@ -179,12 +179,12 @@ class DashboardAdminScreen(Screen):
         name_label = Label(
             text=f"Nombre: {driver.get('name', 'N/A')}",
             font_size=32,
-            bold=True,
             halign='left',
             valign='middle',
             text_size=(None, None),
             size_hint_y=None,
-            height=dp(25)
+            height=dp(25),
+            color=(0, 0, 0, 1)
         )
         name_label.bind(size=name_label.setter('text_size'))
         
@@ -197,7 +197,7 @@ class DashboardAdminScreen(Screen):
             text_size=(None, None),
             size_hint_y=None,
             height=dp(25),
-            color=(0.6, 0.6, 0.6, 1)
+            color=(0, 0, 0, 1)
         )
         email_label.bind(size=email_label.setter('text_size'))
         
@@ -219,9 +219,26 @@ class DashboardAdminScreen(Screen):
             size_hint_x=0.3,
             size_hint_y=None,
             height=dp(35),
-            background_color=(0.2, 0.6, 0.86, 1),  # Color azul
+            background_normal='',  # Sin imagen, para que se vea el background_color
+            background_down='',    # Igual para cuando está presionado
+            background_color=(1, 1, 1, 1),  # Fondo blanco
+            color=(0, 0, 0, 1),  # Texto negro
             on_press=lambda x: self.view_driver_reports(driver['id'], driver['name'])
         )
+        
+        with view_reports_btn.canvas.before:
+            Color(0, 0, 0, 1)  # Color negro
+            view_reports_btn.border_line = Line(
+                rounded_rectangle=(view_reports_btn.x, view_reports_btn.y, view_reports_btn.width, view_reports_btn.height, dp(6)),
+                width=dp(2)
+            )
+        
+        # Función para actualizar el borde del botón
+        def update_btn_border(instance, value):
+            instance.border_line.rounded_rectangle = (instance.x, instance.y, instance.width, instance.height, dp(6))
+        
+        # Bind para actualizar el borde cuando cambie posición o tamaño
+        view_reports_btn.bind(pos=update_btn_border, size=update_btn_border)
         
         # Espaciador para alinear el botón a la derecha
         spacer = Label(size_hint_x=0.7)
@@ -237,21 +254,15 @@ class DashboardAdminScreen(Screen):
     
     def update_rect(self, instance, value):
         """
-        Actualiza el rectángulo de fondo cuando cambia el tamaño del widget
+        Actualiza el rectángulo de fondo cuando cambia el tamaño o posición
         """
         if hasattr(instance, 'rect'):
             instance.rect.pos = instance.pos
             instance.rect.size = instance.size
-        if hasattr(instance, 'border'):
-            instance.border.pos = instance.pos
-            instance.border.size = instance.size
+        if hasattr(instance, 'border') and isinstance(instance.border, Line):
+            instance.border.rectangle = (instance.x, instance.y, instance.width, instance.height)
 
-    def refresh_drivers(self):
-        """
-        Actualiza la lista de conductores
-        """
-        print("Actualizando lista de conductores...")
-        self.load_drivers()
+
 
     def view_driver_reports(self, driver_id, driver_name):
         """

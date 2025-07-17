@@ -3,8 +3,8 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
-from kivy.metrics import dp
-from kivy.graphics import Color, Rectangle
+from kivy.metrics import dp, sp
+from kivy.graphics import Color, Rectangle, Line
 from database import get_final_reports_by_trip
 
 class ViewReportsAdminScreen(Screen):
@@ -95,20 +95,25 @@ class ViewReportsAdminScreen(Screen):
             padding=dp(20)
         )
         
-        # Crear fondo con color
-        with container.canvas.before:
-            Color(0.95, 0.95, 0.95, 1)  # Gris claro
-            container.rect = Rectangle(size=container.size, pos=container.pos)
+        # Crear fondo blanco con borde negro
+        def update_graphics(instance, value):
+            instance.canvas.before.clear()
+            with instance.canvas.before:
+                Color(1, 1, 1, 1)  # Fondo blanco
+                Rectangle(size=instance.size, pos=instance.pos)
+                Color(0, 0, 0, 1)  # Borde negro
+                Line(rectangle=(instance.x, instance.y, instance.width, instance.height), width=1)
         
-        # Actualizar el rectángulo cuando cambie el tamaño
-        container.bind(size=self.update_rect, pos=self.update_rect)
+        container.bind(size=update_graphics, pos=update_graphics)
+        # Ejecutar una vez para crear los gráficos iniciales
+        update_graphics(container, None)
         
         message_label = Label(
             text="No hay reportes disponibles para este conductor",
-            font_size=32,
+            font_size=sp(18),
             halign='center',
             valign='middle',
-            color=(0.5, 0.5, 0.5, 1)
+            color=(0, 0, 0, 1)  # Texto negro
         )
         
         container.add_widget(message_label)
@@ -145,27 +150,30 @@ class ViewReportsAdminScreen(Screen):
             spacing=dp(10)
         )
         
-        # Crear fondo con borde
-        with container.canvas.before:
-            Color(0.98, 0.98, 0.98, 1)  # Fondo muy claro
-            container.rect = Rectangle(size=container.size, pos=container.pos)
-            Color(0.7, 0.7, 0.7, 1)  # Borde gris
-            container.border = Rectangle(size=container.size, pos=container.pos)
+        # Crear fondo blanco con borde negro
+        def update_graphics(instance, value):
+            instance.canvas.before.clear()
+            with instance.canvas.before:
+                Color(1, 1, 1, 1)  # Fondo blanco
+                Rectangle(size=instance.size, pos=instance.pos)
+                Color(0, 0, 0, 1)  # Borde negro
+                Line(rectangle=(instance.x, instance.y, instance.width, instance.height), width=2)
         
-        # Actualizar el rectángulo cuando cambie el tamaño
-        container.bind(size=self.update_rect, pos=self.update_rect)
+        container.bind(size=update_graphics, pos=update_graphics)
+        # Ejecutar una vez para crear los gráficos iniciales
+        update_graphics(container, None)
         
         # Título del tipo de reporte
         title_label = Label(
             text=title,
-            font_size=32,
+            font_size=sp(20),
             bold=True,
             halign='left',
             valign='middle',
             text_size=(None, None),
             size_hint_y=None,
             height=dp(30),
-            color=(0.2, 0.2, 0.2, 1)
+            color=(0, 0, 0, 1)  # Texto negro
         )
         title_label.bind(size=title_label.setter('text_size'))
         
@@ -185,29 +193,29 @@ class ViewReportsAdminScreen(Screen):
         
         stats_label = Label(
             text=f"Total de viajes: {total_reports}",
-            font_size=32,
+            font_size=sp(16),
             halign='left',
             valign='middle',
-            color=(0.4, 0.4, 0.4, 1)
+            color=(0, 0, 0, 1)  # Texto negro
         )
         
         if risk_key:
             risk_stats_label = Label(
                 text=f"Reportes normales: {total_normal} | Reportes de riesgo: {total_risk}",
-                font_size=32,
+                font_size=sp(16),
                 halign='left',
                 valign='middle',
-                color=(0.4, 0.4, 0.4, 1)
+                color=(0, 0, 0, 1)  # Texto negro
             )
             stats_container.add_widget(stats_label)
             stats_container.add_widget(risk_stats_label)
         else:
             gesture_stats_label = Label(
                 text=f"Gestos detectados: {total_normal}",
-                font_size=32,
+                font_size=sp(16),
                 halign='left',
                 valign='middle',
-                color=(0.4, 0.4, 0.4, 1)
+                color=(0, 0, 0, 1)  # Texto negro
             )
             stats_container.add_widget(stats_label)
             stats_container.add_widget(gesture_stats_label)
@@ -225,10 +233,10 @@ class ViewReportsAdminScreen(Screen):
         if len(reports) > 3:
             more_label = Label(
                 text=f"... y {len(reports) - 3} reportes más",
-                font_size=32,
+                font_size=sp(14),
                 halign='center',
                 valign='middle',
-                color=(0.6, 0.6, 0.6, 1),
+                color=(0.4, 0.4, 0.4, 1),  # Texto gris oscuro
                 size_hint_y=None,
                 height=dp(20)
             )
@@ -243,10 +251,24 @@ class ViewReportsAdminScreen(Screen):
                 size_hint_x=None,
                 width=dp(150),
                 pos_hint={'center_x': 0.5},
-                background_color=(0.2, 0.6, 0.9, 1),
-                color=(1, 1, 1, 1)
+                background_color=(1, 1, 1, 1),  # Fondo blanco
+                color=(0, 0, 0, 1)  # Texto negro
             )
+            
+            # Agregar borde negro al botón
+            def update_button_graphics(instance, value):
+                instance.canvas.before.clear()
+                with instance.canvas.before:
+                    Color(1, 1, 1, 1)  # Fondo blanco
+                    Rectangle(size=instance.size, pos=instance.pos)
+                    Color(0, 0, 0, 1)  # Borde negro
+                    Line(rectangle=(instance.x, instance.y, instance.width, instance.height), width=1)
+            
+            details_button.bind(size=update_button_graphics, pos=update_button_graphics)
             details_button.bind(on_press=lambda x, dt=detail_type: self.view_detailed_reports(dt))
+            # Ejecutar una vez para crear los gráficos iniciales
+            update_button_graphics(details_button, None)
+            
             container.add_widget(details_button)
         
         return container
@@ -262,14 +284,27 @@ class ViewReportsAdminScreen(Screen):
             spacing=dp(10)
         )
         
+        # Agregar fondo blanco con borde sutil
+        def update_graphics(instance, value):
+            instance.canvas.before.clear()
+            with instance.canvas.before:
+                Color(0.98, 0.98, 0.98, 1)  # Fondo blanco ligeramente gris
+                Rectangle(size=instance.size, pos=instance.pos)
+                Color(0, 0, 0, 0.3)  # Borde gris suave
+                Line(rectangle=(instance.x, instance.y, instance.width, instance.height), width=1)
+        
+        container.bind(size=update_graphics, pos=update_graphics)
+        update_graphics(container, None)
+        
         # Número del reporte
         index_label = Label(
             text=f"{index}.",
-            font_size=32,
+            font_size=sp(16),
             size_hint_x=None,
             width=dp(30),
             halign='center',
-            valign='middle'
+            valign='middle',
+            color=(0, 0, 0, 1)  # Texto negro
         )
         
         # Información del reporte
@@ -282,10 +317,10 @@ class ViewReportsAdminScreen(Screen):
         
         info_label = Label(
             text=info_text,
-            font_size=32,
+            font_size=sp(16),
             halign='left',
             valign='middle',
-            color=(0.3, 0.3, 0.3, 1)
+            color=(0, 0, 0, 1)  # Texto negro
         )
         
         # Fecha del reporte
@@ -302,10 +337,10 @@ class ViewReportsAdminScreen(Screen):
         
         date_label = Label(
             text=date_text,
-            font_size=32,
+            font_size=sp(14),
             halign='right',
             valign='middle',
-            color=(0.5, 0.5, 0.5, 1),
+            color=(0.3, 0.3, 0.3, 1),  # Texto gris oscuro
             size_hint_x=None,
             width=dp(120)
         )
@@ -360,12 +395,15 @@ class ViewReportsAdminScreen(Screen):
         """
         Actualiza el rectángulo de fondo cuando cambia el tamaño del widget
         """
-        if hasattr(instance, 'rect'):
-            instance.rect.pos = instance.pos
-            instance.rect.size = instance.size
-        if hasattr(instance, 'border'):
-            instance.border.pos = instance.pos
-            instance.border.size = instance.size
+        # Este método ya no es necesario con el nuevo approach
+        pass
+    
+    def update_button_border(self, instance, value):
+        """
+        Actualiza el borde del botón cuando cambia el tamaño
+        """
+        # Este método ya no es necesario con el nuevo approach
+        pass
     
     def refresh_reports(self):
         """
