@@ -1,11 +1,11 @@
-import os
+# yawn_alert.py
 from plyer import notification
-from playsound import playsound
+from .audio_manager import audio_manager
 
 def handle_yawn_event(message: str):
-    print(f"[YawnAlert]{message}")
+    print(f"[YawnAlert] {message}")
     show_notification("Alerta de Bostezo", message)
-    play_notification_sound()
+    audio_manager.play_notification_sound()
 
 def show_notification(title: str, message: str):
     try:
@@ -18,11 +18,3 @@ def show_notification(title: str, message: str):
         print(f"[NOTIFICACIÓN] {title} - {message}")
     except Exception as e:
         print(f"[ERROR] No se pudo mostrar la notificación: {e}")
-
-def play_notification_sound():
-    try:
-        sound_path = os.path.join(os.path.dirname(__file__), "sounds", "notification.mp3")
-        playsound(sound_path)
-        print(f"[SONIDO] Reproduciendo: {sound_path}")
-    except Exception as e:
-        print(f"[ERROR] No se pudo reproducir el sonido: {e}")

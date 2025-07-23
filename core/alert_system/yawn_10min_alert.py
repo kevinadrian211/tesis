@@ -1,14 +1,13 @@
-import os
+# yawn_10min_alert.py
 from plyer import notification
-from playsound import playsound
+from .audio_manager import audio_manager
 
 def handle_yawn_10min_report(data: dict):
     print(f"[Yawn10MinAlert] {data}")
-
     comment = data.get("comment", "").lower()
     if comment != "normal":
         show_notification("Alerta de Bostezos (10min)", "Señales de cansancio detectadas.")
-        play_notification_sound()
+        audio_manager.play_notification_sound()
 
 def show_notification(title: str, message: str):
     try:
@@ -21,11 +20,3 @@ def show_notification(title: str, message: str):
         print(f"[NOTIFICACIÓN] {title} - {message}")
     except Exception as e:
         print(f"[ERROR] No se pudo mostrar la notificación: {e}")
-
-def play_notification_sound():
-    try:
-        sound_path = os.path.join(os.path.dirname(__file__), "sounds", "notification.mp3")
-        playsound(sound_path)
-        print(f"[SONIDO] Reproduciendo: {sound_path}")
-    except Exception as e:
-        print(f"[ERROR] No se pudo reproducir el sonido: {e}")
