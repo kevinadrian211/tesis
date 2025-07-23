@@ -245,23 +245,31 @@
                         halign: 'left'
                         valign: 'middle'
             
-            # Botón finalizar
-            Button:
-                text: "Finalizar viaje"
+            # Botones
+            BoxLayout:
+                orientation: 'horizontal'
                 size_hint: 1, None
                 height: "48dp"
-                font_size: 32
-                background_color: 1, 1, 1, 1  # Fondo blanco
-                background_normal: ''
-                color: 0, 0, 0, 1  # Texto negro
-                bold: True
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 1  # Borde negro
-                    Line:
-                        width: 2
-                        rectangle: (*self.pos, *self.size)
-                on_press: root.end_trip()
+                spacing: 10
+                
+                # Botón finalizar
+                Button:
+                    text: "Finalizar viaje"
+                    size_hint_x: 0.6
+                    font_size: 32
+                    background_color: 1, 1, 1, 1  # Fondo blanco
+                    background_normal: ''
+                    color: 0, 0, 0, 1  # Texto negro
+                    bold: True
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 1  # Borde negro
+                        Line:
+                            width: 2
+                            rectangle: (*self.pos, *self.size)
+                    on_press: root.end_trip()
+                
+                # Botón de prueba de alarma (solo para desarrollo/testing)
         
         # Footer
         Label:

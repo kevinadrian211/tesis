@@ -9,6 +9,20 @@ _alarm_start_time = None
 _minimum_alarm_duration = 5  # segundos mínimos que debe sonar la alarma
 _attention_check_enabled = True
 
+# === NUEVO: Callback para notificar a la UI ===
+_ui_callback = None
+
+def register_ui_callback(callback_function):
+    """
+    Registra una función callback que será llamada cuando se detecte microsueño
+    
+    Args:
+        callback_function: Función que recibe el mensaje de microsueño
+    """
+    global _ui_callback
+    _ui_callback = callback_function
+    print("[MICROSLEEP] Callback de UI registrado")
+
 def handle_microsleep_event(message: str):
     """
     Maneja el evento de microsueño mostrando notificación y reproduciendo alarma
@@ -21,6 +35,14 @@ def handle_microsleep_event(message: str):
     show_persistent_notification("⚠️ ALERTA DE MICROSUEÑO ⚠️", 
                                f"{message}\n\nPresiona el botón 'Desactivar Alarma' cuando estés completamente despierto")
     audio_manager.start_alarm_sound()
+    
+    # === NUEVO: Notificar a la UI si hay callback registrado ===
+    if _ui_callback:
+        try:
+            _ui_callback(message)
+            print("[MICROSLEEP] UI notificada del evento")
+        except Exception as e:
+            print(f"[ERROR] Error al notificar UI: {e}")
     
     # Log para debugging
     print(f"[MICROSUEÑO] Alarma iniciada a las {time.strftime('%H:%M:%S')}")
@@ -230,3 +252,11 @@ def format_alarm_duration():
         elapsed = time.time() - _alarm_start_time
         return f"Alarma activa: {elapsed:.1f}s"
     return "Sin alarma activa"
+
+# === NUEVA FUNCIÓN: Para testing manual ===
+def trigger_test_microsleep():
+    """
+    Función de conveniencia para activar una alarma de prueba
+    Útil para testing de la UI
+    """
+    handle_microsleep_event("PRUEBA: Microsueño simulado para testing")
