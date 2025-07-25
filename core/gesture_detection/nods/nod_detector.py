@@ -1,10 +1,12 @@
-# /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/gesture_detection/nods/nod_detector.py
 import time
-from ..gestures import receive_nod_gesture  # Importa la función para recibir el gesto
+from ..gestures import receive_nod_gesture  # Función para enviar la señal del gesto
 
-# Umbrales ajustados según los rangos observados
-DISTANCE_THRESHOLD_FOREHEAD_NOSE = 10.0
-DISTANCE_THRESHOLD_NOSE_MOUTH = 50.0
+# Umbrales para determinar inclinación de cabeza hacia abajo
+THRESHOLD_FOREHEAD_NOSE = 10.0
+THRESHOLD_NOSE_MOUTH = 50.0
+
+# Duración mínima del gesto (en segundos)
+MIN_NOD_DURATION = 0.3
 
 class PitchDetection:
     def __init__(self):
@@ -12,31 +14,46 @@ class PitchDetection:
         self.flag = False
 
     def check_head_down(self, head_distances: dict) -> bool:
-        forehead_to_nose_distance = head_distances.get('forehead_to_nose_distance', None)
-        nose_to_mouth_distance = head_distances.get('nose_to_mouth_distance', None)
+        """Evalúa si la cabeza está inclinada hacia abajo según distancias clave"""
+        forehead_to_nose = head_distances.get('forehead_to_nose_distance')
+        nose_to_mouth = head_distances.get('nose_to_mouth_distance')
 
-        if forehead_to_nose_distance is None or nose_to_mouth_distance is None:
+        # Validaciones de entrada
+        if forehead_to_nose is None or nose_to_mouth is None:
             return False
 
-        return (forehead_to_nose_distance < DISTANCE_THRESHOLD_FOREHEAD_NOSE and
-                nose_to_mouth_distance < DISTANCE_THRESHOLD_NOSE_MOUTH)
+        # Retorna True si la cabeza parece inclinada
+        return (
+            forehead_to_nose < THRESHOLD_FOREHEAD_NOSE and
+            nose_to_mouth < THRESHOLD_NOSE_MOUTH
+        )
 
     def detect(self, head_down: bool) -> bool:
+        """Detecta un gesto de asentir cabeza (nod)"""
+        current_time = time.time()
+
         if head_down and not self.flag:
-            self.start_time = time.time()
+            self.start_time = current_time
             self.flag = True
+
         elif not head_down and self.flag:
-            pitch_duration = time.time() - self.start_time
+            duration = current_time - self.start_time
             self.flag = False
-            if pitch_duration >= 0:
-                self.start_time = 0
+            self.start_time = 0
+
+            # Validar duración mínima
+            if duration >= MIN_NOD_DURATION:
                 return True
+
         return False
 
+# Instancia global del detector
 pitch_detector = PitchDetection()
 
 def receive_head_distances(head_distances: dict):
+    """Recibe distancias de la cabeza desde el pipeline de detección"""
     head_down = pitch_detector.check_head_down(head_distances)
+
     if pitch_detector.detect(head_down):
-        # Enviar detección a gestures.py en lugar de imprimir
-        receive_nod_gesture(duration=None)  # Puedes pasar duración o cualquier info extra si quieres
+        # Si deseas pasar duración o más datos, puedes modificar esta parte
+        receive_nod_gesture(duration=None)

@@ -1,0 +1,122 @@
+<TypeAccountScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Fondo blanco
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: 0, 0, 0, 1  # Borde negro
+        Line:
+            rectangle: self.x, self.y, self.width, self.height
+            width: 2
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: [30, 50, 30, 50]
+        spacing: 30
+
+        Label:
+            text: "Crear Nueva Cuenta"
+            font_size: 32
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: "60dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+            bold: True
+
+        Label:
+            text: "¿Qué tipo de cuenta deseas crear?"
+            font_size: 32
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: "50dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+
+        Widget:
+            size_hint_y: None
+            height: "30dp"
+
+        Button:
+            text: "Cuenta de Empresa"
+            size_hint_y: None
+            height: "70dp"
+            background_color: 1, 1, 1, 1
+            background_normal: ""
+            background_down: ""
+            color: 0, 0, 0, 1
+            font_size: 32
+            bold: True
+            on_press: root.select_account_type("company")
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 2
+
+        Label:
+            text: "Para empresas que necesitan gestionar conductores y vehículos"
+            font_size: 32
+            color: 0, 0, 0, 1  # Negro en vez de gris
+            size_hint_y: None
+            height: "40dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+
+        Widget:
+            size_hint_y: None
+            height: "20dp"
+
+        Button:
+            text: "Cuenta de Conductor"
+            size_hint_y: None
+            height: "70dp"
+            background_color: 1, 1, 1, 1
+            background_normal: ""
+            background_down: ""
+            color: 0, 0, 0, 1
+            font_size: 32
+            bold: True
+            on_press: root.select_account_type("driver")
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 2
+
+        Label:
+            text: "Para conductores que trabajarán con empresas registradas"
+            font_size: 32
+            color: 0, 0, 0, 1
+            size_hint_y: None
+            height: "40dp"
+            text_size: self.size
+            halign: "center"
+            valign: "middle"
+
+        Widget:
+            size_hint_y: 1
+
+        Button:
+            text: "Volver"
+            size_hint_y: None
+            height: "50dp"
+            background_color: 1, 1, 1, 1
+            background_normal: ""
+            background_down: ""
+            color: 0, 0, 0, 1
+            font_size: 32
+            on_press: app.root.current = "login"
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 2

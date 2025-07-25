@@ -1,0 +1,195 @@
+<RegisterAdminScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        # HEADER EN register_admin.kv
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: dp(10)
+            spacing: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Button:
+                text: "Regresar"
+                size_hint: None, None
+                size: dp(120), dp(40)
+                font_size: 32
+                background_color: 1, 1, 1, 1
+                color: 0, 0, 0, 1
+                on_press: root.manager.current = 'dashboard_company'
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1
+                    Line:
+                        width: 1
+                        rectangle: self.x, self.y, self.width, self.height
+
+            Widget:  # Espaciador
+
+
+        # BODY
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(20)
+            spacing: dp(20)
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: dp(100)
+                spacing: dp(8)
+
+                Label:
+                    text: "Agregar nuevo administrador"
+                    font_size: 32
+                    color: 0, 0, 0, 1
+                    halign: 'center'
+                    valign: 'middle'
+                    size_hint_y: None
+                    height: dp(60)
+                    text_size: self.width, None
+
+                Label:
+                    text: "Complete los datos del nuevo administrador"
+                    font_size: 32
+                    color: 0, 0, 0, 1
+                    halign: 'center'
+                    valign: 'middle'
+                    size_hint_y: None
+                    height: dp(32)
+                    text_size: self.width, None
+
+            Widget:
+                size_hint_y: 0.1
+
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: dp(16)
+                size_hint_y: None
+                height: dp(320)
+
+                # TextInputs (idénticos a antes)
+                TextInput:
+                    id: admin_name
+                    hint_text: "Nombre completo"
+                    multiline: False
+                    font_size: 32
+                    foreground_color: 0, 0, 0, 1
+                    background_color: 1, 1, 1, 1
+                    size_hint_y: None
+                    height: dp(50)
+                    padding: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                            width: dp(2)
+
+                TextInput:
+                    id: admin_email
+                    hint_text: "Correo electrónico"
+                    multiline: False
+                    font_size: 32
+                    foreground_color: 0, 0, 0, 1
+                    background_color: 1, 1, 1, 1
+                    size_hint_y: None
+                    height: dp(50)
+                    padding: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                            width: dp(2)
+
+                TextInput:
+                    id: admin_password
+                    hint_text: "Contraseña"
+                    multiline: False
+                    password: True
+                    font_size: 32
+                    foreground_color: 0, 0, 0, 1
+                    background_color: 1, 1, 1, 1
+                    size_hint_y: None
+                    height: dp(50)
+                    padding: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                            width: dp(2)
+
+                TextInput:
+                    id: admin_confirm_password
+                    hint_text: "Confirmar contraseña"
+                    multiline: False
+                    password: True
+                    font_size: 32
+                    foreground_color: 0, 0, 0, 1
+                    background_color: 1, 1, 1, 1
+                    size_hint_y: None
+                    height: dp(50)
+                    padding: dp(12), dp(12)
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
+                            width: dp(2)
+
+            Widget:
+                size_hint_y: 0.1
+
+            Button:
+                text: "Registrar Administrador"
+                font_size: 32
+                size_hint_y: None
+                height: dp(60)
+                size_hint_x: 0.8
+                pos_hint: {'center_x': 0.5}
+                background_color: 1, 1, 1, 1
+                color: 0, 0, 0, 1
+                on_press: root.register_admin()
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1
+                    Line:
+                        rounded_rectangle: self.x, self.y, self.width, self.height, dp(12)
+                        width: dp(3)
+
+            Widget:
+                size_hint_y: 0.2
+
+        # FOOTER
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            padding: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Label:
+                text: "Pantalla agregar Administrador"
+                font_size: 32
+                color: 0, 0, 0, 1
+                halign: 'center'
+                valign: 'middle'

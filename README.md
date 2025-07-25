@@ -1,17 +1,30 @@
-kevin@Kevins-MacBook-Air tesis % pip3 freeze
+tesis % pip3 freeze
 absl-py==2.2.2
 altgraph @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/altgraph-0.17.2-py2.py3-none-any.whl
+annotated-types==0.7.0
+anyio==4.9.0
 attrs==25.3.0
+bcrypt==4.3.0
 certifi==2025.4.26
 cffi==1.17.1
 charset-normalizer==3.4.2
 contourpy==1.3.0
 cycler==0.12.1
+Cython==3.1.2
+deprecation==2.1.0
 docutils==0.21.2
+exceptiongroup==1.3.0
 filetype==1.2.0
 flatbuffers==25.2.10
 fonttools==4.57.0
 future @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/future-0.18.2-py3-none-any.whl
+gotrue==2.12.3
+h11==0.16.0
+h2==4.2.0
+hpack==4.1.0
+httpcore==1.0.9
+httpx==0.28.1
+hyperframe==6.1.0
 idna==3.10
 importlib_metadata==8.7.0
 importlib_resources==6.5.2
@@ -27,19 +40,37 @@ mediapipe==0.10.21
 ml_dtypes==0.5.1
 numpy==1.26.4
 opencv-contrib-python==4.11.0.86
+opencv-python==4.11.0.86
 opt_einsum==3.4.0
 packaging==25.0
 pillow==11.2.1
+plyer==2.1.0
+postgrest==1.1.1
 protobuf==4.25.7
 pycparser==2.22
+pydantic==2.11.7
+pydantic_core==2.33.2
+pygame==2.6.1
 Pygments==2.19.1
+PyJWT==2.10.1
+pyobjus==1.2.3
 pyparsing==3.2.3
 python-dateutil==2.9.0.post0
+python-dotenv==1.1.1
+realtime==2.5.3
 requests==2.32.3
 scipy==1.13.1
 sentencepiece==0.2.0
 six @ file:///AppleInternal/Library/BuildRoots/39d9dc1a-2111-11f0-be06-226177e5bb69/Library/Caches/com.apple.xbs/Sources/python3/six-1.15.0-py2.py3-none-any.whl
+sniffio==1.3.1
 sounddevice==0.5.1
+storage3==0.12.0
+StrEnum==0.4.15
+supabase==2.16.0
+supafunc==0.10.1
+typing-inspection==0.4.1
+typing_extensions==4.14.1
 urllib3==2.4.0
 vboxapi==1.0
+websockets==15.0.1
 zipp==3.21.0

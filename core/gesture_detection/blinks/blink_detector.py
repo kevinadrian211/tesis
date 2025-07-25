@@ -1,61 +1,61 @@
-# /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/gesture_detection/blinks/blink_detector.py
+# core/gesture_detection/blinks/blink_detector.py
+
 import time
 from ..gestures import receive_blink_gesture, receive_microsleep_gesture
 
-class BlinkAndMicroSleepDetector:
-    def __init__(self):
-        # Estado de si ambos ojos están cerrados
+
+class BlinkAndMicrosleepDetector:
+    def __init__(self, closed_threshold: float = 1.0, microsleep_ms: int = 1000):
+        self.closed_threshold = closed_threshold
+        self.microsleep_ms = microsleep_ms
+
         self.both_eyes_closed = False
-        # Tiempo en el que ambos ojos se cierran
-        self.eyes_start_time = 0
-        # Umbral para considerar que el ojo está cerrado
-        self.CLOSED_THRESHOLD = 1.0
+        self.eyes_start_time = 0.0
+
+    def _eyes_closed(self, upper: float, lower: float) -> bool:
+        return (upper - lower) < self.closed_threshold
 
     def process_eye_distances(self, eye_distances: dict):
+        """
+        Procesa las distancias de los párpados y determina si se ha producido un parpadeo o microsueño.
+        """
         current_time = time.time()
 
-        # Obtener las distancias de los párpados de cada ojo
-        right_upper = eye_distances.get('right_upper_eyelid_distance')
-        right_lower = eye_distances.get('right_lower_eyelid_distance')
-        left_upper = eye_distances.get('left_upper_eyelid_distance')
-        left_lower = eye_distances.get('left_lower_eyelid_distance')
-
-        # Verificar que todas las distancias estén presentes
-        if None in (right_upper, right_lower, left_upper, left_lower):
+        try:
+            right_upper = eye_distances['right_upper_eyelid_distance']
+            right_lower = eye_distances['right_lower_eyelid_distance']
+            left_upper = eye_distances['left_upper_eyelid_distance']
+            left_lower = eye_distances['left_lower_eyelid_distance']
+        except KeyError:
+            # Si falta alguna clave, no se puede procesar
             return
 
-        # Determinar si cada ojo está cerrado
-        right_eye_closed_now = right_upper - right_lower < self.CLOSED_THRESHOLD
-        left_eye_closed_now = left_upper - left_lower < self.CLOSED_THRESHOLD
-        both_eyes_closed_now = right_eye_closed_now and left_eye_closed_now
+        right_closed = self._eyes_closed(right_upper, right_lower)
+        left_closed = self._eyes_closed(left_upper, left_lower)
+        both_closed_now = right_closed and left_closed
 
-        # Inicia el conteo cuando ambos ojos se cierran
-        if both_eyes_closed_now and not self.both_eyes_closed:
+        if both_closed_now and not self.both_eyes_closed:
+            # Inicio de cierre de ojos
             self.both_eyes_closed = True
             self.eyes_start_time = current_time
 
-        # Cuando se abren después de estar cerrados
-        elif not both_eyes_closed_now and self.both_eyes_closed:
-            duration = (current_time - self.eyes_start_time) * 1000  # ms
+        elif not both_closed_now and self.both_eyes_closed:
+            # Fin del cierre de ojos
+            duration_ms = (current_time - self.eyes_start_time) * 1000
 
-            # Solo procesar el gesto si ambos ojos estuvieron cerrados
-            if self.both_eyes_closed:
-                if duration >= 1000:
-                    # Llamar a la función para microsueño
-                    receive_microsleep_gesture("ambos Ojos", duration)
-                else:
-                    # Llamar a la función para parpadeo
-                    receive_blink_gesture("ambos Ojos", duration)
+            if duration_ms >= self.microsleep_ms:
+                receive_microsleep_gesture(duration_ms)
+            else:
+                receive_blink_gesture(duration_ms)
 
-            # Resetear el estado de 'both_eyes_closed' después de procesar el gesto
             self.both_eyes_closed = False
 
+
 # Instancia global del detector
-detector = BlinkAndMicroSleepDetector()
+_detector = BlinkAndMicrosleepDetector()
 
 def receive_eye_distances(eye_distances: dict):
     """
-    Función que recibe las distancias de los párpados de los ojos
-    y las pasa al detector para su procesamiento.
+    Recibe las distancias de los párpados y las envía al detector para análisis.
     """
-    detector.process_eye_distances(eye_distances)
+    _detector.process_eye_distances(eye_distances)

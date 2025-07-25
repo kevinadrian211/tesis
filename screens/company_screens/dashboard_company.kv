@@ -1,0 +1,139 @@
+<DashboardCompanyScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Fondo blanco general
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        # HEADER
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: dp(10)
+            spacing: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Widget:  # Espacio a la izquierda
+
+            Button:
+                text: "Cerrar sesión"
+                size_hint: None, None
+                size: dp(140), dp(40)
+                font_size: 32
+                background_color: 1, 1, 1, 1  # fondo blanco
+                color: 0, 0, 0, 1  # texto negro
+                bold: True
+                on_press: root.cerrar_sesion()
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # borde negro
+                    Line:
+                        width: 1
+                        rectangle: self.x, self.y, self.width, self.height
+
+        # BODY
+        BoxLayout:
+            orientation: 'vertical'
+            padding: dp(20)
+            spacing: dp(30)
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: dp(120)
+
+                Label:
+                    text: "Panel de Empresa"
+                    font_size: 32
+                    color: 0, 0, 0, 1  # texto negro
+                    halign: 'center'
+                    valign: 'middle'
+                    size_hint_y: None
+                    height: dp(60)
+
+                Label:
+                    text: "Gestión de Conductores y Administradores"
+                    font_size: 32
+                    color: 0, 0, 0, 1  # texto negro
+                    halign: 'center'
+                    valign: 'middle'
+                    size_hint_y: None
+                    height: dp(40)
+
+            Widget:
+                size_hint_y: 0.3
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: dp(180)
+                spacing: dp(20)
+
+                Button:
+                    text: 'Ver Conductores'
+                    size_hint: (0.7, None)
+                    height: dp(60)
+                    pos_hint: {'center_x': 0.5}
+                    font_size: 32
+                    background_color: 1, 1, 1, 1
+                    color: 0, 0, 0, 1
+                    on_press: root.ver_reportes()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            width: 1
+                            rectangle: self.x, self.y, self.width, self.height
+
+                Button:
+                    text: 'Agregar Administrador'
+                    size_hint: (0.7, None)
+                    height: dp(60)
+                    pos_hint: {'center_x': 0.5}
+                    font_size: 32
+                    background_color: 1, 1, 1, 1
+                    color: 0, 0, 0, 1
+                    on_press: root.agregar_administrador()
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            width: 1
+                            rectangle: self.x, self.y, self.width, self.height
+
+            Widget:
+                size_hint_y: 0.4
+
+        # FOOTER
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            padding: dp(10)
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Label:
+                text: "Dashboard Company"
+                font_size: 32
+                color: 0, 0, 0, 1
+                halign: 'center'
+                valign: 'middle'

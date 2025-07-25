@@ -1,0 +1,141 @@
+<ViewDriversCompanyScreen>:
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1  # Fondo blanco
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 16
+        spacing: 16
+
+        # HEADER
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 56
+            spacing: 12
+
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.1
+                Line:
+                    width: 1
+                    rectangle: (self.x, self.y, self.width, self.height)
+
+            Button:
+                text: "< Volver"
+                size_hint_x: 0.15
+                font_size: 28
+                background_color: 1, 1, 1, 1
+                color: 0, 0, 0, 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1
+                    Line:
+                        width: 1
+                        rectangle: (self.x, self.y, self.width, self.height)
+                on_press: root.go_back()
+
+            Label:
+                text: "Conductores de la Compañía"
+                font_size: 28
+                bold: True
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+                color: 0, 0, 0, 1
+                size_hint_x: 0.7
+
+            Button:
+                text: "Actualizar"
+                size_hint_x: 0.15
+                font_size: 28
+                background_color: 1, 1, 1, 1
+                color: 0, 0, 0, 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1
+                    Line:
+                        width: 1
+                        rectangle: (self.x, self.y, self.width, self.height)
+                on_press: root.refresh_drivers()
+
+        # DESCRIPCIÓN
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: 48
+            padding: 12, 8
+
+            canvas.before:
+                Color:
+                    rgba: 0.95, 0.95, 0.95, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 0, 0, 0, 0.2
+                Line:
+                    width: 1
+                    rectangle: (self.x, self.y, self.width, self.height)
+
+            Label:
+                text: "Lista de todos los conductores registrados en su compañía"
+                font_size: 24
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+                color: 0.2, 0.2, 0.2, 1
+
+        # LISTA DE CONDUCTORES
+        ScrollView:
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 0.1
+                Line:
+                    width: 1
+                    rectangle: (self.x, self.y, self.width, self.height)
+
+            BoxLayout:
+                id: drivers_list
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 12
+                padding: 12
+
+                canvas.before:
+                    Color:
+                        rgba: 1, 1, 1, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+        # FOOTER
+        BoxLayout:
+            size_hint_y: None
+            height: 48
+            padding: 12
+
+            canvas.before:
+                Color:
+                    rgba: 0.95, 0.95, 0.95, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 0, 0, 0, 0.2
+                Line:
+                    width: 1
+                    rectangle: (self.x, self.y, self.width, self.height)
+
+            Label:
+                text: "Pantalla de conductores desde Company"
+                font_size: 20
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+                color: 0, 0, 0, 1

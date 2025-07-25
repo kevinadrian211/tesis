@@ -1,0 +1,291 @@
+<DriverMonitoringScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 12
+        padding: 16
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1  # Fondo blanco
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        
+        # Header
+        Label:
+            id: header_label
+            text: "Monitor de Atención del Conductor"
+            size_hint: 1, 0.1
+            font_size: 32
+            color: 0, 0, 0, 1  # Texto negro
+            bold: True
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1  # Borde sutil
+                Line:
+                    width: 1
+                    rectangle: (*self.pos, *self.size)
+        
+        # Body
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, 0.8
+            spacing: 12
+            padding: 12
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 0, 1  # Borde sutil
+                Line:
+                    width: 1
+                    rectangle: (*self.pos, *self.size)
+            
+            # Video
+            Image:
+                id: img_widget
+                size_hint_y: 0.5
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1  # Borde negro para el video
+                    Line:
+                        width: 2
+                        rectangle: (*self.pos, *self.size)
+            
+            # Reportes
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: 420   # Ajustado para móviles
+                spacing: 8
+                
+                # Reporte Ojos
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: 80    # Reducido para móviles
+                    padding: 8
+                    spacing: 8
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1  # Fondo gris muy claro
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                        Color:
+                            rgba: 0, 0, 0, 1  # Borde sutil
+                        Line:
+                            width: 1
+                            rectangle: (*self.pos, *self.size)
+                    
+                    Label:
+                        id: eyes_report_label
+                        text: "Ojos:"
+                        size_hint_x: 0.25
+                        font_size: 32
+                        color: 0, 0, 0, 1
+                        bold: True
+                    
+                    Label:
+                        id: eyes_message_label
+                        text: "Esperando..."
+                        markup: True
+                        size_hint_x: 0.75
+                        font_size: 32
+                        color: 0, 0, 0, 1
+                        text_size: self.width, None
+                        halign: 'left'
+                        valign: 'middle'
+                
+                # Reporte Parpadeo
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: 80
+                    padding: 8
+                    spacing: 8
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            width: 1
+                            rectangle: (*self.pos, *self.size)
+                    
+                    Label:
+                        id: blink_report_label
+                        text: "Parpadeo:"
+                        size_hint_x: 0.25
+                        font_size: 32
+                        color: 0, 0, 0, 1
+                        bold: True
+                    
+                    Label:
+                        id: blink_message_label
+                        text: "Esperando..."
+                        markup: True
+                        size_hint_x: 0.75
+                        font_size: 32
+                        color: 0, 0, 0, 1
+                        text_size: self.width, None
+                        halign: 'left'
+                        valign: 'middle'
+                
+                # Reporte Cabeceo
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: 80
+                    padding: 8
+                    spacing: 8
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            width: 1
+                            rectangle: (*self.pos, *self.size)
+                    
+                    Label:
+                        id: nod_report_label
+                        text: "Cabeceo:"
+                        size_hint_x: 0.25
+                        font_size: 32
+                        color: 0, 0, 0, 1
+                        bold: True
+                    
+                    Label:
+                        id: nod_message_label
+                        text: "Esperando..."
+                        markup: True
+                        size_hint_x: 0.75
+                        font_size: 32
+                        color: 0, 0, 0, 1
+                        text_size: self.width, None
+                        halign: 'left'
+                        valign: 'middle'
+                
+                # Reporte Bostezo
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: 80
+                    padding: 8
+                    spacing: 8
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            width: 1
+                            rectangle: (*self.pos, *self.size)
+                    
+                    Label:
+                        id: yawn_report_label
+                        text: "Bostezo:"
+                        size_hint_x: 0.25
+                        font_size: 32
+                        color: 0, 0, 0, 1
+                        bold: True
+                    
+                    Label:
+                        id: yawn_message_label
+                        text: "Esperando..."
+                        markup: True
+                        size_hint_x: 0.75
+                        font_size: 32
+                        color: 0, 0, 0, 1
+                        text_size: self.width, None
+                        halign: 'left'
+                        valign: 'middle'
+                
+                # Reporte Microsueño
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: None
+                    height: 80
+                    padding: 8
+                    spacing: 8
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                        Color:
+                            rgba: 0, 0, 0, 1
+                        Line:
+                            width: 1
+                            rectangle: (*self.pos, *self.size)
+                    
+                    Label:
+                        text: "Microsueño:"
+                        size_hint_x: 0.25
+                        font_size: 32
+                        color: 0, 0, 0, 1
+                        bold: True
+                    
+                    Label:
+                        id: microsleep_message_label
+                        text: "Esperando..."
+                        markup: True
+                        size_hint_x: 0.75
+                        font_size: 32
+                        color: 0, 0, 0, 1
+                        text_size: self.width, None
+                        halign: 'left'
+                        valign: 'middle'
+            
+            # Botones
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: "48dp"
+                spacing: 10
+                
+                # Botón finalizar
+                Button:
+                    text: "Finalizar viaje"
+                    size_hint_x: 0.6
+                    font_size: 32
+                    background_color: 1, 1, 1, 1  # Fondo blanco
+                    background_normal: ''
+                    color: 0, 0, 0, 1  # Texto negro
+                    bold: True
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 1  # Borde negro
+                        Line:
+                            width: 2
+                            rectangle: (*self.pos, *self.size)
+                    on_press: root.end_trip()
+                
+                # Botón de prueba de alarma (solo para desarrollo/testing)
+        
+        # Footer
+        Label:
+            id: footer_label
+            text: "Estado: Iniciando..."
+            size_hint: 1, 0.1
+            font_size: '14sp'
+            color: 0, 0, 0, 1  # Texto gris oscuro
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1  # Fondo gris muy claro
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 0, 0, 0, 1  # Borde sutil
+                Line:
+                    width: 1
+                    rectangle: (*self.pos, *self.size)

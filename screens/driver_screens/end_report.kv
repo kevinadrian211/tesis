@@ -1,0 +1,229 @@
+<EndReportScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: "20dp"
+        spacing: "20dp"
+
+        canvas.before:
+            Color:
+                rgba: 0.95, 0.95, 0.95, 1  # Fondo gris claro
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        # Header
+        BoxLayout:
+            size_hint_y: None
+            height: "80dp"
+            padding: "15dp"
+
+            canvas.before:
+                Color:
+                    rgba: 0.2, 0.4, 0.8, 1  # Azul
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [15, 15, 15, 15]
+
+            Label:
+                text: "Resumen Final del Viaje"
+                font_size: 36
+                bold: True
+                halign: 'center'
+                valign: 'middle'
+                color: 1, 1, 1, 1
+
+        # Body
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: "15dp"
+            padding: "10dp"
+
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1  # Fondo blanco
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [10, 10, 10, 10]
+                Color:
+                    rgba: 0.8, 0.8, 0.8, 1
+                Line:
+                    width: 2
+                    rounded_rectangle: (*self.pos, *self.size, 10)
+
+            Label:
+                text: "Análisis de Comportamiento del Conductor"
+                font_size: 28
+                bold: True
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+                color: 0.2, 0.2, 0.2, 1
+                size_hint_y: None
+                height: "60dp"
+
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: "15dp"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    padding: "10dp"
+
+                    # Reporte de Parpadeos
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "15dp"
+
+                        canvas.before:
+                            Color:
+                                rgba: 0.9, 0.95, 1, 1  # Azul muy claro
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [8, 8, 8, 8]
+                            Color:
+                                rgba: 0.3, 0.6, 0.9, 1
+                            Line:
+                                width: 2
+                                rounded_rectangle: (*self.pos, *self.size, 8)
+
+                        Label:
+                            id: final_blink_label
+                            text: "📊 Reporte de parpadeos: Cargando..."
+                            font_size: 24
+                            color: 0.1, 0.1, 0.1, 1
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width - 20, None
+                            size_hint_y: None
+                            height: self.texture_size[1] + 20
+                            markup: True
+
+                    # Reporte de Bostezos
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "15dp"
+
+                        canvas.before:
+                            Color:
+                                rgba: 1, 0.98, 0.9, 1  # Amarillo muy claro
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [8, 8, 8, 8]
+                            Color:
+                                rgba: 0.9, 0.7, 0.3, 1
+                            Line:
+                                width: 2
+                                rounded_rectangle: (*self.pos, *self.size, 8)
+
+                        Label:
+                            id: final_yawn_label
+                            text: "Reporte de bostezos: Cargando..."
+                            font_size: 24
+                            color: 0.1, 0.1, 0.1, 1
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width - 20, None
+                            size_hint_y: None
+                            height: self.texture_size[1] + 20
+                            markup: True
+
+                    # Reporte de Frotamiento de Ojos
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "15dp"
+
+                        canvas.before:
+                            Color:
+                                rgba: 0.95, 0.9, 1, 1  # Púrpura muy claro
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [8, 8, 8, 8]
+                            Color:
+                                rgba: 0.7, 0.4, 0.9, 1
+                            Line:
+                                width: 2
+                                rounded_rectangle: (*self.pos, *self.size, 8)
+
+                        Label:
+                            id: final_eye_rub_label
+                            text: "Frotamiento de ojos: Cargando..."
+                            font_size: 24
+                            color: 0.1, 0.1, 0.1, 1
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width - 20, None
+                            size_hint_y: None
+                            height: self.texture_size[1] + 20
+                            markup: True
+
+                    # Reporte de Cabeceo
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        padding: "15dp"
+
+                        canvas.before:
+                            Color:
+                                rgba: 1, 0.9, 0.9, 1  # Rojo muy claro
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [8, 8, 8, 8]
+                            Color:
+                                rgba: 0.9, 0.4, 0.4, 1
+                            Line:
+                                width: 2
+                                rounded_rectangle: (*self.pos, *self.size, 8)
+
+                        Label:
+                            id: final_nod_label
+                            text: "Cabeceo: Cargando..."
+                            font_size: 24
+                            color: 0.1, 0.1, 0.1, 1
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width - 20, None
+                            size_hint_y: None
+                            height: self.texture_size[1] + 20
+                            markup: True
+
+        # Footer con botón
+        BoxLayout:
+            size_hint_y: None
+            height: "80dp"
+            padding: "20dp"
+
+            Button:
+                text: "Volver al Inicio"
+                size_hint: 0.6, 1
+                pos_hint: {"center_x": 0.5}
+                font_size: 24
+                bold: True
+                background_normal: ''
+                background_color: 0.2, 0.7, 0.3, 1  # Verde
+                color: 1, 1, 1, 1
+                
+                canvas.before:
+                    Color:
+                        rgba: 0.2, 0.7, 0.3, 1
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [10, 10, 10, 10]
+                
+                on_press: root.go_to_home()
