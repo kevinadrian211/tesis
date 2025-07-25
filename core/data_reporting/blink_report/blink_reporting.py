@@ -1,88 +1,126 @@
-# /Users/kevin/Desktop/Piensa/driver-monitoring-app-copy/core/data_reporting/blink_report/blink_reporting.py
-
+# core/data_reporting/blink_report/blink_reporting.py
 import time
 import threading
+from datetime import datetime
+# Importar funciones para reporte detallado y minute report (DB)
+from ..blink_report.total_blink_report import (
+    send_report,
+    send_minute_report
+)
+from ..report_dispatcher import (
+    print_blink_event,
+    print_microsleep_event,
+)
+# Importar utilidades para obtener IDs
+from ...utils.id_utils import get_current_driver_id, get_current_trip_id, get_driver_id_or_fallback, get_trip_id_or_fallback
 
-# Lógica para imprimir o enviar reportes a la interfaz
-ui_report_callback = None  # Se debe asignar desde la UI
-
-def print_report(text):
-    global ui_report_callback
-    print(text)
-    if ui_report_callback:
-        ui_report_callback(text)
-
-# Variables globales para almacenar los datos de parpadeos
-blink_count = 0
-total_duration = 0
-
-# Control del hilo de reporte
-reporting_active = False
-report_thread = None
-lock = threading.Lock()
-
-# Parámetros de referencia
+# ----------------------------
+# CONFIGURACIÓN Y UMBRALES
+# ----------------------------
 NORMAL_FREQUENCY_MIN = 10
 NORMAL_FREQUENCY_MAX = 20
-NORMAL_DURATION_MIN = 100
+NORMAL_DURATION_MIN = 100  # ms
 NORMAL_DURATION_MAX = 150
 CANSANCIO_DURATION_THRESHOLD = 400
 RIESGO_DURATION_MIN = 300
 RIESGO_DURATION_MAX = 600
+REPORT_INTERVAL_SECONDS = 60
 
+# ----------------------------
+# VARIABLES DE ESTADO
+# ----------------------------
+blink_count = 0
+total_duration = 0.0
+reporting_active = True
+report_thread = None
+lock = threading.Lock()
+
+# ----------------------------
+# FUNCIONES PRINCIPALES
+# ----------------------------
 def generate_report():
     global blink_count, total_duration
     while reporting_active:
-        time.sleep(60)
+        time.sleep(REPORT_INTERVAL_SECONDS)
         with lock:
+            # Obtener IDs dinámicos
+            driver_id = get_driver_id_or_fallback()
+            trip_id = get_trip_id_or_fallback()
+            
             if blink_count == 0:
-                print_report("En el último minuto: No se detectaron parpadeos.")
+                # Solo imprimir mensaje legible cuando no hay parpadeos
+                report_message = "En el último minuto: No se detectaron parpadeos."
+                print_minute_report(report_message)
+                send_report(report_message)
             else:
                 average_duration = total_duration / blink_count
-                print_report("En el último minuto:")
-                print_report(f"- Total de parpadeos: {blink_count}")
-                print_report(f"- Duración promedio del parpadeo: {average_duration:.2f} ms")
-
-                if blink_count < NORMAL_FREQUENCY_MIN:
-                    if average_duration > CANSANCIO_DURATION_THRESHOLD:
-                        print_report("Estado de cansancio: Parpadeos muy lentos y prolongados (> 400 ms).")
-                    elif RIESGO_DURATION_MIN <= average_duration <= RIESGO_DURATION_MAX:
-                        print_report("⚠️ Riesgo de somnolencia: posibles microsueños (300–600 ms).")
-                    else:
-                        print_report("Parpadeos poco frecuentes y breves: posible fatiga leve.")
-                elif NORMAL_FREQUENCY_MIN <= blink_count <= NORMAL_FREQUENCY_MAX:
-                    if NORMAL_DURATION_MIN <= average_duration <= NORMAL_DURATION_MAX:
-                        print_report("✅ Parpadeo normal: Frecuencia y duración dentro del rango esperado.")
-                    elif average_duration > NORMAL_DURATION_MAX:
-                        print_report("Fatiga moderada: parpadeos más lentos de lo normal.")
-                    else:
-                        print_report("Parpadeos rápidos pero dentro de frecuencia normal.")
-                else:
-                    print_report("Frecuencia de parpadeo alta: fuera del rango típico.")
-
-            # Reiniciar contadores
+                evaluation = evaluate_blink_status(blink_count, average_duration)
+                
+                # Enviar reporte minuto con IDs reales
+                send_minute_report(
+                    driver_id=driver_id,
+                    trip_id=trip_id,
+                    count=blink_count,
+                    avg_duration=average_duration,
+                    comment=evaluation
+                )
+                
+                # Actualizar estadísticas internas sin imprimir mensaje adicional
+                send_report(evaluation)
+                
             blink_count = 0
-            total_duration = 0
+            total_duration = 0.0
+
+def evaluate_blink_status(count: int, avg_duration: float) -> str:
+    if count < NORMAL_FREQUENCY_MIN:
+        if avg_duration > CANSANCIO_DURATION_THRESHOLD:
+            return "Cansancio: Parpadeos muy lentos y prolongados (> 400 ms)."
+        elif RIESGO_DURATION_MIN <= avg_duration <= RIESGO_DURATION_MAX:
+            return "Riesgo de somnolencia: Microsueños posibles (300–600 ms)."
+        else:
+            return "Parpadeos escasos y breves: posible fatiga leve."
+    elif NORMAL_FREQUENCY_MIN <= count <= NORMAL_FREQUENCY_MAX:
+        if NORMAL_DURATION_MIN <= avg_duration <= NORMAL_DURATION_MAX:
+            return "Parpadeo normal: frecuencia y duración dentro del rango."
+        elif avg_duration > NORMAL_DURATION_MAX:
+            return "Fatiga moderada: parpadeos más lentos de lo normal."
+        else:
+            return "Parpadeos rápidos pero frecuencia adecuada."
+    else:
+        return "Frecuencia alta de parpadeo: fuera del rango típico."
 
 def report_blink_data(gesture_type: str, eye: str, duration: float):
     global blink_count, total_duration
     with lock:
         blink_count += 1
         total_duration += duration
-    print(f"Datos reportados: {gesture_type.capitalize()} en {eye.capitalize()} con duración de {duration:.0f} ms")
+        
+        msg = f"{gesture_type.capitalize()} {eye.capitalize()} {duration:.0f} ms"
+        if gesture_type == "parpadeo":
+            print_blink_event(msg)
+        elif gesture_type == "microsueño":
+            print_microsleep_event(msg)
 
+# ----------------------------
+# CONTROL DEL HILO DE REPORTE
+# ----------------------------
 def start_blink_reporting():
     global report_thread, reporting_active
-    if reporting_active:
-        print("[INFO] El hilo de reporte de parpadeos ya está activo.")
+    if report_thread and report_thread.is_alive():
         return
-
+    
+    # Validar que tengamos los IDs necesarios
+    driver_id = get_current_driver_id()
+    trip_id = get_current_trip_id()
+    
+    if not driver_id or not trip_id:
+        print("[WARNING] Iniciando reporte de parpadeos sin IDs válidos")
+        print(f"[INFO] driver_id: {driver_id}, trip_id: {trip_id}")
+    
     reporting_active = True
     report_thread = threading.Thread(target=generate_report, daemon=True)
     report_thread.start()
-    print("[INFO] Hilo de reporte de parpadeos iniciado.")
 
 def stop_blink_reporting():
     global reporting_active
     reporting_active = False
-    print("[INFO] Hilo de reporte de parpadeos detenido.")
