@@ -1,118 +1,126 @@
 <DashboardAdminScreen>:
+    # Canvas principal con color de fondo del sistema
     canvas.before:
         Color:
-            rgba: 1, 1, 1, 1  # Fondo blanco
+            rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
         Rectangle:
             pos: self.pos
             size: self.size
     
     BoxLayout:
         orientation: 'vertical'
-        padding: dp(16)
-        spacing: dp(16)
         
-        # Header
+        # 🎯 HEADER (70dp altura)
         BoxLayout:
-            orientation: 'vertical'
+            orientation: 'horizontal'
             size_hint_y: None
-            height: dp(120)
-            spacing: dp(8)
+            height: dp(70)
+            padding: [dp(15), dp(10)]
+            spacing: dp(10)
             
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1  # Fondo muy sutil para el header
-                RoundedRectangle:
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                Rectangle:
                     pos: self.pos
                     size: self.size
-                    radius: [dp(8)]
                 Color:
-                    rgba: 0, 0, 0, 1  # Borde sutil
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                 Line:
-                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
                     width: dp(1)
+                    rectangle: (self.x, self.y, self.width, self.height)
             
             Label:
                 text: "Panel de Administrador"
-                font_size: 32
+                font_size: sp(20)
                 bold: True
                 halign: 'center'
                 valign: 'middle'
-                color: 0, 0, 0, 1  # Texto negro
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
+                text_size: self.size
+                size_hint_x: 0.7
+            
+            # Botón de logout en header
+            Button:
+                text: "Salir"
+                font_size: sp(12)
+                bold: True
+                size_hint_x: 0.3
                 size_hint_y: None
-                height: dp(50)
-                text_size: self.width, None
+                height: dp(40)
+                background_color: 0, 0, 0, 0  # Transparente
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
+                on_press: root.logout()
+                
+                canvas.before:
+                    Color:
+                        rgba: 168/255, 159/255, 145/255, 1  # #A89F91
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(8)]
+                    Color:
+                        rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                    Line:
+                        width: dp(1)
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+        
+        # 📝 ÁREA DESCRIPCIÓN (60dp altura)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: [dp(20), dp(15)]
             
             Label:
                 id: welcome_label
                 text: "Bienvenido, Admin"
-                font_size: 32
+                font_size: sp(16)
                 halign: 'center'
                 valign: 'middle'
-                color: 0, 0, 0, 1  # Gris oscuro para subtítulo
-                size_hint_y: None
-                height: dp(40)
-                text_size: self.width, None
+                color: 20/255, 26/255, 28/255, 0.7  # Texto secundario
+                text_size: self.size
         
-        # Título de la sección de conductores
-        Label:
-            text: "Conductores de la Empresa"
-            font_size: 32
-            bold: True
-            halign: 'center'
-            valign: 'middle'
-            color: 0, 0, 0, 1  # Texto negro
+        # 📋 CONTENIDO PRINCIPAL
+        BoxLayout:
+            orientation: 'vertical'
+            padding: [dp(15), dp(10)]
+            spacing: dp(12)
+            
+            # ScrollView con los conductores directamente en el fondo
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                
+                BoxLayout:
+                    id: drivers_list
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(12)
+                    padding: [dp(15), dp(15), dp(15), dp(15)]
+        
+        # 🦶 FOOTER (50dp altura)
+        BoxLayout:
             size_hint_y: None
             height: dp(50)
-            text_size: self.width, None
-        
-        # Lista de conductores con scroll
-        ScrollView:
-            do_scroll_x: False
-            do_scroll_y: True
+            padding: [dp(20), dp(10)]
             
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1  # Fondo muy sutil para el área de scroll
-                RoundedRectangle:
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                Rectangle:
                     pos: self.pos
                     size: self.size
-                    radius: [dp(8)]
                 Color:
-                    rgba: 0, 0, 0, 1  # Borde para el área de scroll
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                 Line:
-                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
                     width: dp(1)
+                    points: [self.x, self.y + self.height, self.x + self.width, self.y + self.height]
             
-            BoxLayout:
-                id: drivers_list
-                orientation: 'vertical'
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: dp(8)
-                padding: [dp(12), dp(12), dp(12), dp(12)]
-        
-        # Botón de cerrar sesión
-        Button:
-            text: "Cerrar Sesión"
-            font_size: 32
-            size_hint_y: None
-            height: dp(50)
-            background_color: 1, 1, 1, 1  # Fondo blanco
-            color: 0, 0, 0, 1  # Texto negro
-            bold: True
-            on_press: root.logout()
-            
-            canvas.before:
-                Color:
-                    rgba: 0, 0, 0, 1  # Borde negro
-                Line:
-                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
-                    width: dp(2)
-            
-            canvas.after:
-                Color:
-                    rgba: 0.95, 0.95, 0.95, 1 if self.state == 'down' else 0, 0, 0, 0
-                RoundedRectangle:
-                    pos: self.pos
-                    size: self.size
-                    radius: [dp(8)]
+            Label:
+                text: "Sistema de Gestión - Admin Panel"
+                font_size: sp(12)
+                halign: 'center'
+                valign: 'middle'
+                color: 20/255, 26/255, 28/255, 0.7  # Texto secundario
+                text_size: self.size

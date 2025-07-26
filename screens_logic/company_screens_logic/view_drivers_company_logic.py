@@ -3,17 +3,30 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
-from kivy.metrics import dp
-from kivy.graphics import Color, Rectangle
+from kivy.metrics import dp, sp
+from kivy.graphics import Color, RoundedRectangle, Line
+from kivy.animation import Animation
 from database import get_drivers_by_company
 
 class ViewDriversCompanyScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.drivers_data = []
+        # Colores del tema
+        self.colors = {
+            'background': (255/255, 252/255, 242/255, 1),  # #FFFCF2
+            'surface': (204/255, 197/255, 185/255, 1),     # #CCC5B9
+            'primary': (168/255, 159/255, 145/255, 1),     # #A89F91
+            'border': (20/255, 26/255, 28/255, 1),         # #141A1C
+            'text': (20/255, 26/255, 28/255, 1),           # #141A1C
+            'text_secondary': (20/255, 26/255, 28/255, 0.7)
+        }
     
     def on_enter(self):
         self.load_drivers()
+        # Animación de entrada suave
+        self.opacity = 0
+        Animation(opacity=1, duration=0.3).start(self)
     
     def load_drivers(self):
         try:
@@ -66,8 +79,12 @@ class ViewDriversCompanyScreen(Screen):
                 drivers_list.add_widget(self.create_no_drivers_widget())
                 return
             
-            for driver in self.drivers_data:
-                drivers_list.add_widget(self.create_driver_widget(driver))
+            for i, driver in enumerate(self.drivers_data):
+                widget = self.create_driver_widget(driver)
+                drivers_list.add_widget(widget)
+                # Animación escalonada para cada elemento
+                widget.opacity = 0
+                Animation(opacity=1, duration=0.2, t='out_cubic').start(widget)
                 
         except Exception as e:
             print(f"Error al actualizar lista de conductores: {e}")
@@ -78,114 +95,267 @@ class ViewDriversCompanyScreen(Screen):
         container = BoxLayout(
             orientation='vertical',
             size_hint_y=None,
-            height=dp(100),
-            padding=dp(20)
+            height=dp(150),
+            padding=dp(30),
+            spacing=dp(15)
         )
-        with container.canvas.before:
-            Color(0.9, 0.9, 0.9, 1)
-            container.rect = Rectangle(size=container.size, pos=container.pos)
-        container.bind(size=self.update_rect, pos=self.update_rect)
         
-        label = Label(
-            text="No hay conductores registrados en esta compañía",
-            font_size=32,
+        with container.canvas.before:
+            Color(*self.colors['surface'])
+            container.bg_rect = RoundedRectangle(
+                size=container.size, 
+                pos=container.pos, 
+                radius=[dp(12)]
+            )
+            Color(*self.colors['border'])
+            container.border_line = Line(
+                width=dp(1),
+                rounded_rectangle=(container.x, container.y, container.width, container.height, dp(12))
+            )
+        
+        container.bind(size=self.update_canvas_rect, pos=self.update_canvas_rect)
+        
+        # Icono de conductor eliminado
+        
+        # Mensaje principal
+        message_label = Label(
+            text="No hay conductores registrados",
+            font_size=sp(18),
+            bold=True,
             halign='center',
             valign='middle',
-            color=(0.5, 0.5, 0.5, 1)
+            color=self.colors['text'],
+            size_hint_y=None,
+            height=dp(30)
         )
-        container.add_widget(label)
+        
+        # Submensaje
+        sub_label = Label(
+            text="Los conductores aparecerán aquí una vez registrados",
+            font_size=sp(14),
+            halign='center',
+            valign='middle',
+            color=self.colors['text_secondary'],
+            size_hint_y=None,
+            height=dp(25),
+            italic=True
+        )
+        
+        container.add_widget(message_label)
+        container.add_widget(sub_label)
+        
         return container
     
     def create_driver_widget(self, driver):
         container = BoxLayout(
             orientation='vertical',
             size_hint_y=None,
-            height=dp(120),
-            padding=dp(15),
-            spacing=dp(5)
+            height=dp(130),
+            padding=dp(18),
+            spacing=dp(10)
         )
-        with container.canvas.before:
-            Color(0.95, 0.95, 0.95, 1)
-            container.rect = Rectangle(size=container.size, pos=container.pos)
-            Color(0.8, 0.8, 0.8, 1)
-            container.border = Rectangle(size=container.size, pos=container.pos)
-        container.bind(size=self.update_rect, pos=self.update_rect)
         
-        info_container = BoxLayout(
-            orientation='vertical',
+        with container.canvas.before:
+            Color(*self.colors['background'])
+            container.bg_rect = RoundedRectangle(
+                size=container.size, 
+                pos=container.pos, 
+                radius=[dp(12)]
+            )
+            Color(*self.colors['border'])
+            container.border_line = Line(
+                width=dp(1),
+                rounded_rectangle=(container.x, container.y, container.width, container.height, dp(12))
+            )
+        
+        container.bind(size=self.update_canvas_rect, pos=self.update_canvas_rect)
+        
+        # Header del conductor
+        header_layout = BoxLayout(
+            orientation='horizontal',
             size_hint_y=None,
-            height=dp(50),
-            spacing=dp(2)
+            height=dp(35),
+            spacing=dp(10)
+        )
+        
+        # Información del conductor
+        info_layout = BoxLayout(
+            orientation='vertical',
+            spacing=dp(5)
         )
         
         name_label = Label(
-            text=f"Nombre: {driver.get('name', 'N/A')}",
-            font_size=32,
+            text=f"{driver.get('name', 'N/A')}",
+            font_size=sp(18),
             bold=True,
             halign='left',
             valign='middle',
             text_size=(None, None),
             size_hint_y=None,
             height=dp(25),
-            color=(0, 0, 0, 1)
+            color=self.colors['text']
         )
         name_label.bind(size=name_label.setter('text_size'))
         
+        email_layout = BoxLayout(
+            orientation='horizontal',
+            size_hint_y=None,
+            height=dp(20),
+            spacing=dp(5)
+        )
+        
         email_label = Label(
-            text=f"Email: {driver.get('email', 'N/A')}",
-            font_size=32,
+            text=f"{driver.get('email', 'N/A')}",
+            font_size=sp(15),
             halign='left',
             valign='middle',
             text_size=(None, None),
-            size_hint_y=None,
-            height=dp(25),
-            color=(0, 0, 0, 1)
+            color=self.colors['text_secondary']
         )
         email_label.bind(size=email_label.setter('text_size'))
         
-        info_container.add_widget(name_label)
-        info_container.add_widget(email_label)
+        email_layout.add_widget(email_label)
         
-        button_container = BoxLayout(
+        info_layout.add_widget(name_label)
+        info_layout.add_widget(email_layout)
+        
+        header_layout.add_widget(info_layout)
+        
+        # Botón de acción
+        button_layout = BoxLayout(
             orientation='horizontal',
             size_hint_y=None,
-            height=dp(40),
-            padding=(dp(0), dp(10), dp(0), dp(0))
+            height=dp(45),
+            padding=[dp(0), dp(5), dp(0), dp(0)]
         )
         
-        view_reports_btn = Button(
+        spacer = Label(size_hint_x=0.5)
+        
+        view_trips_btn = Button(
             text="Ver Viajes",
-            size_hint_x=0.3,
+            size_hint_x=0.5,
             size_hint_y=None,
             height=dp(35),
-            background_color=(0.2, 0.6, 0.86, 1),
-            color=(0, 0, 0, 1),
+            font_size=sp(14),
+            bold=True,
+            background_normal='',
+            background_color=(0, 0, 0, 0),  # Transparente
+            color=self.colors['text']
+        )
+        
+        # Estilo personalizado para el botón
+        with view_trips_btn.canvas.before:
+            Color(*self.colors['primary'])
+            view_trips_btn.bg_rect = RoundedRectangle(
+                pos=view_trips_btn.pos,
+                size=view_trips_btn.size,
+                radius=[dp(20)]
+            )
+            Color(*self.colors['border'])
+            view_trips_btn.border_line = Line(
+                width=dp(1),
+                rounded_rectangle=(
+                    view_trips_btn.x, view_trips_btn.y, 
+                    view_trips_btn.width, view_trips_btn.height, 
+                    dp(20)
+                )
+            )
+        
+        view_trips_btn.bind(
+            size=self.update_button_canvas,
+            pos=self.update_button_canvas,
             on_press=lambda x: self.view_driver_reports(driver['id'], driver['name'])
         )
         
-        spacer = Label(size_hint_x=0.7)
-        button_container.add_widget(spacer)
-        button_container.add_widget(view_reports_btn)
+        # Efecto hover para botón
+        def on_button_press(instance):
+            # Cambiar el color del fondo del canvas
+            with instance.canvas.before:
+                Color(148/255, 139/255, 125/255, 1)  # Color más oscuro
+                instance.bg_rect = RoundedRectangle(
+                    pos=instance.pos,
+                    size=instance.size,
+                    radius=[dp(20)]
+                )
+                Color(*self.colors['border'])
+                instance.border_line = Line(
+                    width=dp(1),
+                    rounded_rectangle=(
+                        instance.x, instance.y, 
+                        instance.width, instance.height, 
+                        dp(20)
+                    )
+                )
         
-        container.add_widget(info_container)
-        container.add_widget(button_container)
+        def on_button_release(instance):
+            # Restaurar color original
+            with instance.canvas.before:
+                Color(*self.colors['primary'])
+                instance.bg_rect = RoundedRectangle(
+                    pos=instance.pos,
+                    size=instance.size,
+                    radius=[dp(20)]
+                )
+                Color(*self.colors['border'])
+                instance.border_line = Line(
+                    width=dp(1),
+                    rounded_rectangle=(
+                        instance.x, instance.y, 
+                        instance.width, instance.height, 
+                        dp(20)
+                    )
+                )
+        
+        view_trips_btn.bind(on_press=on_button_press, on_release=on_button_release)
+        
+        button_layout.add_widget(spacer)
+        button_layout.add_widget(view_trips_btn)
+        
+        container.add_widget(header_layout)
+        container.add_widget(button_layout)
         
         return container
     
-    def update_rect(self, instance, value):
-        if hasattr(instance, 'rect'):
-            instance.rect.pos = instance.pos
-            instance.rect.size = instance.size
-        if hasattr(instance, 'border'):
-            instance.border.pos = instance.pos
-            instance.border.size = instance.size
+    def update_canvas_rect(self, instance, value):
+        if hasattr(instance, 'bg_rect'):
+            instance.bg_rect.pos = instance.pos
+            instance.bg_rect.size = instance.size
+        if hasattr(instance, 'border_line'):
+            instance.border_line.rounded_rectangle = (
+                instance.x, instance.y, instance.width, instance.height, dp(12)
+            )
+    
+    def update_button_canvas(self, instance, value):
+        if hasattr(instance, 'bg_rect'):
+            instance.bg_rect.pos = instance.pos
+            instance.bg_rect.size = instance.size
+        if hasattr(instance, 'border_line'):
+            instance.border_line.rounded_rectangle = (
+                instance.x, instance.y, instance.width, instance.height, dp(20)
+            )
 
     def refresh_drivers(self):
         print("Actualizando lista de conductores...")
+        # Animación de rotación para el botón de refresh
+        refresh_btn = None
+        for child in self.children[0].children:
+            if hasattr(child, 'children'):
+                for btn in child.children:
+                    if hasattr(btn, 'text') and btn.text == "⟳":
+                        refresh_btn = btn
+                        break
+        
+        if refresh_btn:
+            Animation(rotation=360, duration=0.5).start(refresh_btn)
+            refresh_btn.rotation = 0
+        
         self.load_drivers()
 
     def go_back(self):
         try:
+            # Animación de salida
+            Animation(opacity=0, duration=0.2).start(self)
+            
             current_user = App.get_running_app().current_user
             if current_user:
                 user_role = current_user.get('role')
@@ -211,7 +381,11 @@ class ViewDriversCompanyScreen(Screen):
                 'name': driver_name
             }
             print(f"Navegando a reportes del conductor: {driver_name} (ID: {driver_id})")
+            
+            # Animación de salida
+            Animation(opacity=0, duration=0.2).start(self)
             self.manager.current = 'view_trips_company'
+            
         except Exception as e:
             print(f"Error al navegar a reportes: {e}")
             import traceback

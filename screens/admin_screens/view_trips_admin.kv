@@ -1,131 +1,144 @@
 <ViewTripsAdminScreen>:
     canvas.before:
         Color:
-            rgba: 1, 1, 1, 1  # Fondo blanco
+            rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
         Rectangle:
             pos: self.pos
             size: self.size
 
     BoxLayout:
         orientation: 'vertical'
-        padding: dp(16)
-        spacing: dp(16)
+        spacing: 0
+        padding: 0
 
-        # Header con botón de regreso y título
+        # HEADER
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: None
-            height: dp(60)
-            spacing: dp(16)
+            height: dp(70)
+            padding: [dp(15), dp(10)]
+            spacing: dp(10)
+
+            canvas.before:
+                Color:
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                Line:
+                    width: dp(1)
+                    rectangle: (self.x, self.y, self.width, self.height)
 
             Button:
-                text: "← Regresar"
-                size_hint_x: None
-                width: dp(140)
-                font_size: 32
+                text: "Volver"
+                size_hint: (None, None)
+                size: dp(70), dp(40)
+                font_size: sp(14)
                 background_normal: ''
-                background_down: ''
-                background_color: 1, 1, 1, 1  # Fondo blanco
-                color: 0, 0, 0, 1  # Texto negro
-                on_press: root.go_back()
-
+                background_color: 0, 0, 0, 0  # Transparente
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
+                bold: True
                 canvas.before:
                     Color:
-                        rgba: 1, 1, 1, 1
+                        rgba: 168/255, 159/255, 145/255, 1  # #A89F91
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
-                        radius: [dp(6)]
+                        radius: [dp(8)]
                     Color:
-                        rgba: 0, 0, 0, 1
+                        rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                     Line:
-                        rounded_rectangle: self.x, self.y, self.width, self.height, dp(6)
-                        width: dp(2)
-
-                canvas.after:
-                    Color:
-                        rgba: (0.9, 0.9, 0.9, 1) if self.state == 'down' else (0, 0, 0, 0)
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [dp(6)]
+                        width: dp(1)
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+                on_press: root.go_back()
 
             Label:
                 id: title_label
                 text: "Viajes del Conductor"
-                font_size: 32
+                font_size: sp(18)
                 bold: True
-                color: 0, 0, 0, 1
                 halign: 'center'
                 valign: 'middle'
-                text_size: self.width, None
+                text_size: self.size
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
 
-        # Información del conductor
+            Button:
+                text: "Actualizar"
+                size_hint: (None, None)
+                size: dp(70), dp(40)
+                font_size: sp(12)
+                background_normal: ''
+                background_color: 0, 0, 0, 0  # Transparente
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
+                bold: True
+                canvas.before:
+                    Color:
+                        rgba: 168/255, 159/255, 145/255, 1  # #A89F91
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(8)]
+                    Color:
+                        rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                    Line:
+                        width: dp(1)
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+                on_press: root.refresh_trips()
+
+        # CONTENIDO PRINCIPAL
         BoxLayout:
             orientation: 'vertical'
-            size_hint_y: None
-            height: dp(50)
-            spacing: dp(8)
-            padding: dp(10)
+            padding: [dp(15), dp(15)]
 
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1
-                RoundedRectangle:
+                    rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
+                Rectangle:
                     pos: self.pos
                     size: self.size
-                    radius: [dp(8)]
-                Color:
-                    rgba: 0, 0, 0, 1
-                Line:
-                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
-                    width: dp(2)
 
-            Label:
-                id: driver_info_label
-                text: "Seleccione un conductor"
-                font_size: 32
-                color: 0, 0, 0, 1
-                halign: 'center'
-                valign: 'middle'
-                text_size: self.width, None
+            # LISTA DE VIAJES (SIN RECUADRO EXTRA)
+            ScrollView:
+                do_scroll_x: False
+                scroll_type: ['bars']
+                bar_width: dp(8)
+                bar_color: 168/255, 159/255, 145/255, 1
+                bar_inactive_color: 204/255, 197/255, 185/255, 0.5
 
-        # Contenedor scrollable para la lista de viajes
-        ScrollView:
-            do_scroll_x: False
-            do_scroll_y: True
+                GridLayout:
+                    id: trips_list
+                    cols: 1
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(15)
+                    padding: [dp(0), dp(0)]
 
-            canvas.before:
-                Color:
-                    rgba: 0.98, 0.98, 0.98, 1
-                RoundedRectangle:
-                    pos: self.pos
-                    size: self.size
-                    radius: [dp(8)]
-                Color:
-                    rgba: 0, 0, 0, 1
-                Line:
-                    rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
-                    width: dp(2)
-
-            BoxLayout:
-                id: trips_list
-                orientation: 'vertical'
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: dp(10)
-                padding: [dp(15), dp(15), dp(15), dp(15)]
-
-        # Status label
+        # FOOTER CON STATUS
         BoxLayout:
             size_hint_y: None
             height: dp(50)
+            padding: [dp(20), dp(10)]
+
+            canvas.before:
+                Color:
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                Line:
+                    width: dp(1)
+                    points: [self.x, self.y + self.height, self.x + self.width, self.y + self.height]
 
             Label:
                 id: status_label
-                text: ""
-                font_size: 32
-                color: 0, 0, 0, 1
+                text: "Listo para cargar viajes"
+                font_size: sp(14)
                 halign: 'center'
                 valign: 'middle'
-                text_size: self.width, None
+                text_size: self.size
+                color: 20/255, 26/255, 28/255, 1
+                italic: True

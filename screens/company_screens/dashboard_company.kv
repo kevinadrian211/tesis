@@ -1,7 +1,8 @@
 <DashboardCompanyScreen>:
+    # Canvas principal con fondo obligatorio
     canvas.before:
         Color:
-            rgba: 1, 1, 1, 1  # Fondo blanco general
+            rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
         Rectangle:
             pos: self.pos
             size: self.size
@@ -9,131 +10,167 @@
     BoxLayout:
         orientation: 'vertical'
 
-        # HEADER
+        # HEADER (70dp altura)
         BoxLayout:
+            orientation: 'horizontal'
             size_hint_y: None
-            height: dp(60)
-            padding: dp(10)
+            height: dp(70)
+            padding: [dp(15), dp(10)]
             spacing: dp(10)
+            
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
                 Rectangle:
                     pos: self.pos
                     size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                Line:
+                    width: dp(1)
+                    rectangle: (self.x, self.y, self.width, self.height)
 
-            Widget:  # Espacio a la izquierda
+            Label:
+                text: "Panel de Empresa"
+                font_size: dp(16)
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
+                bold: True
+                halign: 'left'
+                valign: 'middle'
+                text_size: self.size
+                size_hint_x: 0.65
+                markup: True
+
+            Widget:
+                size_hint_x: 0.05  # Espacio mínimo flexible
 
             Button:
-                text: "Cerrar sesión"
+                text: "Cerrar Sesion"
                 size_hint: None, None
-                size: dp(140), dp(40)
-                font_size: 32
-                background_color: 1, 1, 1, 1  # fondo blanco
-                color: 0, 0, 0, 1  # texto negro
+                size: dp(110), dp(40)
+                font_size: dp(11)
+                background_color: 0, 0, 0, 0  # Transparente
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
                 bold: True
                 on_press: root.cerrar_sesion()
                 canvas.before:
                     Color:
-                        rgba: 0, 0, 0, 1  # borde negro
+                        rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(8)]
+                    Color:
+                        rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                     Line:
-                        width: 1
-                        rectangle: self.x, self.y, self.width, self.height
+                        width: dp(1)
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
 
-        # BODY
+        # ÁREA DESCRIPCIÓN (60dp altura) - Solo bienvenida en fondo
+        BoxLayout:
+            size_hint_y: None
+            height: dp(60)
+            padding: [dp(20), dp(15)]
+
+            Label:
+                id: welcome_label
+                text: "Bienvenido, Compañía"
+                font_size: dp(15)
+                color: 20/255, 26/255, 28/255, 0.7  # Texto secundario más sutil
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+                markup: True
+
+        # CONTENIDO PRINCIPAL
         BoxLayout:
             orientation: 'vertical'
-            padding: dp(20)
-            spacing: dp(30)
-            canvas.before:
-                Color:
-                    rgba: 1, 1, 1, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-
-            BoxLayout:
-                orientation: 'vertical'
-                size_hint_y: None
-                height: dp(120)
-
-                Label:
-                    text: "Panel de Empresa"
-                    font_size: 32
-                    color: 0, 0, 0, 1  # texto negro
-                    halign: 'center'
-                    valign: 'middle'
-                    size_hint_y: None
-                    height: dp(60)
-
-                Label:
-                    text: "Gestión de Conductores y Administradores"
-                    font_size: 32
-                    color: 0, 0, 0, 1  # texto negro
-                    halign: 'center'
-                    valign: 'middle'
-                    size_hint_y: None
-                    height: dp(40)
+            padding: [dp(15), dp(10)]
+            spacing: dp(20)
 
             Widget:
-                size_hint_y: 0.3
+                size_hint_y: 0.6  # Espacio flexible superior
 
+            # Área de botones principales
             BoxLayout:
                 orientation: 'vertical'
                 size_hint_y: None
-                height: dp(180)
-                spacing: dp(20)
+                height: dp(140)
+                spacing: dp(15)
+                padding: [dp(20), 0]
 
                 Button:
                     text: 'Ver Conductores'
-                    size_hint: (0.7, None)
-                    height: dp(60)
+                    size_hint: (0.85, None)
+                    height: dp(55)
                     pos_hint: {'center_x': 0.5}
-                    font_size: 32
-                    background_color: 1, 1, 1, 1
-                    color: 0, 0, 0, 1
+                    font_size: dp(14)
+                    background_color: 0, 0, 0, 0  # Transparente
+                    color: 20/255, 26/255, 28/255, 1  # #141A1C
+                    bold: True
                     on_press: root.ver_reportes()
                     canvas.before:
                         Color:
-                            rgba: 0, 0, 0, 1
+                            rgba: 168/255, 159/255, 145/255, 1  # #A89F91
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(12)]
+                        Color:
+                            rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                         Line:
-                            width: 1
-                            rectangle: self.x, self.y, self.width, self.height
+                            width: dp(1)
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, dp(12))
 
                 Button:
                     text: 'Agregar Administrador'
-                    size_hint: (0.7, None)
-                    height: dp(60)
+                    size_hint: (0.85, None)
+                    height: dp(55)
                     pos_hint: {'center_x': 0.5}
-                    font_size: 32
-                    background_color: 1, 1, 1, 1
-                    color: 0, 0, 0, 1
+                    font_size: dp(14)
+                    background_color: 0, 0, 0, 0  # Transparente
+                    color: 20/255, 26/255, 28/255, 1  # #141A1C
+                    bold: True
                     on_press: root.agregar_administrador()
                     canvas.before:
                         Color:
-                            rgba: 0, 0, 0, 1
+                            rgba: 168/255, 159/255, 145/255, 1  # #A89F91
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(12)]
+                        Color:
+                            rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                         Line:
-                            width: 1
-                            rectangle: self.x, self.y, self.width, self.height
+                            width: dp(1)
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, dp(12))
 
             Widget:
-                size_hint_y: 0.4
+                size_hint_y: 0.4  # Espacio flexible inferior
 
-        # FOOTER
+        # FOOTER (50dp altura)
         BoxLayout:
             size_hint_y: None
             height: dp(50)
-            padding: dp(10)
+            padding: [dp(20), dp(10)]
+            
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
                 Rectangle:
                     pos: self.pos
                     size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                Line:
+                    width: dp(1)
+                    points: [self.x, self.y + self.height, self.x + self.width, self.y + self.height]
 
             Label:
                 text: "Dashboard Company"
-                font_size: 32
-                color: 0, 0, 0, 1
+                font_size: dp(12)
+                color: 20/255, 26/255, 28/255, 0.7  # Texto secundario
                 halign: 'center'
                 valign: 'middle'
+                text_size: self.size
+                markup: True

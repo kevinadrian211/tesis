@@ -1,7 +1,8 @@
 <RegisterAdminScreen>:
+    # Canvas principal con fondo obligatorio
     canvas.before:
         Color:
-            rgba: 1, 1, 1, 1
+            rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
         Rectangle:
             pos: self.pos
             size: self.size
@@ -9,187 +10,340 @@
     BoxLayout:
         orientation: 'vertical'
 
-        # HEADER EN register_admin.kv
+        # HEADER (70dp altura)
         BoxLayout:
+            orientation: 'horizontal'
             size_hint_y: None
-            height: dp(60)
-            padding: dp(10)
+            height: dp(70)
+            padding: [dp(15), dp(10)]
             spacing: dp(10)
+            
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
                 Rectangle:
                     pos: self.pos
                     size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                Line:
+                    width: dp(1)
+                    rectangle: (self.x, self.y, self.width, self.height)
 
             Button:
                 text: "Regresar"
                 size_hint: None, None
-                size: dp(120), dp(40)
-                font_size: 32
-                background_color: 1, 1, 1, 1
-                color: 0, 0, 0, 1
+                size: dp(100), dp(40)
+                font_size: dp(12)
+                background_color: 0, 0, 0, 0  # Transparente
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
+                bold: True
                 on_press: root.manager.current = 'dashboard_company'
                 canvas.before:
                     Color:
-                        rgba: 0, 0, 0, 1
-                    Line:
-                        width: 1
-                        rectangle: self.x, self.y, self.width, self.height
-
-            Widget:  # Espaciador
-
-
-        # BODY
-        BoxLayout:
-            orientation: 'vertical'
-            padding: dp(20)
-            spacing: dp(20)
-
-            BoxLayout:
-                orientation: 'vertical'
-                size_hint_y: None
-                height: dp(100)
-                spacing: dp(8)
-
-                Label:
-                    text: "Agregar nuevo administrador"
-                    font_size: 32
-                    color: 0, 0, 0, 1
-                    halign: 'center'
-                    valign: 'middle'
-                    size_hint_y: None
-                    height: dp(60)
-                    text_size: self.width, None
-
-                Label:
-                    text: "Complete los datos del nuevo administrador"
-                    font_size: 32
-                    color: 0, 0, 0, 1
-                    halign: 'center'
-                    valign: 'middle'
-                    size_hint_y: None
-                    height: dp(32)
-                    text_size: self.width, None
-
-            Widget:
-                size_hint_y: 0.1
-
-            BoxLayout:
-                orientation: 'vertical'
-                spacing: dp(16)
-                size_hint_y: None
-                height: dp(320)
-
-                # TextInputs (idénticos a antes)
-                TextInput:
-                    id: admin_name
-                    hint_text: "Nombre completo"
-                    multiline: False
-                    font_size: 32
-                    foreground_color: 0, 0, 0, 1
-                    background_color: 1, 1, 1, 1
-                    size_hint_y: None
-                    height: dp(50)
-                    padding: dp(12), dp(12)
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 1
-                        Line:
-                            rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
-                            width: dp(2)
-
-                TextInput:
-                    id: admin_email
-                    hint_text: "Correo electrónico"
-                    multiline: False
-                    font_size: 32
-                    foreground_color: 0, 0, 0, 1
-                    background_color: 1, 1, 1, 1
-                    size_hint_y: None
-                    height: dp(50)
-                    padding: dp(12), dp(12)
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 1
-                        Line:
-                            rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
-                            width: dp(2)
-
-                TextInput:
-                    id: admin_password
-                    hint_text: "Contraseña"
-                    multiline: False
-                    password: True
-                    font_size: 32
-                    foreground_color: 0, 0, 0, 1
-                    background_color: 1, 1, 1, 1
-                    size_hint_y: None
-                    height: dp(50)
-                    padding: dp(12), dp(12)
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 1
-                        Line:
-                            rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
-                            width: dp(2)
-
-                TextInput:
-                    id: admin_confirm_password
-                    hint_text: "Confirmar contraseña"
-                    multiline: False
-                    password: True
-                    font_size: 32
-                    foreground_color: 0, 0, 0, 1
-                    background_color: 1, 1, 1, 1
-                    size_hint_y: None
-                    height: dp(50)
-                    padding: dp(12), dp(12)
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 1
-                        Line:
-                            rounded_rectangle: self.x, self.y, self.width, self.height, dp(8)
-                            width: dp(2)
-
-            Widget:
-                size_hint_y: 0.1
-
-            Button:
-                text: "Registrar Administrador"
-                font_size: 32
-                size_hint_y: None
-                height: dp(60)
-                size_hint_x: 0.8
-                pos_hint: {'center_x': 0.5}
-                background_color: 1, 1, 1, 1
-                color: 0, 0, 0, 1
-                on_press: root.register_admin()
-                canvas.before:
+                        rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(8)]
                     Color:
-                        rgba: 0, 0, 0, 1
+                        rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                     Line:
-                        rounded_rectangle: self.x, self.y, self.width, self.height, dp(12)
-                        width: dp(3)
+                        width: dp(1)
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
 
-            Widget:
-                size_hint_y: 0.2
+            Widget:  # Espacio flexible
 
-        # FOOTER
+            Label:
+                text: "Nuevo Admin"
+                font_size: dp(16)
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
+                bold: True
+                halign: 'right'
+                valign: 'middle'
+                text_size: self.size
+                size_hint_x: 0.4
+
+        # ÁREA DESCRIPCIÓN (60dp altura)
         BoxLayout:
             size_hint_y: None
-            height: dp(50)
-            padding: dp(10)
+            height: dp(60)
+            padding: [dp(20), dp(15)]
+            
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
                 Rectangle:
                     pos: self.pos
                     size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                Line:
+                    width: dp(1)
+                    points: [self.x, self.y, self.x + self.width, self.y]
 
             Label:
-                text: "Pantalla agregar Administrador"
-                font_size: 32
-                color: 0, 0, 0, 1
+                text: "Complete los datos del nuevo administrador"
+                font_size: dp(14)
+                color: 20/255, 26/255, 28/255, 0.7  # Texto secundario
                 halign: 'center'
                 valign: 'middle'
+                text_size: self.size
+                markup: True
+
+        # CONTENIDO PRINCIPAL
+        BoxLayout:
+            orientation: 'vertical'
+            padding: [dp(15), dp(10)]
+
+            ScrollView:
+                canvas.before:
+                    Color:
+                        rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(12)]
+                    Color:
+                        rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                    Line:
+                        width: dp(1)
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, dp(12))
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: [dp(20), dp(15)]
+                    spacing: dp(18)
+                    size_hint_y: None
+                    height: self.minimum_height
+
+                    Widget:
+                        size_hint_y: None
+                        height: dp(10)
+
+                    # Campo Nombre
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(75)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Nombre completo"
+                            font_size: dp(12)
+                            color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            bold: True
+                            halign: 'left'
+                            valign: 'bottom'
+                            text_size: self.size
+                            size_hint_y: None
+                            height: dp(20)
+
+                        TextInput:
+                            id: admin_name
+                            hint_text: "Ingrese nombre completo"
+                            multiline: False
+                            font_size: dp(14)
+                            foreground_color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            background_color: 255/255, 252/255, 242/255, 1  # #FFFCF2
+                            size_hint_y: None
+                            height: dp(50)
+                            padding: [dp(15), dp(12)]
+                            canvas.before:
+                                Color:
+                                    rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [dp(8)]
+                                Color:
+                                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                                Line:
+                                    width: dp(1)
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+
+                    # Campo Email
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(75)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Correo electrónico"
+                            font_size: dp(12)
+                            color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            bold: True
+                            halign: 'left'
+                            valign: 'bottom'
+                            text_size: self.size
+                            size_hint_y: None
+                            height: dp(20)
+
+                        TextInput:
+                            id: admin_email
+                            hint_text: "ejemplo@correo.com"
+                            multiline: False
+                            font_size: dp(14)
+                            foreground_color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            background_color: 255/255, 252/255, 242/255, 1  # #FFFCF2
+                            size_hint_y: None
+                            height: dp(50)
+                            padding: [dp(15), dp(12)]
+                            input_filter: 'email'
+                            canvas.before:
+                                Color:
+                                    rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [dp(8)]
+                                Color:
+                                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                                Line:
+                                    width: dp(1)
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+
+                    # Campo Contraseña
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(75)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Contraseña"
+                            font_size: dp(12)
+                            color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            bold: True
+                            halign: 'left'
+                            valign: 'bottom'
+                            text_size: self.size
+                            size_hint_y: None
+                            height: dp(20)
+
+                        TextInput:
+                            id: admin_password
+                            hint_text: "Mínimo 6 caracteres"
+                            multiline: False
+                            password: True
+                            font_size: dp(14)
+                            foreground_color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            background_color: 255/255, 252/255, 242/255, 1  # #FFFCF2
+                            size_hint_y: None
+                            height: dp(50)
+                            padding: [dp(15), dp(12)]
+                            canvas.before:
+                                Color:
+                                    rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [dp(8)]
+                                Color:
+                                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                                Line:
+                                    width: dp(1)
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+
+                    # Campo Confirmar Contraseña
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: dp(75)
+                        spacing: dp(5)
+
+                        Label:
+                            text: "Confirmar contraseña"
+                            font_size: dp(12)
+                            color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            bold: True
+                            halign: 'left'
+                            valign: 'bottom'
+                            text_size: self.size
+                            size_hint_y: None
+                            height: dp(20)
+
+                        TextInput:
+                            id: admin_confirm_password
+                            hint_text: "Repita la contraseña"
+                            multiline: False
+                            password: True
+                            font_size: dp(14)
+                            foreground_color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            background_color: 255/255, 252/255, 242/255, 1  # #FFFCF2
+                            size_hint_y: None
+                            height: dp(50)
+                            padding: [dp(15), dp(12)]
+                            canvas.before:
+                                Color:
+                                    rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [dp(8)]
+                                Color:
+                                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                                Line:
+                                    width: dp(1)
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+
+                    Widget:
+                        size_hint_y: None
+                        height: dp(20)
+
+                    # Botón Registrar
+                    Button:
+                        text: "Registrar Administrador"
+                        font_size: dp(14)
+                        size_hint_y: None
+                        height: dp(55)
+                        size_hint_x: 0.85
+                        pos_hint: {'center_x': 0.5}
+                        background_color: 0, 0, 0, 0  # Transparente
+                        color: 20/255, 26/255, 28/255, 1  # #141A1C
+                        bold: True
+                        on_press: root.register_admin()
+                        canvas.before:
+                            Color:
+                                rgba: 168/255, 159/255, 145/255, 1  # #A89F91
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [dp(12)]
+                            Color:
+                                rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                            Line:
+                                width: dp(1)
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, dp(12))
+
+                    Widget:
+                        size_hint_y: None
+                        height: dp(15)
+
+        # FOOTER (50dp altura)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            padding: [dp(20), dp(10)]
+            
+            canvas.before:
+                Color:
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                Line:
+                    width: dp(1)
+                    points: [self.x, self.y + self.height, self.x + self.width, self.y + self.height]
+
+            Label:
+                text: "Registro de Administrador"
+                font_size: dp(12)
+                color: 20/255, 26/255, 28/255, 0.7  # Texto secundario
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
+                markup: True
