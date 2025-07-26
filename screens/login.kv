@@ -1,159 +1,289 @@
 <LoginScreen>:
     name: "login"
+    on_enter: self.on_enter()
     canvas.before:
         Color:
-            rgba: 1, 1, 1, 1  # Fondo blanco
+            rgba: 255/255, 252/255, 242/255, 1  # background
         Rectangle:
             pos: self.pos
             size: self.size
-        Color:
-            rgba: 0, 0, 0, 1  # Borde negro
-        Line:
-            rectangle: self.x, self.y, self.width, self.height
-            width: 2
 
     BoxLayout:
         orientation: "vertical"
-        padding: [30, 50, 30, 50]
-        spacing: 25
 
-        Label:
-            text: "Iniciar Sesión"
-            font_size: 32
-            color: 0, 0, 0, 1
-            size_hint_y: None
-            height: "60dp"
-            text_size: self.size
-            halign: "center"
-            valign: "middle"
-            bold: True
-
-        Widget:
-            size_hint_y: None
-            height: "20dp"
-
+        # HEADER
         BoxLayout:
-            orientation: "vertical"
+            orientation: "horizontal"
             size_hint_y: None
-            height: "70dp"
-            spacing: 5
+            height: dp(70)
+            padding: [dp(15), dp(10)]
+            spacing: dp(10)
 
-            Label:
-                text: "Correo Electrónico:"
-                font_size: 32
-                color: 0, 0, 0, 1
-                size_hint_y: None
-                height: "25dp"
-                text_size: self.size
-                halign: "left"
-                valign: "middle"
-
-            TextInput:
-                id: email_input
-                hint_text: "Ingresa tu email"
-                multiline: False
-                font_size: 32
-                padding: [10, 10]
-                foreground_color: 0, 0, 0, 1
-                background_color: 1, 1, 1, 1
-                cursor_color: 0, 0, 0, 1
-                size_hint_y: None
-                height: "45dp"
-                background_active: ''
-                background_normal: ''
-                background_disabled_normal: ''
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 1
-                    Line:
-                        rectangle: self.x, self.y, self.width, self.height
-                        width: 1.5
-
-        BoxLayout:
-            orientation: "vertical"
-            size_hint_y: None
-            height: "70dp"
-            spacing: 5
-
-            Label:
-                text: "Contraseña:"
-                font_size: 32
-                color: 0, 0, 0, 1
-                size_hint_y: None
-                height: "25dp"
-                text_size: self.size
-                halign: "left"
-                valign: "middle"
-
-            TextInput:
-                id: password_input
-                hint_text: "Ingresa tu contraseña"
-                password: True
-                multiline: False
-                font_size: 32
-                padding: [10, 10]
-                foreground_color: 0, 0, 0, 1
-                background_color: 1, 1, 1, 1
-                cursor_color: 0, 0, 0, 1
-                size_hint_y: None
-                height: "45dp"
-                background_active: ''
-                background_normal: ''
-                background_disabled_normal: ''
-                canvas.before:
-                    Color:
-                        rgba: 0, 0, 0, 1
-                    Line:
-                        rectangle: self.x, self.y, self.width, self.height
-                        width: 1.5
-
-        Label:
-            id: error_label
-            text: ""
-            color: 1, 0, 0, 1
-            size_hint_y: None
-            height: "30dp"
-            text_size: self.size
-            halign: "center"
-            valign: "middle"
-            font_size: 32
-
-        Widget:
-            size_hint_y: None
-            height: "20dp"
-
-        Button:
-            text: "Iniciar Sesión"
-            font_size: 32
-            bold: True
-            size_hint_y: None
-            height: "55dp"
-            background_normal: ''
-            background_down: ''
-            background_color: 1, 1, 1, 1
-            color: 0, 0, 0, 1
-            on_press: root.login()
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, 1
+                    rgba: 204/255, 197/255, 185/255, 1  # surface
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1  # border
                 Line:
-                    rectangle: self.x, self.y, self.width, self.height
-                    width: 2
+                    width: dp(1)
+                    rectangle: (self.x, self.y, self.width, self.height)
 
-        Button:
-            text: "Crear Cuenta"
-            font_size: 32
-            bold: True
+            Label:
+                text: "Iniciar Sesión"
+                font_size: sp(20)
+                bold: True
+                color: 20/255, 26/255, 28/255, 1
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+
+        # DESCRIPCIÓN
+        BoxLayout:
             size_hint_y: None
-            height: "55dp"
-            background_normal: ''
-            background_down: ''
-            background_color: 1, 1, 1, 1
-            color: 0, 0, 0, 1
-            on_press: app.root.current = "type_account"
+            height: dp(60)
+            padding: [dp(20), dp(15)]
+
             canvas.before:
                 Color:
-                    rgba: 0, 0, 0, 1
+                    rgba: 204/255, 197/255, 185/255, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1
                 Line:
-                    rectangle: self.x, self.y, self.width, self.height
-                    width: 2
+                    width: dp(1)
+                    points: [self.x, self.y, self.x + self.width, self.y]
+
+            Label:
+                text: "Ingresa tus credenciales para acceder"
+                font_size: sp(16)
+                color: 20/255, 26/255, 28/255, 1
+                halign: "center"
+                valign: "middle"
+                text_size: self.size
+
+        # CONTENIDO PRINCIPAL
+        BoxLayout:
+            orientation: "vertical"
+            padding: [dp(15), dp(10)]
+
+            ScrollView:
+                do_scroll_x: False
+
+                BoxLayout:
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(15)
+                    padding: dp(20)
+
+                    canvas.before:
+                        Color:
+                            rgba: 204/255, 197/255, 185/255, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [dp(12)]
+                        Color:
+                            rgba: 20/255, 26/255, 28/255, 1
+                        Line:
+                            width: dp(1)
+                            rounded_rectangle: (self.x, self.y, self.width, self.height, dp(12))
+
+                    Widget:
+                        size_hint_y: None
+                        height: dp(5)
+
+                    # CAMPO EMAIL
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: dp(75)
+                        spacing: dp(6)
+
+                        Label:
+                            text: "Correo Electrónico"
+                            font_size: sp(14)
+                            bold: True
+                            color: 20/255, 26/255, 28/255, 1
+                            size_hint_y: None
+                            height: dp(25)
+                            text_size: self.size
+                            halign: "left"
+                            valign: "middle"
+
+                        TextInput:
+                            id: email_input
+                            hint_text: "Ingresa tu email"
+                            multiline: False
+                            font_size: sp(16)
+                            padding: [dp(15), dp(12)]
+                            foreground_color: 20/255, 26/255, 28/255, 1
+                            background_color: 0, 0, 0, 0
+                            cursor_color: 20/255, 26/255, 28/255, 1
+                            size_hint_y: None
+                            height: dp(45)
+                            background_active: ''
+                            background_normal: ''
+                            background_disabled_normal: ''
+                            on_focus: root.on_email_input_focus(self, self.focus)
+                            canvas.before:
+                                Color:
+                                    rgba: 255/255, 252/255, 242/255, 1
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [dp(8)]
+                                Color:
+                                    rgba: 20/255, 26/255, 28/255, 1
+                                Line:
+                                    width: dp(1)
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+
+                    # CAMPO CONTRASEÑA
+                    BoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: dp(75)
+                        spacing: dp(6)
+
+                        Label:
+                            text: "Contraseña"
+                            font_size: sp(14)
+                            bold: True
+                            color: 20/255, 26/255, 28/255, 1
+                            size_hint_y: None
+                            height: dp(25)
+                            text_size: self.size
+                            halign: "left"
+                            valign: "middle"
+
+                        TextInput:
+                            id: password_input
+                            hint_text: "Ingresa tu contraseña"
+                            password: True
+                            multiline: False
+                            font_size: sp(16)
+                            padding: [dp(15), dp(12)]
+                            foreground_color: 20/255, 26/255, 28/255, 1
+                            background_color: 0, 0, 0, 0
+                            cursor_color: 20/255, 26/255, 28/255, 1
+                            size_hint_y: None
+                            height: dp(45)
+                            background_active: ''
+                            background_normal: ''
+                            background_disabled_normal: ''
+                            on_focus: root.on_password_input_focus(self, self.focus)
+                            canvas.before:
+                                Color:
+                                    rgba: 255/255, 252/255, 242/255, 1
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [dp(8)]
+                                Color:
+                                    rgba: 20/255, 26/255, 28/255, 1
+                                Line:
+                                    width: dp(1)
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+
+                    # MENSAJE DE ERROR
+                    Label:
+                        id: error_label
+                        text: ""
+                        color: 1, 0, 0, 1
+                        size_hint_y: None
+                        height: dp(30)
+                        text_size: self.size
+                        halign: "center"
+                        valign: "middle"
+                        font_size: sp(14)
+
+                    Widget:
+                        size_hint_y: None
+                        height: dp(10)
+
+                    # BOTÓN INICIAR SESIÓN
+                    Button:
+                        text: "Iniciar Sesión"
+                        font_size: sp(14)
+                        bold: True
+                        size_hint_y: None
+                        height: dp(50)
+                        background_color: 0, 0, 0, 0
+                        color: 20/255, 26/255, 28/255, 1
+                        on_press: root.login()
+                        canvas.before:
+                            Color:
+                                rgba: 168/255, 159/255, 145/255, 1
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [dp(8)]
+                            Color:
+                                rgba: 20/255, 26/255, 28/255, 1
+                            Line:
+                                width: dp(1)
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+
+                    Widget:
+                        size_hint_y: None
+                        height: dp(8)
+
+                    # BOTÓN CREAR CUENTA
+                    Button:
+                        text: "Crear Cuenta"
+                        font_size: sp(14)
+                        bold: True
+                        size_hint_y: None
+                        height: dp(50)
+                        background_color: 0, 0, 0, 0
+                        color: 20/255, 26/255, 28/255, 1
+                        on_press: app.root.current = "type_account"
+                        canvas.before:
+                            Color:
+                                rgba: 255/255, 252/255, 242/255, 1
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [dp(8)]
+                            Color:
+                                rgba: 20/255, 26/255, 28/255, 1
+                            Line:
+                                width: dp(1)
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
+
+                    Widget:
+                        size_hint_y: None
+                        height: dp(10)
+
+        # FOOTER
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            padding: [dp(20), dp(10)]
+
+            canvas.before:
+                Color:
+                    rgba: 204/255, 197/255, 185/255, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1
+                Line:
+                    width: dp(1)
+                    points: [self.x, self.y + self.height, self.x + self.width, self.y + self.height]
+
+            Label:
+                text: "¿Necesitas ayuda? Contacta soporte"
+                font_size: sp(14)
+                italic: True
+                color: 20/255, 26/255, 28/255, 0.7
+                halign: "center"
+                valign: "middle"
+                text_size: self.size

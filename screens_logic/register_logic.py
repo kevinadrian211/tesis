@@ -5,69 +5,213 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.animation import Animation
+from kivy.metrics import dp
 from database import register_company, register_driver, register_admin, get_all_companies
 import re
 
 class RegisterScreen(Screen):
-    account_type = StringProperty("")  # Usamos StringProperty para hacer la propiedad reactiva
-    company_name = StringProperty("")  # Para el nombre de la compañía
-    driver_name = StringProperty("")   # Para el nombre del conductor
-    driver_email = StringProperty("")  # Para el correo electrónico del conductor
-    driver_password = StringProperty("")  # Para la contraseña del conductor
-    company_email = StringProperty("")  # Correo de la compañía
-    company_password = StringProperty("")  # Contraseña de la compañía
-    company_id = StringProperty("")  # ID de la compañía, solo necesario para conductores
+    account_type = StringProperty("")
+    company_name = StringProperty("")
+    driver_name = StringProperty("")
+    driver_email = StringProperty("")
+    driver_password = StringProperty("")
+    company_email = StringProperty("")
+    company_password = StringProperty("")
+    company_id = StringProperty("")
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.colors = {
+            'background': (255/255, 252/255, 242/255, 1),  # #FFFCF2
+            'surface': (204/255, 197/255, 185/255, 1),     # #CCC5B9
+            'primary': (168/255, 159/255, 145/255, 1),     # #A89F91
+            'border': (20/255, 26/255, 28/255, 1),         # #141A1C
+            'text': (20/255, 26/255, 28/255, 1),           # #141A1C
+            'text_secondary': (20/255, 26/255, 28/255, 0.7)
+        }
 
     def on_enter(self):
-        """
-        Este método se ejecuta cuando se entra en la pantalla de registro.
-        Aquí, configuramos los campos a mostrar según el tipo de cuenta.
-        """
+        """Método ejecutado al entrar en la pantalla."""
         print(f"Llegaste como: {self.account_type}")
         
-        # Si llegamos como company, se deben mostrar los campos correspondientes a company
+        # Animación de entrada
+        self.opacity = 0
+        Animation(opacity=1, duration=0.3).start(self)
+        
+        # Limpiar campos y configurar interfaz según el tipo de cuenta
         if self.account_type == "company":
-            self.clear_fields_for_driver()  # Limpiamos cualquier campo de driver si es una company
+            self.clear_fields_for_driver()
             print("Campos de Company visibles.")
         elif self.account_type == "driver":
-            self.clear_fields_for_company()  # Limpiamos cualquier campo de company si es un driver
+            self.clear_fields_for_company()
             print("Campos de Driver visibles.")
+        elif self.account_type == "admin":
+            self.clear_fields_for_company()
+            print("Campos de Admin visibles.")
         
+        # Limpiar el indicador de estado de contraseñas
+        self.update_password_status()
+
+    def on_password_change(self, *args):
+        """Método llamado cuando cambia el texto de las contraseñas."""
+        self.update_password_status()
+
+    def update_password_status(self):
+        """Actualiza el indicador de estado de las contraseñas."""
+        try:
+            password_status_label = self.ids.get('password_status_label')
+            if not password_status_label:
+                return
+            
+            # Obtener los campos de contraseña según el tipo de cuenta
+            password_field = None
+            confirm_field = None
+            
+            if self.account_type == "company":
+                password_field = self.ids.get('company_password_input')
+                confirm_field = self.ids.get('company_password_confirm_input')
+            elif self.account_type == "driver":
+                password_field = self.ids.get('driver_password_input')
+                confirm_field = self.ids.get('driver_password_confirm_input')
+            elif self.account_type == "admin":
+                password_field = self.ids.get('admin_password_input')
+                confirm_field = self.ids.get('admin_password_confirm_input')
+            
+            if not password_field or not confirm_field:
+                password_status_label.text = ""
+                return
+            
+            password = password_field.text
+            confirm_password = confirm_field.text
+            
+            # Verificar si ambos campos están vacíos
+            if not password and not confirm_password:
+                password_status_label.text = ""
+                password_status_label.color = self.colors['text_secondary']
+                return
+            
+            # Verificar longitud mínima
+            if password and len(password) < 6:
+                password_status_label.text = "La contraseña debe tener al menos 6 caracteres"
+                password_status_label.color = (1, 0.3, 0.3, 1)  # Rojo
+                return
+            
+            # Verificar si las contraseñas coinciden
+            if password and confirm_password:
+                if password == confirm_password:
+                    if len(password) >= 6:
+                        password_status_label.text = "Las contraseñas coinciden"
+                        password_status_label.color = (0.2, 0.7, 0.2, 1)  # Verde
+                    else:
+                        password_status_label.text = "Las contraseñas coinciden pero son muy cortas"
+                        password_status_label.color = (1, 0.6, 0, 1)  # Naranja
+                else:
+                    password_status_label.text = "Las contraseñas no coinciden"
+                    password_status_label.color = (1, 0.3, 0.3, 1)  # Rojo
+            elif confirm_password:
+                # Solo hay texto en confirmar contraseña
+                password_status_label.text = "Ingresa la contraseña principal primero"
+                password_status_label.color = self.colors['text_secondary']
+            else:
+                # Solo hay texto en contraseña principal
+                password_status_label.text = "Confirma tu contraseña"
+                password_status_label.color = self.colors['text_secondary']
+                
+        except Exception as e:
+            print(f"Error actualizando el estado de contraseñas: {e}")
+
     def clear_fields_for_company(self):
         """Limpiar campos que no son necesarios para Company"""
-        self.ids.driver_name_input.text = ""
-        self.ids.driver_email_input.text = ""
-        self.ids.driver_password_input.text = ""
-        self.ids.driver_password_confirm_input.text = ""
-        self.ids.company_email_input.text = ""  # Limpiar campo de correo de la compañía
-        self.ids.company_password_input.text = ""  # Limpiar campo de contraseña de la compañía
-        self.ids.company_password_confirm_input.text = ""
+        if hasattr(self, 'ids'):
+            self.ids.get('driver_name_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('driver_email_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('driver_password_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('driver_password_confirm_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('admin_name_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('admin_email_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('admin_password_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('admin_password_confirm_input', type('obj', (object,), {'text': ''})).text = ""
 
     def clear_fields_for_driver(self):
         """Limpiar campos que no son necesarios para Driver"""
-        self.ids.company_name_input.text = ""
-        self.ids.company_email_input.text = ""  # Limpiar campo de correo de la compañía
-        self.ids.company_password_input.text = ""  # Limpiar campo de contraseña de la compañía
-        self.ids.company_password_confirm_input.text = ""
+        if hasattr(self, 'ids'):
+            self.ids.get('company_name_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('company_email_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('company_password_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('company_password_confirm_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('admin_name_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('admin_email_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('admin_password_input', type('obj', (object,), {'text': ''})).text = ""
+            self.ids.get('admin_password_confirm_input', type('obj', (object,), {'text': ''})).text = ""
 
     def show_error_popup(self, title, message):
-        """
-        Muestra un popup con un mensaje de error.
-        """
-        content = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        """Muestra un popup con un mensaje de error."""
+        content = BoxLayout(
+            orientation='vertical', 
+            padding=dp(15), 
+            spacing=dp(10)
+        )
+        
+        # Crear canvas personalizado para el popup
+        with content.canvas.before:
+            from kivy.graphics import Color, RoundedRectangle, Line
+            Color(*self.colors['background'])
+            content.bg_rect = RoundedRectangle(
+                size=content.size, 
+                pos=content.pos, 
+                radius=[dp(12)]
+            )
+            Color(*self.colors['border'])
+            content.border_line = Line(
+                width=dp(1),
+                rounded_rectangle=(content.x, content.y, content.width, content.height, dp(12))
+            )
         
         label = Label(
             text=message,
-            text_size=(300, None),
+            text_size=(dp(280), None),
             halign='center',
-            valign='middle'
+            valign='middle',
+            color=self.colors['text'],
+            font_size=dp(14)
         )
         
         button = Button(
             text='Cerrar',
-            size_hint=(1, 0.3),
-            height=40
+            size_hint=(1, None),
+            height=dp(45),
+            background_color=(0, 0, 0, 0),
+            color=self.colors['text'],
+            font_size=dp(14),
+            bold=True
         )
+        
+        # Canvas personalizado para el botón
+        with button.canvas.before:
+            from kivy.graphics import Color, RoundedRectangle, Line
+            Color(*self.colors['primary'])
+            button.bg_rect = RoundedRectangle(
+                size=button.size, 
+                pos=button.pos, 
+                radius=[dp(8)]
+            )
+            Color(*self.colors['border'])
+            button.border_line = Line(
+                width=dp(1),
+                rounded_rectangle=(button.x, button.y, button.width, button.height, dp(8))
+            )
+        
+        def update_button_canvas(instance, value):
+            if hasattr(instance, 'bg_rect'):
+                instance.bg_rect.pos = instance.pos
+                instance.bg_rect.size = instance.size
+            if hasattr(instance, 'border_line'):
+                instance.border_line.rounded_rectangle = (
+                    instance.x, instance.y, instance.width, instance.height, dp(8)
+                )
+        
+        button.bind(size=update_button_canvas, pos=update_button_canvas)
         
         content.add_widget(label)
         content.add_widget(button)
@@ -75,56 +219,58 @@ class RegisterScreen(Screen):
         popup = Popup(
             title=title,
             content=content,
-            size_hint=(0.8, 0.4),
-            auto_dismiss=False
+            size_hint=(0.85, 0.4),
+            auto_dismiss=False,
+            background_color=self.colors['surface'],
+            title_color=self.colors['text']
         )
         
+        def update_content_canvas(instance, value):
+            if hasattr(instance, 'bg_rect'):
+                instance.bg_rect.pos = instance.pos
+                instance.bg_rect.size = instance.size
+            if hasattr(instance, 'border_line'):
+                instance.border_line.rounded_rectangle = (
+                    instance.x, instance.y, instance.width, instance.height, dp(12)
+                )
+        
+        content.bind(size=update_content_canvas, pos=update_content_canvas)
         button.bind(on_press=popup.dismiss)
         popup.open()
 
     def validate_email(self, email):
-        """
-        Valida que el email tenga un formato correcto.
-        """
+        """Valida que el email tenga un formato correcto."""
         email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         return re.match(email_pattern, email) is not None
 
     def validate_name(self, name):
-        """
-        Valida que el nombre tenga un formato correcto.
-        """
+        """Valida que el nombre tenga un formato correcto."""
         if not name or len(name.strip()) < 2:
             return False, "El nombre debe tener al menos 2 caracteres."
         
         if len(name.strip()) > 50:
             return False, "El nombre no puede tener más de 50 caracteres."
         
-        # Verificar que no contenga números o caracteres especiales (excepto espacios, guiones y apostrofes)
         if not re.match(r"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\-']+$", name.strip()):
             return False, "El nombre solo puede contener letras, espacios, guiones y apostrofes."
         
         return True, ""
 
     def validate_company_name(self, name):
-        """
-        Valida que el nombre de la compañía tenga un formato correcto.
-        """
+        """Valida que el nombre de la compañía tenga un formato correcto."""
         if not name or len(name.strip()) < 2:
             return False, "El nombre de la compañía debe tener al menos 2 caracteres."
         
         if len(name.strip()) > 100:
             return False, "El nombre de la compañía no puede tener más de 100 caracteres."
         
-        # Permitir letras, números, espacios y algunos caracteres especiales comunes en nombres de empresas
         if not re.match(r"^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s\-'&.,()]+$", name.strip()):
             return False, "El nombre de la compañía contiene caracteres no válidos."
         
         return True, ""
 
     def validate_passwords(self, password, password_confirm):
-        """
-        Valida que las contraseñas coincidan y cumplan con los requisitos mínimos.
-        """
+        """Valida que las contraseñas coincidan y cumplan con los requisitos mínimos."""
         if not password or not password_confirm:
             return False, "Ambos campos de contraseña son obligatorios."
         
@@ -137,141 +283,129 @@ class RegisterScreen(Screen):
         if len(password) > 128:
             return False, "La contraseña no puede tener más de 128 caracteres."
         
-        # Verificar que contenga al menos una letra y un número
         if not re.search(r'[a-zA-Z]', password):
             return False, "La contraseña debe contener al menos una letra."
         
         if not re.search(r'[0-9]', password):
             return False, "La contraseña debe contener al menos un número."
         
-        # Verificar que no contenga espacios
         if ' ' in password:
             return False, "La contraseña no puede contener espacios."
         
         return True, ""
 
     def sanitize_input(self, text):
-        """
-        Sanitiza el input removiendo caracteres peligrosos y espacios extra.
-        """
+        """Sanitiza el input removiendo caracteres peligrosos y espacios extra."""
         if not text:
             return ""
         
-        # Remover espacios al inicio y final
         text = text.strip()
-        
-        # Remover caracteres de control
         text = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', text)
-        
-        # Remover múltiples espacios consecutivos
         text = re.sub(r'\s+', ' ', text)
         
         return text
 
     def validate_company_fields(self):
-        """
-        Valida todos los campos para el registro de compañía.
-        """
-        name = self.sanitize_input(self.ids.company_name_input.text)
-        email = self.sanitize_input(self.ids.company_email_input.text)
-        password = self.ids.company_password_input.text
-        password_confirm = self.ids.company_password_confirm_input.text
+        """Valida todos los campos para el registro de compañía."""
+        try:
+            name = self.sanitize_input(self.ids.company_name_input.text)
+            email = self.sanitize_input(self.ids.company_email_input.text)
+            password = self.ids.company_password_input.text
+            password_confirm = self.ids.company_password_confirm_input.text
 
-        # Validar nombre de compañía
-        is_valid, error_msg = self.validate_company_name(name)
-        if not is_valid:
-            return False, error_msg
+            # Validar nombre de compañía
+            is_valid, error_msg = self.validate_company_name(name)
+            if not is_valid:
+                return False, error_msg
 
-        # Validar email
-        if not email:
-            return False, "El correo electrónico es obligatorio."
-        
-        if not self.validate_email(email):
-            return False, "El formato del correo electrónico no es válido."
+            # Validar email
+            if not email:
+                return False, "El correo electrónico es obligatorio."
+            
+            if not self.validate_email(email):
+                return False, "El formato del correo electrónico no es válido."
 
-        # Validar contraseñas
-        is_valid, error_msg = self.validate_passwords(password, password_confirm)
-        if not is_valid:
-            return False, error_msg
+            # Validar contraseñas
+            is_valid, error_msg = self.validate_passwords(password, password_confirm)
+            if not is_valid:
+                return False, error_msg
 
-        return True, ""
+            return True, ""
+        except Exception as e:
+            return False, f"Error validando campos: {str(e)}"
 
     def validate_driver_fields(self):
-        """
-        Valida todos los campos para el registro de conductor.
-        """
-        name = self.sanitize_input(self.ids.driver_name_input.text)
-        email = self.sanitize_input(self.ids.driver_email_input.text)
-        password = self.ids.driver_password_input.text
-        password_confirm = self.ids.driver_password_confirm_input.text
+        """Valida todos los campos para el registro de conductor."""
+        try:
+            name = self.sanitize_input(self.ids.driver_name_input.text)
+            email = self.sanitize_input(self.ids.driver_email_input.text)
+            password = self.ids.driver_password_input.text
+            password_confirm = self.ids.driver_password_confirm_input.text
 
-        # Validar nombre
-        is_valid, error_msg = self.validate_name(name)
-        if not is_valid:
-            return False, error_msg
+            # Validar nombre
+            is_valid, error_msg = self.validate_name(name)
+            if not is_valid:
+                return False, error_msg
 
-        # Validar email
-        if not email:
-            return False, "El correo electrónico es obligatorio."
-        
-        if not self.validate_email(email):
-            return False, "El formato del correo electrónico no es válido."
+            # Validar email
+            if not email:
+                return False, "El correo electrónico es obligatorio."
+            
+            if not self.validate_email(email):
+                return False, "El formato del correo electrónico no es válido."
 
-        # Validar contraseñas
-        is_valid, error_msg = self.validate_passwords(password, password_confirm)
-        if not is_valid:
-            return False, error_msg
+            # Validar contraseñas
+            is_valid, error_msg = self.validate_passwords(password, password_confirm)
+            if not is_valid:
+                return False, error_msg
 
-        # Validar que se haya seleccionado una compañía
-        if not self.company_id:
-            return False, "Debe seleccionar una compañía."
+            # Validar que se haya seleccionado una compañía
+            if not self.company_id:
+                return False, "Debe seleccionar una compañía."
 
-        return True, ""
+            return True, ""
+        except Exception as e:
+            return False, f"Error validando campos: {str(e)}"
 
     def validate_admin_fields(self):
-        """
-        Valida todos los campos para el registro de administrador.
-        """
-        name = self.sanitize_input(self.ids.admin_name_input.text)
-        email = self.sanitize_input(self.ids.admin_email_input.text)
-        password = self.ids.admin_password_input.text
-        password_confirm = self.ids.admin_password_confirm_input.text
+        """Valida todos los campos para el registro de administrador."""
+        try:
+            name = self.sanitize_input(self.ids.admin_name_input.text)
+            email = self.sanitize_input(self.ids.admin_email_input.text)
+            password = self.ids.admin_password_input.text
+            password_confirm = self.ids.admin_password_confirm_input.text
 
-        # Validar nombre
-        is_valid, error_msg = self.validate_name(name)
-        if not is_valid:
-            return False, error_msg
+            # Validar nombre
+            is_valid, error_msg = self.validate_name(name)
+            if not is_valid:
+                return False, error_msg
 
-        # Validar email
-        if not email:
-            return False, "El correo electrónico es obligatorio."
-        
-        if not self.validate_email(email):
-            return False, "El formato del correo electrónico no es válido."
+            # Validar email
+            if not email:
+                return False, "El correo electrónico es obligatorio."
+            
+            if not self.validate_email(email):
+                return False, "El formato del correo electrónico no es válido."
 
-        # Validar contraseñas
-        is_valid, error_msg = self.validate_passwords(password, password_confirm)
-        if not is_valid:
-            return False, error_msg
+            # Validar contraseñas
+            is_valid, error_msg = self.validate_passwords(password, password_confirm)
+            if not is_valid:
+                return False, error_msg
 
-        # Validar que se haya seleccionado una compañía
-        if not self.company_id:
-            return False, "Debe seleccionar una compañía."
+            # Validar que se haya seleccionado una compañía
+            if not self.company_id:
+                return False, "Debe seleccionar una compañía."
 
-        return True, ""
+            return True, ""
+        except Exception as e:
+            return False, f"Error validando campos: {str(e)}"
 
     def go_back(self):
-        """
-        Esta función maneja la navegación hacia la pantalla anterior (Login).
-        Cambia la pantalla activa de ScreenManager a 'login'.
-        """
-        self.manager.current = 'login'  # Ahora redirige directamente al login
+        """Navega hacia la pantalla anterior (Login)."""
+        self.manager.current = 'login'
 
     def register_action(self):
-        """
-        Este método se ejecuta cuando se hace clic en el botón "Registrar".
-        Dependiendo del tipo de cuenta, realiza la validación de los campos.
-        """
+        """Método ejecutado cuando se hace clic en el botón 'Registrar'."""
         print("Botón 'Registrar' presionado.")
         
         try:
@@ -372,15 +506,12 @@ class RegisterScreen(Screen):
             self.show_error_popup("Error Inesperado", f"Ocurrió un error durante el registro: {str(e)}")
         
     def get_company_list(self):
-        """
-        Obtiene una lista de las compañías registradas.
-        Esta función es llamada desde el archivo .kv
-        """
+        """Obtiene una lista de las compañías registradas."""
         try:
-            companies = get_all_companies()  # Obtener todas las compañías de la base de datos
+            companies = get_all_companies()
             print(f"Compañías obtenidas de la base de datos: {companies}")
             if companies:
-                return [company['name'] for company in companies]  # Retornar solo los nombres
+                return [company['name'] for company in companies]
             else:
                 return ["No hay compañías registradas"]
         except Exception as e:
@@ -388,10 +519,7 @@ class RegisterScreen(Screen):
             return ["Error al cargar compañías"]
 
     def on_company_selected(self, company_name):
-        """
-        Este método maneja la selección de una compañía desde el Spinner.
-        Captura el ID de la compañía seleccionada.
-        """
+        """Maneja la selección de una compañía desde el Spinner."""
         try:
             # Validar que no sea el mensaje de error o vacío
             if company_name in ["No hay compañías registradas", "Error al cargar compañías", ""]:
@@ -399,12 +527,12 @@ class RegisterScreen(Screen):
                 print("No se seleccionó una compañía válida.")
                 return
             
-            companies = get_all_companies()  # Obtener todas las compañías
+            companies = get_all_companies()
             print(f"Compañías disponibles: {companies}")
 
             for company in companies:
-                if company['name'] == company_name:  # Si el nombre coincide
-                    self.company_id = str(company['id'])  # Asignar el ID de la compañía como string
+                if company['name'] == company_name:
+                    self.company_id = str(company['id'])
                     print(f"Compañía seleccionada: {company_name} con ID {self.company_id}")
                     break
             else:

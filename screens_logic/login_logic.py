@@ -5,6 +5,9 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
+from kivy.animation import Animation
+from kivy.graphics import Color, RoundedRectangle, Line
+from kivy.metrics import dp, sp
 from database import verify_company_login, verify_driver_login, verify_admin_login
 import re
 import hashlib
@@ -13,29 +16,92 @@ import time
 class LoginScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        # Sistema de colores obligatorio
+        self.colors = {
+            'background': (255/255, 252/255, 242/255, 1),  # #FFFCF2
+            'surface': (204/255, 197/255, 185/255, 1),     # #CCC5B9
+            'primary': (168/255, 159/255, 145/255, 1),     # #A89F91
+            'border': (20/255, 26/255, 28/255, 1),         # #141A1C
+            'text': (20/255, 26/255, 28/255, 1),           # #141A1C
+            'text_secondary': (20/255, 26/255, 28/255, 0.7)
+        }
+        
+        # Control de intentos fallidos
         self.failed_attempts = 0
         self.last_attempt_time = 0
         self.lockout_duration = 30  # segundos
         self.max_attempts = 5
 
+    def on_enter(self):
+        """Animación de entrada obligatoria"""
+        self.load_data()
+        self.opacity = 0
+        Animation(opacity=1, duration=0.3).start(self)
+
+    def load_data(self):
+        """Carga datos iniciales de la pantalla"""
+        self.clear_error_message()
+
     def show_error_popup(self, title, message):
         """
-        Muestra un popup con un mensaje de error.
+        Muestra un popup con un mensaje de error siguiendo el sistema de diseño.
         """
-        content = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        content = BoxLayout(
+            orientation='vertical', 
+            padding=dp(15), 
+            spacing=dp(12)
+        )
+        
+        # Aplicar canvas personalizado al contenido
+        with content.canvas.before:
+            Color(*self.colors['background'])
+            content.bg_rect = RoundedRectangle(
+                size=content.size, 
+                pos=content.pos, 
+                radius=[dp(12)]
+            )
+            Color(*self.colors['border'])
+            content.border_line = Line(
+                width=dp(1),
+                rounded_rectangle=(content.x, content.y, content.width, content.height, dp(12))
+            )
+        
+        content.bind(size=self.update_canvas_rect, pos=self.update_canvas_rect)
         
         label = Label(
             text=message,
-            text_size=(350, None),
+            text_size=(dp(300), None),
             halign='center',
-            valign='middle'
+            valign='middle',
+            font_size=sp(16),
+            color=self.colors['text']
         )
         
         button = Button(
             text='Cerrar',
-            size_hint=(1, 0.3),
-            height=40
+            size_hint=(1, None),
+            height=dp(45),
+            font_size=sp(14),
+            bold=True,
+            color=self.colors['text'],
+            background_color=(0, 0, 0, 0)
         )
+        
+        # Canvas personalizado para el botón
+        with button.canvas.before:
+            Color(*self.colors['primary'])
+            button.bg_rect = RoundedRectangle(
+                size=button.size, 
+                pos=button.pos, 
+                radius=[dp(8)]
+            )
+            Color(*self.colors['border'])
+            button.border_line = Line(
+                width=dp(1),
+                rounded_rectangle=(button.x, button.y, button.width, button.height, dp(8))
+            )
+        
+        button.bind(size=self.update_canvas_rect, pos=self.update_canvas_rect)
         
         content.add_widget(label)
         content.add_widget(button)
@@ -43,12 +109,24 @@ class LoginScreen(Screen):
         popup = Popup(
             title=title,
             content=content,
-            size_hint=(0.8, 0.5),
-            auto_dismiss=False
+            size_hint=(0.85, 0.6),
+            auto_dismiss=False,
+            title_size=sp(18),
+            title_color=self.colors['text']
         )
         
         button.bind(on_press=popup.dismiss)
         popup.open()
+
+    def update_canvas_rect(self, instance, value):
+        """Función de actualización de canvas obligatoria"""
+        if hasattr(instance, 'bg_rect'):
+            instance.bg_rect.pos = instance.pos
+            instance.bg_rect.size = instance.size
+        if hasattr(instance, 'border_line'):
+            instance.border_line.rounded_rectangle = (
+                instance.x, instance.y, instance.width, instance.height, dp(12)
+            )
 
     def validate_email(self, email):
         """
@@ -320,9 +398,9 @@ class LoginScreen(Screen):
             self.ids.password_input.text = ""
         self.clear_error_message()
 
-    def on_enter(self):
+    def on_pre_enter(self):
         """
-        Se ejecuta cuando se entra a la pantalla de login.
+        Se ejecuta antes de entrar a la pantalla de login.
         """
         # Limpiar campos al entrar
         self.clear_error_message()
