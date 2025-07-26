@@ -1,229 +1,313 @@
 <EndReportScreen>:
     BoxLayout:
         orientation: 'vertical'
-        padding: "20dp"
-        spacing: "20dp"
-
+        
         canvas.before:
             Color:
-                rgba: 0.95, 0.95, 0.95, 1  # Fondo gris claro
+                rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
             Rectangle:
                 pos: self.pos
                 size: self.size
-
+        
         # Header
         BoxLayout:
+            orientation: 'horizontal'
             size_hint_y: None
-            height: "80dp"
-            padding: "15dp"
-
+            height: dp(70)
+            padding: [dp(15), dp(10)]
+            spacing: dp(10)
+            
             canvas.before:
                 Color:
-                    rgba: 0.2, 0.4, 0.8, 1  # Azul
-                RoundedRectangle:
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                Rectangle:
                     pos: self.pos
                     size: self.size
-                    radius: [15, 15, 15, 15]
-
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                Line:
+                    width: dp(1)
+                    rectangle: (self.x, self.y, self.width, self.height)
+            
             Label:
                 text: "Resumen Final del Viaje"
-                font_size: 36
+                font_size: sp(20)
                 bold: True
                 halign: 'center'
                 valign: 'middle'
-                color: 1, 1, 1, 1
-
-        # Body
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
+                text_size: self.size
+        
+        # Área Descripción
         BoxLayout:
-            orientation: 'vertical'
-            spacing: "15dp"
-            padding: "10dp"
-
+            size_hint_y: None
+            height: dp(60)
+            padding: [dp(20), dp(15)]
+            
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 1  # Fondo blanco
-                RoundedRectangle:
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                Rectangle:
                     pos: self.pos
                     size: self.size
-                    radius: [10, 10, 10, 10]
                 Color:
-                    rgba: 0.8, 0.8, 0.8, 1
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                 Line:
-                    width: 2
-                    rounded_rectangle: (*self.pos, *self.size, 10)
-
+                    width: dp(1)
+                    points: [self.x, self.y, self.x + self.width, self.y]
+            
             Label:
                 text: "Análisis de Comportamiento del Conductor"
-                font_size: 28
+                font_size: sp(16)
                 bold: True
                 halign: 'center'
                 valign: 'middle'
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
                 text_size: self.size
-                color: 0.2, 0.2, 0.2, 1
-                size_hint_y: None
-                height: "60dp"
-
+        
+        # Contenido Principal
+        BoxLayout:
+            orientation: 'vertical'
+            padding: [dp(15), dp(10)]
+            
             ScrollView:
                 do_scroll_x: False
                 do_scroll_y: True
-
+                
+                canvas.before:
+                    Color:
+                        rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [dp(12)]
+                    Color:
+                        rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                    Line:
+                        width: dp(1)
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, dp(12))
+                
                 BoxLayout:
                     orientation: 'vertical'
-                    spacing: "15dp"
+                    spacing: dp(12)
                     size_hint_y: None
                     height: self.minimum_height
-                    padding: "10dp"
-
+                    padding: [dp(18), dp(15)]
+                    
                     # Reporte de Parpadeos
                     BoxLayout:
                         orientation: 'vertical'
                         size_hint_y: None
                         height: self.minimum_height
-                        padding: "15dp"
-
+                        padding: dp(18)
+                        spacing: dp(8)
+                        
                         canvas.before:
                             Color:
-                                rgba: 0.9, 0.95, 1, 1  # Azul muy claro
+                                rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
                             RoundedRectangle:
                                 pos: self.pos
                                 size: self.size
-                                radius: [8, 8, 8, 8]
+                                radius: [dp(12)]
                             Color:
-                                rgba: 0.3, 0.6, 0.9, 1
+                                rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                             Line:
-                                width: 2
-                                rounded_rectangle: (*self.pos, *self.size, 8)
-
+                                width: dp(1)
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, dp(12))
+                        
                         Label:
-                            id: final_blink_label
-                            text: "📊 Reporte de parpadeos: Cargando..."
-                            font_size: 24
-                            color: 0.1, 0.1, 0.1, 1
+                            text: "Reporte de Parpadeos"
+                            font_size: sp(16)
+                            bold: True
                             halign: 'left'
                             valign: 'top'
-                            text_size: self.width - 20, None
+                            color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            text_size: self.width, None
                             size_hint_y: None
-                            height: self.texture_size[1] + 20
+                            height: self.texture_size[1]
+                        
+                        Label:
+                            id: final_blink_label
+                            text: "Cargando datos de parpadeos..."
+                            font_size: sp(14)
+                            color: 20/255, 26/255, 28/255, 0.7  # text_secondary
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            size_hint_y: None
+                            height: self.texture_size[1] + dp(10)
                             markup: True
-
+                    
                     # Reporte de Bostezos
                     BoxLayout:
                         orientation: 'vertical'
                         size_hint_y: None
                         height: self.minimum_height
-                        padding: "15dp"
-
+                        padding: dp(18)
+                        spacing: dp(8)
+                        
                         canvas.before:
                             Color:
-                                rgba: 1, 0.98, 0.9, 1  # Amarillo muy claro
+                                rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
                             RoundedRectangle:
                                 pos: self.pos
                                 size: self.size
-                                radius: [8, 8, 8, 8]
+                                radius: [dp(12)]
                             Color:
-                                rgba: 0.9, 0.7, 0.3, 1
+                                rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                             Line:
-                                width: 2
-                                rounded_rectangle: (*self.pos, *self.size, 8)
-
+                                width: dp(1)
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, dp(12))
+                        
                         Label:
-                            id: final_yawn_label
-                            text: "Reporte de bostezos: Cargando..."
-                            font_size: 24
-                            color: 0.1, 0.1, 0.1, 1
+                            text: "Reporte de Bostezos"
+                            font_size: sp(16)
+                            bold: True
                             halign: 'left'
                             valign: 'top'
-                            text_size: self.width - 20, None
+                            color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            text_size: self.width, None
                             size_hint_y: None
-                            height: self.texture_size[1] + 20
+                            height: self.texture_size[1]
+                        
+                        Label:
+                            id: final_yawn_label
+                            text: "Cargando datos de bostezos..."
+                            font_size: sp(14)
+                            color: 20/255, 26/255, 28/255, 0.7  # text_secondary
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            size_hint_y: None
+                            height: self.texture_size[1] + dp(10)
                             markup: True
-
+                    
                     # Reporte de Frotamiento de Ojos
                     BoxLayout:
                         orientation: 'vertical'
                         size_hint_y: None
                         height: self.minimum_height
-                        padding: "15dp"
-
+                        padding: dp(18)
+                        spacing: dp(8)
+                        
                         canvas.before:
                             Color:
-                                rgba: 0.95, 0.9, 1, 1  # Púrpura muy claro
+                                rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
                             RoundedRectangle:
                                 pos: self.pos
                                 size: self.size
-                                radius: [8, 8, 8, 8]
+                                radius: [dp(12)]
                             Color:
-                                rgba: 0.7, 0.4, 0.9, 1
+                                rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                             Line:
-                                width: 2
-                                rounded_rectangle: (*self.pos, *self.size, 8)
-
+                                width: dp(1)
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, dp(12))
+                        
                         Label:
-                            id: final_eye_rub_label
-                            text: "Frotamiento de ojos: Cargando..."
-                            font_size: 24
-                            color: 0.1, 0.1, 0.1, 1
+                            text: "Frotamiento de Ojos"
+                            font_size: sp(16)
+                            bold: True
                             halign: 'left'
                             valign: 'top'
-                            text_size: self.width - 20, None
+                            color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            text_size: self.width, None
                             size_hint_y: None
-                            height: self.texture_size[1] + 20
+                            height: self.texture_size[1]
+                        
+                        Label:
+                            id: final_eye_rub_label
+                            text: "Cargando datos de frotamiento..."
+                            font_size: sp(14)
+                            color: 20/255, 26/255, 28/255, 0.7  # text_secondary
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            size_hint_y: None
+                            height: self.texture_size[1] + dp(10)
                             markup: True
-
+                    
                     # Reporte de Cabeceo
                     BoxLayout:
                         orientation: 'vertical'
                         size_hint_y: None
                         height: self.minimum_height
-                        padding: "15dp"
-
+                        padding: dp(18)
+                        spacing: dp(8)
+                        
                         canvas.before:
                             Color:
-                                rgba: 1, 0.9, 0.9, 1  # Rojo muy claro
+                                rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
                             RoundedRectangle:
                                 pos: self.pos
                                 size: self.size
-                                radius: [8, 8, 8, 8]
+                                radius: [dp(12)]
                             Color:
-                                rgba: 0.9, 0.4, 0.4, 1
+                                rgba: 20/255, 26/255, 28/255, 1  # #141A1C
                             Line:
-                                width: 2
-                                rounded_rectangle: (*self.pos, *self.size, 8)
-
+                                width: dp(1)
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, dp(12))
+                        
                         Label:
-                            id: final_nod_label
-                            text: "Cabeceo: Cargando..."
-                            font_size: 24
-                            color: 0.1, 0.1, 0.1, 1
+                            text: "Cabeceo"
+                            font_size: sp(16)
+                            bold: True
                             halign: 'left'
                             valign: 'top'
-                            text_size: self.width - 20, None
+                            color: 20/255, 26/255, 28/255, 1  # #141A1C
+                            text_size: self.width, None
                             size_hint_y: None
-                            height: self.texture_size[1] + 20
+                            height: self.texture_size[1]
+                        
+                        Label:
+                            id: final_nod_label
+                            text: "Cargando datos de cabeceo..."
+                            font_size: sp(14)
+                            color: 20/255, 26/255, 28/255, 0.7  # text_secondary
+                            halign: 'left'
+                            valign: 'top'
+                            text_size: self.width, None
+                            size_hint_y: None
+                            height: self.texture_size[1] + dp(10)
                             markup: True
-
-        # Footer con botón
+        
+        # Footer
         BoxLayout:
             size_hint_y: None
-            height: "80dp"
-            padding: "20dp"
-
+            height: dp(50)
+            padding: [dp(20), dp(10)]
+            
+            canvas.before:
+                Color:
+                    rgba: 204/255, 197/255, 185/255, 1  # #CCC5B9
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                Line:
+                    width: dp(1)
+                    points: [self.x, self.y + self.height, self.x + self.width, self.y + self.height]
+            
             Button:
                 text: "Volver al Inicio"
-                size_hint: 0.6, 1
+                size_hint: 0.7, 1
                 pos_hint: {"center_x": 0.5}
-                font_size: 24
+                font_size: sp(14)
                 bold: True
-                background_normal: ''
-                background_color: 0.2, 0.7, 0.3, 1  # Verde
-                color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0  # Transparente
+                color: 20/255, 26/255, 28/255, 1  # #141A1C
                 
                 canvas.before:
                     Color:
-                        rgba: 0.2, 0.7, 0.3, 1
+                        rgba: 168/255, 159/255, 145/255, 1  # #A89F91
                     RoundedRectangle:
                         pos: self.pos
                         size: self.size
-                        radius: [10, 10, 10, 10]
+                        radius: [dp(8)]
+                    Color:
+                        rgba: 20/255, 26/255, 28/255, 1  # #141A1C
+                    Line:
+                        width: dp(1)
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, dp(8))
                 
                 on_press: root.go_to_home()

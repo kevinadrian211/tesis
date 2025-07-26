@@ -1,7 +1,10 @@
+
+# end_report.py - Código Python Actualizado
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.app import App
+from kivy.animation import Animation
 
 # Cargar el archivo .kv correspondiente
 Builder.load_file("screens/driver_screens/end_report.kv")
@@ -9,6 +12,17 @@ Builder.load_file("screens/driver_screens/end_report.kv")
 class EndReportScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        
+        # Inicialización de colores según especificación
+        self.colors = {
+            'background': (255/255, 252/255, 242/255, 1),  # #FFFCF2
+            'surface': (204/255, 197/255, 185/255, 1),     # #CCC5B9
+            'primary': (168/255, 159/255, 145/255, 1),     # #A89F91
+            'border': (20/255, 26/255, 28/255, 1),         # #141A1C
+            'text': (20/255, 26/255, 28/255, 1),           # #141A1C
+            'text_secondary': (20/255, 26/255, 28/255, 0.7)
+        }
+        
         # Diccionario para almacenar datos de reportes
         self.report_data = {
             'blink': None,
@@ -18,8 +32,13 @@ class EndReportScreen(Screen):
         }
         
     def on_enter(self):
-        """Se ejecuta cuando se entra a la pantalla"""
+        """Se ejecuta cuando se entra a la pantalla con animación"""
         print("[INFO] Entrando a EndReportScreen")
+        
+        # Animación de entrada
+        self.opacity = 0
+        Animation(opacity=1, duration=0.3).start(self)
+        
         # NO resetear labels aquí, solo si no hay datos previos
         if not any(self.report_data.values()):
             self.reset_labels()
@@ -40,13 +59,17 @@ class EndReportScreen(Screen):
     
     def reset_labels(self):
         """Resetea todos los labels a su estado inicial"""
-        self.ids.final_blink_label.text = "Reporte de parpadeos: Cargando..."
-        self.ids.final_yawn_label.text = "Reporte de bostezos: Cargando..."
-        self.ids.final_eye_rub_label.text = "Frotamiento de ojos: Cargando..."
-        self.ids.final_nod_label.text = "Cabeceo: Cargando..."
+        self.ids.final_blink_label.text = "Analizando patrones de parpadeo..."
+        self.ids.final_yawn_label.text = "Evaluando nivel de somnolencia..."
+        self.ids.final_eye_rub_label.text = "Procesando datos de frotamiento..."
+        self.ids.final_nod_label.text = "Analizando movimientos de cabeza..."
         
     def go_to_home(self):
-        self.manager.current = "init_report"
+        """Navegar al inicio con animación"""
+        # Animación de salida
+        anim = Animation(opacity=0, duration=0.2)
+        anim.bind(on_complete=lambda *args: setattr(self.manager, 'current', 'init_report'))
+        anim.start(self)
 
     def get_overall_risk_level(self):
         """Calcula el nivel de riesgo general basado en todos los reportes"""
@@ -74,7 +97,6 @@ class EndReportScreen(Screen):
                     medium_risk_count += 1
                     
             elif report_type == 'eye_rub':
-                # Para eye_rub y nod, el data ya viene formateado
                 if "ALTO" in str(data):
                     high_risk_count += 1
                 elif "MEDIO" in str(data):
@@ -111,7 +133,7 @@ class EndReportScreen(Screen):
                 risk = data.get("risk_reports", 0)
                 microsleeps = data.get("microsleeps", 0)
                 
-                # Crear mensaje más legible
+                # Crear mensaje más legible sin emojis
                 if count == 0:
                     main_text = "No se registraron datos de parpadeo"
                 else:
@@ -127,7 +149,7 @@ class EndReportScreen(Screen):
                 else:
                     status_text = "Patrón de parpadeo normal"
                 
-                new_text = f"Parpadeos:\n{main_text}\n{status_text}"
+                new_text = f"{main_text}\n{status_text}"
                 
                 self.ids.final_blink_label.text = new_text
                 print(f"[INFO] Label de parpadeos actualizado exitosamente")
@@ -135,7 +157,7 @@ class EndReportScreen(Screen):
             except Exception as e:
                 print(f"[ERROR] Error actualizando reporte de parpadeos: {e}")
                 if hasattr(self, 'ids') and hasattr(self.ids, 'final_blink_label'):
-                    self.ids.final_blink_label.text = "❌ Error cargando reporte de parpadeos"
+                    self.ids.final_blink_label.text = "Error cargando reporte de parpadeos"
         
         Clock.schedule_once(update_label, 0.05)
 
@@ -170,7 +192,7 @@ class EndReportScreen(Screen):
                     else:
                         status_text = "Nivel normal de somnolencia"
                 
-                new_text = f"Bostezos:\n{main_text}\n{status_text}"
+                new_text = f"{main_text}\n{status_text}"
                 
                 self.ids.final_yawn_label.text = new_text
                 print(f"[INFO] Label de bostezos actualizado exitosamente")
@@ -178,7 +200,7 @@ class EndReportScreen(Screen):
             except Exception as e:
                 print(f"[ERROR] Error actualizando reporte de bostezos: {e}")
                 if hasattr(self, 'ids') and hasattr(self.ids, 'final_yawn_label'):
-                    self.ids.final_yawn_label.text = "❌ Error cargando reporte de bostezos"
+                    self.ids.final_yawn_label.text = "Error cargando reporte de bostezos"
         
         Clock.schedule_once(update_label, 0.05)
 
@@ -195,14 +217,13 @@ class EndReportScreen(Screen):
                     return
                 
                 # El message ya viene formateado desde el dispatcher
-                new_text = f"Frotamiento de ojos:\n{message}"
-                self.ids.final_eye_rub_label.text = new_text
+                self.ids.final_eye_rub_label.text = message
                 print(f"[INFO] Label de frotamiento de ojos actualizado exitosamente")
                 
             except Exception as e:
                 print(f"[ERROR] Error actualizando reporte de frotamiento de ojos: {e}")
                 if hasattr(self, 'ids') and hasattr(self.ids, 'final_eye_rub_label'):
-                    self.ids.final_eye_rub_label.text = "❌ Error cargando reporte de frotamiento"
+                    self.ids.final_eye_rub_label.text = "Error cargando reporte de frotamiento"
         
         Clock.schedule_once(update_label, 0.05)
 
@@ -219,14 +240,13 @@ class EndReportScreen(Screen):
                     return
                 
                 # El message ya viene formateado desde el dispatcher
-                new_text = f"Cabeceo:\n{message}"
-                self.ids.final_nod_label.text = new_text
+                self.ids.final_nod_label.text = message
                 print(f"[INFO] Label de cabeceo actualizado exitosamente")
                 
             except Exception as e:
                 print(f"[ERROR] Error actualizando reporte de cabeceo: {e}")
                 if hasattr(self, 'ids') and hasattr(self.ids, 'final_nod_label'):
-                    self.ids.final_nod_label.text = "❌ Error cargando reporte de cabeceo"
+                    self.ids.final_nod_label.text = "Error cargando reporte de cabeceo"
         
         Clock.schedule_once(update_label, 0.05)
 
