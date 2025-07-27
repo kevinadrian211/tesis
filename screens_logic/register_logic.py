@@ -19,6 +19,9 @@ class RegisterScreen(Screen):
     company_email = StringProperty("")
     company_password = StringProperty("")
     company_id = StringProperty("")
+    company_password_confirm = StringProperty("")
+    driver_password_confirm = StringProperty("")
+    admin_password_confirm = StringProperty("")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -50,8 +53,44 @@ class RegisterScreen(Screen):
             self.clear_fields_for_company()
             print("Campos de Admin visibles.")
         
+        # Configurar bindings para los TextInputs después de que la pantalla esté lista
+        self.setup_text_bindings()
+        
         # Limpiar el indicador de estado de contraseñas
         self.update_password_status()
+
+    def setup_text_bindings(self):
+        """Configura los bindings bidireccionales para los TextInputs."""
+        try:
+            # Company fields
+            if 'company_password_confirm_input' in self.ids:
+                self.ids.company_password_confirm_input.bind(text=self.on_company_password_confirm_change)
+            
+            # Driver fields  
+            if 'driver_password_confirm_input' in self.ids:
+                self.ids.driver_password_confirm_input.bind(text=self.on_driver_password_confirm_change)
+            
+            # Admin fields
+            if 'admin_password_confirm_input' in self.ids:
+                self.ids.admin_password_confirm_input.bind(text=self.on_admin_password_confirm_change)
+                
+        except Exception as e:
+            print(f"Error configurando bindings: {e}")
+
+    def on_company_password_confirm_change(self, instance, value):
+        """Callback para cambios en la confirmación de contraseña de company."""
+        self.company_password_confirm = value
+        self.on_password_change()
+
+    def on_driver_password_confirm_change(self, instance, value):
+        """Callback para cambios en la confirmación de contraseña de driver."""
+        self.driver_password_confirm = value
+        self.on_password_change()
+
+    def on_admin_password_confirm_change(self, instance, value):
+        """Callback para cambios en la confirmación de contraseña de admin."""
+        self.admin_password_confirm = value
+        self.on_password_change()
 
     def on_password_change(self, *args):
         """Método llamado cuando cambia el texto de las contraseñas."""
@@ -144,6 +183,8 @@ class RegisterScreen(Screen):
             self.ids.get('admin_email_input', type('obj', (object,), {'text': ''})).text = ""
             self.ids.get('admin_password_input', type('obj', (object,), {'text': ''})).text = ""
             self.ids.get('admin_password_confirm_input', type('obj', (object,), {'text': ''})).text = ""
+
+    # ... resto de métodos (show_error_popup, validate_email, etc.) permanecen igual ...
 
     def show_error_popup(self, title, message):
         """Muestra un popup con un mensaje de error."""
