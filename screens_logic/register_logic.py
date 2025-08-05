@@ -7,6 +7,7 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.animation import Animation
 from kivy.metrics import dp
+from kivy.clock import Clock
 from database import register_company, register_driver, register_admin, get_all_companies
 import re
 
@@ -33,6 +34,7 @@ class RegisterScreen(Screen):
             'text': (20/255, 26/255, 28/255, 1),           # #141A1C
             'text_secondary': (20/255, 26/255, 28/255, 0.7)
         }
+        self._bindings_setup = False
 
     def on_enter(self):
         """Método ejecutado al entrar en la pantalla."""
@@ -42,6 +44,11 @@ class RegisterScreen(Screen):
         self.opacity = 0
         Animation(opacity=1, duration=0.3).start(self)
         
+        # Configurar interfaz después de un pequeño delay para asegurar que los widgets estén listos
+        Clock.schedule_once(self._setup_interface, 0.1)
+
+    def _setup_interface(self, dt):
+        """Configura la interfaz después de que los widgets estén listos."""
         # Limpiar campos y configurar interfaz según el tipo de cuenta
         if self.account_type == "company":
             self.clear_fields_for_driver()
@@ -53,7 +60,7 @@ class RegisterScreen(Screen):
             self.clear_fields_for_company()
             print("Campos de Admin visibles.")
         
-        # Configurar bindings para los TextInputs después de que la pantalla esté lista
+        # Configurar bindings para los TextInputs
         self.setup_text_bindings()
         
         # Limpiar el indicador de estado de contraseñas
@@ -61,40 +68,119 @@ class RegisterScreen(Screen):
 
     def setup_text_bindings(self):
         """Configura los bindings bidireccionales para los TextInputs."""
+        if self._bindings_setup:
+            return  # Evitar configurar múltiples veces
+            
         try:
-            # Company fields
-            if 'company_password_confirm_input' in self.ids:
-                self.ids.company_password_confirm_input.bind(text=self.on_company_password_confirm_change)
+            # Company fields - Solo si es tipo company
+            if self.account_type == "company":
+                company_name_input = self.ids.get('company_name_input')
+                if company_name_input:
+                    company_name_input.bind(text=self.on_company_name_change)
+                    
+                company_email_input = self.ids.get('company_email_input')
+                if company_email_input:
+                    company_email_input.bind(text=self.on_company_email_change)
+                    
+                company_password_input = self.ids.get('company_password_input')
+                if company_password_input:
+                    company_password_input.bind(text=self.on_company_password_change)
+                    
+                company_password_confirm_input = self.ids.get('company_password_confirm_input')
+                if company_password_confirm_input:
+                    company_password_confirm_input.bind(text=self.on_company_password_confirm_change)
             
-            # Driver fields  
-            if 'driver_password_confirm_input' in self.ids:
-                self.ids.driver_password_confirm_input.bind(text=self.on_driver_password_confirm_change)
+            # Driver fields - Solo si es tipo driver
+            elif self.account_type == "driver":
+                driver_name_input = self.ids.get('driver_name_input')
+                if driver_name_input:
+                    driver_name_input.bind(text=self.on_driver_name_change)
+                    
+                driver_email_input = self.ids.get('driver_email_input')
+                if driver_email_input:
+                    driver_email_input.bind(text=self.on_driver_email_change)
+                    
+                driver_password_input = self.ids.get('driver_password_input')
+                if driver_password_input:
+                    driver_password_input.bind(text=self.on_driver_password_change)
+                    
+                driver_password_confirm_input = self.ids.get('driver_password_confirm_input')
+                if driver_password_confirm_input:
+                    driver_password_confirm_input.bind(text=self.on_driver_password_confirm_change)
             
-            # Admin fields
-            if 'admin_password_confirm_input' in self.ids:
-                self.ids.admin_password_confirm_input.bind(text=self.on_admin_password_confirm_change)
+            # Admin fields - Solo si es tipo admin
+            elif self.account_type == "admin":
+                admin_name_input = self.ids.get('admin_name_input')
+                if admin_name_input:
+                    admin_name_input.bind(text=self.on_admin_name_change)
+                    
+                admin_email_input = self.ids.get('admin_email_input')
+                if admin_email_input:
+                    admin_email_input.bind(text=self.on_admin_email_change)
+                    
+                admin_password_input = self.ids.get('admin_password_input')
+                if admin_password_input:
+                    admin_password_input.bind(text=self.on_admin_password_change)
+                    
+                admin_password_confirm_input = self.ids.get('admin_password_confirm_input')
+                if admin_password_confirm_input:
+                    admin_password_confirm_input.bind(text=self.on_admin_password_confirm_change)
+                    
+            self._bindings_setup = True
+            print("Bindings configurados correctamente")
                 
         except Exception as e:
             print(f"Error configurando bindings: {e}")
 
+    # Callbacks para actualizar las StringProperties
+    def on_company_name_change(self, instance, value):
+        self.company_name = value
+
+    def on_company_email_change(self, instance, value):
+        self.company_email = value
+
+    def on_company_password_change(self, instance, value):
+        self.company_password = value
+        self.on_password_change()
+
     def on_company_password_confirm_change(self, instance, value):
-        """Callback para cambios en la confirmación de contraseña de company."""
         self.company_password_confirm = value
         self.on_password_change()
 
+    def on_driver_name_change(self, instance, value):
+        self.driver_name = value
+
+    def on_driver_email_change(self, instance, value):
+        self.driver_email = value
+
+    def on_driver_password_change(self, instance, value):
+        self.driver_password = value
+        self.on_password_change()
+
     def on_driver_password_confirm_change(self, instance, value):
-        """Callback para cambios en la confirmación de contraseña de driver."""
         self.driver_password_confirm = value
         self.on_password_change()
 
+    def on_admin_name_change(self, instance, value):
+        # No tienes StringProperty para admin_name, así que solo validamos
+        self.on_password_change()
+
+    def on_admin_email_change(self, instance, value):
+        # No tienes StringProperty para admin_email, así que solo validamos
+        self.on_password_change()
+
+    def on_admin_password_change(self, instance, value):
+        # No tienes StringProperty para admin_password, así que solo validamos
+        self.on_password_change()
+
     def on_admin_password_confirm_change(self, instance, value):
-        """Callback para cambios en la confirmación de contraseña de admin."""
         self.admin_password_confirm = value
         self.on_password_change()
 
     def on_password_change(self, *args):
         """Método llamado cuando cambia el texto de las contraseñas."""
-        self.update_password_status()
+        # Usar Clock.schedule_once para evitar llamadas múltiples
+        Clock.schedule_once(lambda dt: self.update_password_status(), 0.1)
 
     def update_password_status(self):
         """Actualiza el indicador de estado de las contraseñas."""
@@ -149,11 +235,9 @@ class RegisterScreen(Screen):
                     password_status_label.text = "Las contraseñas no coinciden"
                     password_status_label.color = (1, 0.3, 0.3, 1)  # Rojo
             elif confirm_password:
-                # Solo hay texto en confirmar contraseña
                 password_status_label.text = "Ingresa la contraseña principal primero"
                 password_status_label.color = self.colors['text_secondary']
             else:
-                # Solo hay texto en contraseña principal
                 password_status_label.text = "Confirma tu contraseña"
                 password_status_label.color = self.colors['text_secondary']
                 
@@ -162,30 +246,53 @@ class RegisterScreen(Screen):
 
     def clear_fields_for_company(self):
         """Limpiar campos que no son necesarios para Company"""
-        if hasattr(self, 'ids'):
-            self.ids.get('driver_name_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('driver_email_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('driver_password_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('driver_password_confirm_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('admin_name_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('admin_email_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('admin_password_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('admin_password_confirm_input', type('obj', (object,), {'text': ''})).text = ""
+        try:
+            # Usar Clock.schedule_once para asegurar que los widgets estén disponibles
+            Clock.schedule_once(self._clear_driver_admin_fields, 0.05)
+        except Exception as e:
+            print(f"Error limpiando campos: {e}")
+
+    def _clear_driver_admin_fields(self, dt):
+        """Limpia los campos de driver y admin."""
+        try:
+            if hasattr(self, 'ids'):
+                driver_fields = ['driver_name_input', 'driver_email_input', 
+                               'driver_password_input', 'driver_password_confirm_input']
+                admin_fields = ['admin_name_input', 'admin_email_input', 
+                              'admin_password_input', 'admin_password_confirm_input']
+                
+                for field_id in driver_fields + admin_fields:
+                    field = self.ids.get(field_id)
+                    if field:
+                        field.text = ""
+        except Exception as e:
+            print(f"Error limpiando campos driver/admin: {e}")
 
     def clear_fields_for_driver(self):
         """Limpiar campos que no son necesarios para Driver"""
-        if hasattr(self, 'ids'):
-            self.ids.get('company_name_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('company_email_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('company_password_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('company_password_confirm_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('admin_name_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('admin_email_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('admin_password_input', type('obj', (object,), {'text': ''})).text = ""
-            self.ids.get('admin_password_confirm_input', type('obj', (object,), {'text': ''})).text = ""
+        try:
+            Clock.schedule_once(self._clear_company_admin_fields, 0.05)
+        except Exception as e:
+            print(f"Error limpiando campos: {e}")
 
-    # ... resto de métodos (show_error_popup, validate_email, etc.) permanecen igual ...
+    def _clear_company_admin_fields(self, dt):
+        """Limpia los campos de company y admin."""
+        try:
+            if hasattr(self, 'ids'):
+                company_fields = ['company_name_input', 'company_email_input', 
+                                'company_password_input', 'company_password_confirm_input']
+                admin_fields = ['admin_name_input', 'admin_email_input', 
+                              'admin_password_input', 'admin_password_confirm_input']
+                
+                for field_id in company_fields + admin_fields:
+                    field = self.ids.get(field_id)
+                    if field:
+                        field.text = ""
+        except Exception as e:
+            print(f"Error limpiando campos company/admin: {e}")
 
+    # [El resto de métodos permanecen igual - show_error_popup, validate_email, etc.]
+    
     def show_error_popup(self, title, message):
         """Muestra un popup con un mensaje de error."""
         content = BoxLayout(

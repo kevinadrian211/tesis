@@ -136,7 +136,6 @@
                         
                         TextInput:
                             id: company_name_input
-                            text: root.company_name
                             hint_text: "Ingresa el nombre de tu empresa"
                             size_hint_y: None
                             height: dp(50)
@@ -145,6 +144,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -178,7 +178,6 @@
                         
                         TextInput:
                             id: company_email_input
-                            text: root.company_email
                             hint_text: "empresa@ejemplo.com"
                             size_hint_y: None
                             height: dp(50)
@@ -187,6 +186,8 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
+                            multiline: False
+                            input_filter: None
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -220,7 +221,6 @@
                         
                         TextInput:
                             id: company_password_input
-                            text: root.company_password
                             hint_text: "Mínimo 6 caracteres"
                             password: True
                             size_hint_y: None
@@ -230,7 +230,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
-                            on_text: root.on_password_change()
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -264,7 +264,6 @@
                         
                         TextInput:
                             id: company_password_confirm_input
-                            text: root.company_password_confirm
                             hint_text: "Confirma tu contraseña"
                             password: True
                             size_hint_y: None
@@ -274,7 +273,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
-                            on_text: root.on_password_change()
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -309,7 +308,6 @@
                         
                         TextInput:
                             id: driver_name_input
-                            text: root.driver_name
                             hint_text: "Ingresa tu nombre completo"
                             size_hint_y: None
                             height: dp(50)
@@ -318,6 +316,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -351,7 +350,6 @@
                         
                         TextInput:
                             id: driver_email_input
-                            text: root.driver_email
                             hint_text: "conductor@ejemplo.com"
                             size_hint_y: None
                             height: dp(50)
@@ -360,6 +358,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -393,7 +392,6 @@
                         
                         TextInput:
                             id: driver_password_input
-                            text: root.driver_password
                             hint_text: "Mínimo 6 caracteres"
                             password: True
                             size_hint_y: None
@@ -403,7 +401,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
-                            on_text: root.on_password_change()
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -437,7 +435,6 @@
                         
                         TextInput:
                             id: driver_password_confirm_input
-                            text: root.driver_password_confirm  
                             hint_text: "Confirma tu contraseña"
                             password: True
                             size_hint_y: None
@@ -447,7 +444,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
-                            on_text: root.on_password_change()
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -490,6 +487,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -531,6 +529,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -573,7 +572,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
-                            on_text: root.on_password_change()
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -607,7 +606,6 @@
                         
                         TextInput:
                             id: admin_password_confirm_input
-                            text: root.admin_password_confirm
                             hint_text: "Confirma tu contraseña"
                             password: True
                             size_hint_y: None
@@ -617,7 +615,7 @@
                             cursor_color: 20/255, 26/255, 28/255, 1
                             font_size: sp(16)
                             padding: [dp(15), dp(12)]
-                            on_text: root.on_password_change()
+                            multiline: False
                             canvas.before:
                                 Color:
                                     rgba: 255/255, 252/255, 242/255, 1  # #FFFCF2
@@ -659,7 +657,7 @@
                             background_color: 0, 0, 0, 0
                             background_normal: ''
                             color: 20/255, 26/255, 28/255, 1
-                            font_size: sp(16)
+                            font_size: sp(16)  
                             on_text: root.on_company_selected(self.text)
                             canvas.before:
                                 Color:

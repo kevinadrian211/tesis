@@ -3,9 +3,8 @@ from supabase import create_client, Client
 from dotenv import load_dotenv
 import os
 import uuid
-import bcrypt
-from typing import Dict, Any  # ← AÑADIR ESTA LÍNEA
-from datetime import datetime  # ← AÑADIR ESTA LÍNEA
+from typing import Dict, Any
+from datetime import datetime
 
 # Cargar las variables de entorno
 load_dotenv()
@@ -21,11 +20,6 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # ----------------------------------------
 # Funciones de utilidad
 # ----------------------------------------
-
-def hash_password(password: str) -> str:
-    salt = bcrypt.gensalt()
-    hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hashed.decode('utf-8')
 
 def email_exists_in_table(table_name: str, email: str) -> bool:
     try:
@@ -46,13 +40,12 @@ def register_company(name, email, password):
             return False
 
         company_id = str(uuid.uuid4())
-        hashed_password = hash_password(password)
 
         response = supabase.table('companies').insert({
             'id': company_id,
             'name': name,
             'email': email,
-            'encrypted_password': hashed_password
+            'encrypted_password': password  # Almacenar contraseña en texto plano
         }).execute()
 
         if response.data:
@@ -81,13 +74,12 @@ def register_driver(name, email, password, company_id):
             return False
 
         driver_id = str(uuid.uuid4())
-        hashed_password = hash_password(password)
 
         response = supabase.table('users').insert({
             'id': driver_id,
             'name': name,
             'email': email,
-            'encrypted_password': hashed_password,
+            'encrypted_password': password,  # Almacenar contraseña en texto plano
             'role': 'driver',
             'company_id': company_id
         }).execute()
@@ -132,9 +124,9 @@ def verify_company_login(email: str, password: str):
             return False
 
         company = response.data[0]
-        stored_hash = company.get('encrypted_password')
+        stored_password = company.get('encrypted_password')
 
-        if stored_hash and bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
+        if stored_password and stored_password == password:
             return company
         else:
             print("Contraseña incorrecta para compañía.")
@@ -155,9 +147,9 @@ def verify_driver_login(email: str, password: str):
             return False
 
         driver = response.data[0]
-        stored_hash = driver.get('encrypted_password')
+        stored_password = driver.get('encrypted_password')
 
-        if stored_hash and bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
+        if stored_password and stored_password == password:
             return driver
         else:
             print("Contraseña incorrecta para conductor.")
@@ -177,13 +169,12 @@ def register_admin(name, email, password, company_id):
             return False
 
         admin_id = str(uuid.uuid4())
-        hashed_password = hash_password(password)
 
         response = supabase.table('users').insert({
             'id': admin_id,
             'name': name,
             'email': email,
-            'encrypted_password': hashed_password,
+            'encrypted_password': password,  # Almacenar contraseña en texto plano
             'role': 'admin',
             'company_id': company_id
         }).execute()
@@ -216,9 +207,9 @@ def verify_admin_login(email: str, password: str):
             return False
 
         admin = response.data[0]
-        stored_hash = admin.get('encrypted_password')
+        stored_password = admin.get('encrypted_password')
 
-        if stored_hash and bcrypt.checkpw(password.encode('utf-8'), stored_hash.encode('utf-8')):
+        if stored_password and stored_password == password:
             return admin
         else:
             print("Contraseña incorrecta para administrador.")
@@ -889,56 +880,6 @@ def get_final_reports_by_trip(trip_id: str):
         print(f"Error al obtener reportes finales por viaje: {e}")
         return {}
 
-def get_minute_reports_by_trip(trip_id: str):
-    """
-    Obtiene todos los reportes por minuto de un viaje específico
-    """
-    try:
-        response = supabase.table('blink_minute_reports') \
-                      .select('*') \
-                      .eq('trip_id', trip_id) \
-                      .order('timestamp') \
-                      .execute()
-        
-        return response.data if response.data else []
-        
-    except Exception as e:
-        print(f"Error al obtener reportes por minuto: {e}")
-        return []
-
-def get_5min_reports_by_trip(trip_id: str):
-    """
-    Obtiene todos los reportes de 5 minutos de un viaje específico
-    """
-    try:
-        response = supabase.table('yawn_5min_reports') \
-                      .select('*') \
-                      .eq('trip_id', trip_id) \
-                      .order('timestamp') \
-                      .execute()
-        
-        return response.data if response.data else []
-        
-    except Exception as e:
-        print(f"Error al obtener reportes de 5 minutos: {e}")
-        return []
-
-def get_10min_reports_by_trip(trip_id: str):
-    """
-    Obtiene todos los reportes de 10 minutos de un viaje específico
-    """
-    try:
-        response = supabase.table('yawn_10min_reports') \
-                      .select('*') \
-                      .eq('trip_id', trip_id) \
-                      .order('timestamp') \
-                      .execute()
-        
-        return response.data if response.data else []
-        
-    except Exception as e:
-        print(f"Error al obtener reportes de 10 minutos: {e}")
-        return []
 def get_minute_reports_by_trip(trip_id: str):
     """
     Obtiene todos los reportes por minuto de un viaje específico
